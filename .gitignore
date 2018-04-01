@@ -1,3 +1,9 @@
+**/target/*
+**/bin/*
+**/.settings/*
+**/.classpath
+**/src/main/java/com/fdmgroup/dev/*
+
 # Compiled class file
 *.class
 
