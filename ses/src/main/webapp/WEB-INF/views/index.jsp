@@ -8,5 +8,11 @@
 </head>
 <body>
 	Sup friends?
+	<br/>
+	<a href="hello"><input type="button" value="say hi"/></a>
+	<br/>
+	<a href="jigvu"><input type="button" value="error :)"/></a>
+	<br/>
+	<a href="exception"><input type="button" value="exception :o"/></a>
 </body>
 </html>
