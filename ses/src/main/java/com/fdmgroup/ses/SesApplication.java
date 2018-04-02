@@ -5,19 +5,20 @@ import java.util.Arrays;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication(scanBasePackages="com.fdmgroup.controller")
+@EnableJpaRepositories("com.fdmgroup.repository")
+@EntityScan("com.fdmgroup.entity")
 public class SesApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SesApplication.class, args);
-		System.out.println("Hello world!");
 	}
 	
 	@Override
@@ -26,7 +27,7 @@ public class SesApplication extends SpringBootServletInitializer {
     }
 	
 	/**
-	 * Handy debugger to spit out the names of all beans registered
+	 * TODO: Delete this -- Handy debugger to spit out the names of all beans registered
 	 */
 	@Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {

@@ -10,5 +10,7 @@
 	Hi hi :D
 	<br/>
 	${number}
+	<br/>
+	<a href="/"><input type="button" value="home"/></a>
 </body>
 </html>
