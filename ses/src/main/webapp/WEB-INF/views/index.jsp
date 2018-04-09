@@ -5,8 +5,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<title>Demo Index Page</title>
-	<link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/hb_core.css"/>
-	<link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/hb_index.css"/>
+	<link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/ses_core.css"/>
 </head>
 <body>
 	Sup friends?
@@ -16,5 +15,9 @@
 	<a href="jigvu"><input type="button" value="error :)"/></a>
 	<br/>
 	<a href="exception"><input type="button" value="exception :o"/></a>
+	<br/>
+	<a href="admin"><input type="button" value="Admin?"/></a>
+	<br/>
+	<a href="adminEdit"><input type="button" value="Admin Edit"/></a>
 </body>
 </html>

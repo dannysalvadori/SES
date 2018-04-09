@@ -1,20 +1,19 @@
 package com.fdmgroup.ses;
 
-import java.util.Arrays;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@SpringBootApplication(scanBasePackages="com.fdmgroup.controller")
-@EnableJpaRepositories("com.fdmgroup.repository")
-@EntityScan("com.fdmgroup.entity")
+import com.fdmgroup.ses.config.QueryConfig;
+
+@SpringBootApplication(scanBasePackages="com.fdmgroup.ses")
+@EnableConfigurationProperties(QueryConfig.class)
 public class SesApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
@@ -31,14 +30,15 @@ public class SesApplication extends SpringBootServletInitializer {
 	 */
 	@Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
-        return args -> {
-            System.out.println("Let's inspect the beans provided by Spring Boot:");
-            String[] beanNames = ctx.getBeanDefinitionNames();
-            Arrays.sort(beanNames);
-            for (String beanName : beanNames) {
-                System.out.println(beanName);
-            }
-        };
+//        return args -> {
+//            System.out.println("Let's inspect the beans provided by Spring Boot:");
+//            String[] beanNames = ctx.getBeanDefinitionNames();
+//            Arrays.sort(beanNames);
+//            for (String beanName : beanNames) {
+//                System.out.println(beanName);
+//            }
+//        };
+		return null;
     }
 	
 }
