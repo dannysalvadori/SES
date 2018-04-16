@@ -15,7 +15,6 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.5.9.RELEASE</version>
-		<!-- <relativePath/>  --><!-- lookup parent from repository -->
 	</parent>
 
 	<properties>
@@ -35,24 +34,48 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
-		    <groupId>org.apache.tomcat.embed</groupId>
-		    <artifactId>tomcat-embed-jasper</artifactId>
-		    <scope>provided</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- WARNING! Will break stuff until configured. Username: user; PW: see INFO logs -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
 		
-		<!-- Oracle driver for Oracle DB -->
+		<!-- Required to run Springs embedded server (without it, views won't resolve) -->
+		<dependency>
+		    <groupId>org.apache.tomcat.embed</groupId>
+		    <artifactId>tomcat-embed-jasper</artifactId>
+		    <scope>provided</scope>
+		</dependency>
+		
+		<!-- Driver for Oracle DB connection -->
 		<dependency>
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc6</artifactId>
             <version>11.2.0.4</version>
         </dependency>
         
+        <!-- Tags for JSPs -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/net.sourceforge.nekohtml/nekohtml -->
+		<!-- <dependency>
+			<groupId>net.sourceforge.nekohtml</groupId>
+			<artifactId>nekohtml</artifactId>
+			<version>1.9.21</version>$NO-MVN-MAN-VER$
+		</dependency> -->
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
 	</dependencies>
 
 	<build>

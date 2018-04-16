@@ -4,13 +4,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Demo Index Page</title>
+<title>Insert title here</title>
 </head>
 <body>
-	Hi hi :D
-	<br/>
-	${number}
-	<br/>
-	<a href="/"><input type="button" value="home"/></a>
+	ADMIN HOME
 </body>
 </html>
