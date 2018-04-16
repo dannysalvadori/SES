@@ -17,15 +17,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests()
-				.antMatchers("/css/**", "/", "/index", "/login**").permitAll()
-				.antMatchers("/views/admin/**", "admin/**", "/adminHome", "/admin", "/admin*").hasRole("ADMIN") // "/admin*" gets any MAPPING (not end URI) matching /admin*
+				.antMatchers("/").permitAll()
+				.antMatchers("/hello*").hasAnyRole("USER", "ADMIN")
+				.antMatchers("/admin*").hasRole("ADMIN") // "/admin*" gets any MAPPING (not end URI) matching /admin*
+				// N.B. While this role must be "ADMIN", Spring prepends "ROLE_" - it must be "ROLE_ADMIN" in the DB
 			.and()
 				.formLogin()
 					.and().logout().permitAll();
 //				.formLogin()
-//					.loginPage("/login") // use to setup custom login page
-//					.defaultSuccessUrl("/index")
-//					.failureUrl("/login?error=true");
+//					.loginPage("/login") // note this is the default mapping
+//					.failureUrl("/login?error") // default mapping
+//					.defaultSuccessUrl("/index");
 	}
 
 	@Autowired

@@ -19,5 +19,8 @@
 	<a href="admin"><input type="button" value="Admin?"/></a>
 	<br/>
 	<a href="adminEdit"><input type="button" value="Admin Edit"/></a>
+	<br/>
+	<br/>
+	<br/>
 </body>
 </html>

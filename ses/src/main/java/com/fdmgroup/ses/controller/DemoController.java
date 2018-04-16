@@ -3,6 +3,8 @@ package com.fdmgroup.ses.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -25,6 +27,8 @@ public class DemoController {
 
 	@RequestMapping(value="/")
     public ModelAndView index() {
+		Authentication roles = SecurityContextHolder.getContext().getAuthentication();
+		String auths = roles.getAuthorities().toString();
         return new ModelAndView("index");
     }
 	
@@ -36,7 +40,7 @@ public class DemoController {
 		List<Role> roles = roleRepo.findAll();
 		model.addAttribute("roleCount", roles.size());
 		model.addAttribute("userCount", users.size());
-        return "hi";
+        return "user/hi";
 	}
 	
 	@RequestMapping(value="/exception")
