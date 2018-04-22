@@ -7,7 +7,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -34,9 +33,9 @@ public class DemoController {
 	
 	@RequestMapping(value="/hello")
     public String sayHi(Model model) {
-		userRepo.save(new User());
+//		userRepo.save(new User());
 		List<User> users = userRepo.findAll();
-		roleRepo.save(new Role());
+//		roleRepo.save(new Role());
 		List<Role> roles = roleRepo.findAll();
 		model.addAttribute("roleCount", roles.size());
 		model.addAttribute("userCount", users.size());
@@ -59,22 +58,6 @@ public class DemoController {
 	@RequestMapping(value="/adminEdit")
     public ModelAndView adminEdit(ModelAndView modelAndView) {
 		modelAndView.setViewName("hi");
-        return modelAndView;
-	}
-	
-	@RequestMapping(value="/login")
-    public ModelAndView login(
-    	ModelAndView modelAndView,
-    	@ModelAttribute("error") String error
-    ) {
-		modelAndView.addObject("loginError", error.equalsIgnoreCase("true"));
-		modelAndView.setViewName("login");
-		return modelAndView;
-	}
-	
-	@RequestMapping(value="/login-error")
-    public ModelAndView loginError(ModelAndView modelAndView) {
-		modelAndView.setViewName("login-error");
         return modelAndView;
 	}
 	
