@@ -8,7 +8,12 @@
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/ses_core.css"/>
 </head>
 <body>
-	Sup friends?
+	<a href="register"><input type="button" value="REGISTER"/></a>
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+	<br/>
 	<br/>
 	<a href="hello"><input type="button" value="say hi"/></a>
 	<br/>

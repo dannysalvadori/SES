@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 
 import com.fdmgroup.ses.model.Role;
 import com.fdmgroup.ses.model.User;
+import com.fdmgroup.ses.model.VerificationToken;
 import com.fdmgroup.ses.repository.RoleRepository;
 import com.fdmgroup.ses.repository.UserRepository;
+import com.fdmgroup.ses.repository.VerificationTokenRepository;
 
 @Service("userService")
 public class UserServiceImpl implements UserService {
@@ -19,6 +21,8 @@ public class UserServiceImpl implements UserService {
 	private UserRepository userRepository;
 	@Autowired
     private RoleRepository roleRepository;
+	@Autowired
+	private VerificationTokenRepository verificationTokenRepository;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
@@ -36,6 +40,14 @@ public class UserServiceImpl implements UserService {
         Role userRole = roleRepository.findByRole("ADMIN");
         user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
 		userRepository.save(user);
+	}
+
+	@Override
+	public void createVerificationToken(User user, String token) {
+		System.out.println("user: " + user);
+		System.out.println("token: " + token);
+		VerificationToken newToken = new VerificationToken(user, token);
+		verificationTokenRepository.save(newToken);		
 	}
 
 }
