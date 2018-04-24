@@ -4,28 +4,29 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
 	<title>Demo Index Page</title>
-	<link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/ses_core.css"/>
 </head>
 <body>
+	<jsp:include page="nav.jsp"/>
+	
+	<br/>
 	<a href="register"><input type="button" value="REGISTER"/></a>
+	
 	<br/>
-	<br/>
-	<br/>
-	<br/>
-	<br/>
-	<br/>
-	<a href="hello"><input type="button" value="say hi"/></a>
-	<br/>
-	<a href="jigvu"><input type="button" value="error :)"/></a>
-	<br/>
-	<a href="exception"><input type="button" value="exception :o"/></a>
-	<br/>
-	<a href="admin"><input type="button" value="Admin?"/></a>
-	<br/>
-	<a href="adminEdit"><input type="button" value="Admin Edit"/></a>
-	<br/>
-	<br/>
-	<br/>
+	<div class="container">
+		<h1>Welcome to stockSim</h1>
+		<br/>
+		<a href="hello"><button type="button" class="btn btn-primary">Say Hi</button></a>
+		<br/><br/>
+		<a href="jigvu"><button type="button" class="btn btn-primary">Bad Link?</button></a>
+		<br/><br/>
+		<a href="exception"><button type="button" class="btn btn-primary">Throw Exception</button></a>
+		<br/><br/>
+		<a href="admin"><button type="button" class="btn btn-primary">Go to Admin Home</button></a>
+		<br/><br/>
+		<a href="adminEdit"><button type="button" class="btn btn-primary">Go to Admin Edit</button></a>
+	</div>
+	
 </body>
 </html>

@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -23,11 +24,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				// N.B. While this role must be "ADMIN", Spring prepends "ROLE_" - it must be "ROLE_ADMIN" in the DB
 			.and()
 				.formLogin()
-					.and().logout().permitAll();
+					.loginPage("/login") // Without this, Boot's own default page is used
+					.failureUrl("/login-error") // default mapping
+					.defaultSuccessUrl("/login-success")
+					.and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/logout-success");
 //				.formLogin()
-//					.loginPage("/login") // note this is the default mapping
-//					.failureUrl("/login?error") // default mapping
-//					.defaultSuccessUrl("/index");
 	}
 
 	@Autowired
