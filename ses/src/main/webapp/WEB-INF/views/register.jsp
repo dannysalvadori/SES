@@ -7,42 +7,43 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<title>Sign Up to StockSim</title>
-	<link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/ses_core.css"/>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
 </head>
 <body>
-	<c:if test="${success}">
-		Success!
-	</c:if>
+	<jsp:include page="nav.jsp"/>
+	
 	<br/>
-	<a href="/"><input type="button" value="home"/></a>
-	<br/>
-	<form:form action="createUser" method="POST" modelAttribute="newUser">
-		<table>
-			<tr>
-				<td>Email</td>
-				<td><form:input path="email" type="email" placeholder="email" required="true" autofocus="true"/></td>
-			</tr>
-			<tr>
-				<td>Password</td>
-				<td><form:input path="password" placeholder="password" type="password" min="6" max="50" required="true"/></td>
-			</tr>
-			<tr>
-				<td>First Name</td>
-				<td><form:input path="name" placeholder="first name" required="true"/></td>
-			</tr>			
-			<tr>
-				<td>Last Name</td>
-				<td><form:input path="lastName" placeholder="last name" required="true"/></td>
-			</tr>
-			<tr>
-				<td>Active?</td>
-				<td><form:input path="active" type="number" max="1" required="true"/></td>
-			</tr>
-			<tr>
-			    <td></td>
-				<td><input type="submit" value="Register"/></td>
-			</tr>
-		</table>
-	</form:form>
+	<div class="container">
+		<h1>Sign Up</h1>
+		<c:if test="${success}">
+			<div class="alert alert-success">
+					Success!
+				</div>
+		</c:if>
+		
+		<!-- TODO: This is evidently a poor way of delivering page messages... -->
+		<c:forTokens items="${failures}" delims="|" var="failure">
+			<div class="alert alert-danger" id="asp-error">
+				<c:out value="${failure}"/>
+			</div>
+		</c:forTokens>
+		
+		<form:form action="registerUser" method="POST" modelAttribute="newUser" class="col-md-6 col-md-offset-3">
+			<label for="email">Email Address:</label>
+			<form:input id="email" path="email" type="email" placeholder="email" required="true" autofocus="true" class="form-control"/>
+			<label for="password">Password</label>
+			<form:input id="password" path="password" placeholder="password" type="password" required="true" class="form-control"/>
+			<label for="confirmPW">Password</label>
+			<form:input id="confirmPW" path="confirmationPassword" placeholder="confirm your password" type="password" required="true" class="form-control"/>
+			<label for="name">First Name</label>
+			<form:input id="name" path="name" placeholder="first name" required="true" class="form-control"/>
+			<label for="lastName">Last Name</label>
+			<form:input id="lastName" path="lastName" placeholder="last name" required="true" class="form-control"/>
+			<br/>
+			<form:hidden path="active" value="1" required="true"/>
+			<input type="submit" value="Register" class="btn btn-primary"/>
+		</form:form>
+	</div>
+	
 </body>
 </html>

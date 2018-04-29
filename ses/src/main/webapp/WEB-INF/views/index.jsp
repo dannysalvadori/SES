@@ -11,9 +11,6 @@
 	<jsp:include page="nav.jsp"/>
 	
 	<br/>
-	<a href="register"><input type="button" value="REGISTER"/></a>
-	
-	<br/>
 	<div class="container">
 		<h1>Welcome to stockSim</h1>
 		<br/>

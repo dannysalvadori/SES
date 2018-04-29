@@ -13,19 +13,22 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.data.annotation.Transient;
 
 @Entity
-@Table(name = "USERS")
 @SequenceGenerator(name="seq", initialValue=0, allocationSize=1, sequenceName="USER_SEQUENCE")
+@Table(
+	name = "USERS",
+	uniqueConstraints=@UniqueConstraint(columnNames={"email"})
+)
 public class User {
 
 	@Id
-//	@GeneratedValue(strategy = GenerationType.AUTO)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq")
 	@Column(name = "id")
 	private int id;
@@ -38,8 +41,10 @@ public class User {
 	@Column(name = "password")
 	@Length(min = 6, max = 50, message = "*Your password must have at least 6 characters")
 	@NotEmpty(message = "*Please provide your password")
-	@Transient
 	private String password;
+	
+	@Transient
+	private String confirmationPassword;
 	
 	@Column(name = "name")
 	@NotEmpty(message = "*Please provide your name")
@@ -70,6 +75,14 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getConfirmationPassword() {
+		return confirmationPassword;
+	}
+
+	public void setConfirmationPassword(String confirmPassword) {
+		this.confirmationPassword = confirmPassword;
 	}
 
 	public String getName() {

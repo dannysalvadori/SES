@@ -1,6 +1,5 @@
 package com.fdmgroup.ses.controller;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
@@ -9,19 +8,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fdmgroup.ses.Validation.SesValidationException;
+import com.fdmgroup.ses.Validation.ValidationUtils;
 import com.fdmgroup.ses.model.User;
-import com.fdmgroup.ses.registration.OnRegistrationCompleteEvent;
-import com.fdmgroup.ses.repository.UserRepository;
+import com.fdmgroup.ses.service.UserService;
 
 @Controller
 public class RegistrationController {
-	
+
 	@Autowired
-	private UserRepository userRepo;
+	private UserService userService;
 	
 	@Autowired
 	ApplicationEventPublisher eventPublisher;
 
+	/**
+	 * Go to registration page
+	 */
 	@RequestMapping(value="/register")
     public ModelAndView register(ModelAndView modelAndView) {
 		modelAndView.setViewName("register");
@@ -29,21 +32,25 @@ public class RegistrationController {
 		return modelAndView;
 	}
 	
-	@RequestMapping(value="/createUser")
+	/**
+	 * Register a new user. On success, redirect to login. On failure, reload registration page reporting errors.
+	 * @param newUser User DTO from registration form 
+	 */
+	@RequestMapping(value="/registerUser")
     public ModelAndView createUser(
     		ModelAndView modelAndView,
     		@ModelAttribute("newUser") User newUser,
     		WebRequest request
     ) {
-		userRepo.save(newUser);
-		modelAndView.setViewName("register");
-		modelAndView.addObject("success", true);
-		
-//		try {
-			System.out.println("Publishing event...");
-	        String appUrl = request.getContextPath();
-	        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(newUser, request.getLocale(), appUrl));
-//	    } catch (Exception me) {
+		try {
+			userService.saveUser(newUser, request);
+			modelAndView.addObject("successfulRegistration", true);
+			modelAndView.setViewName("login");
+		} catch (SesValidationException ex) {
+			modelAndView.addObject("failures", ValidationUtils.stringifyFailures(ex.getFailures()));
+			modelAndView.setViewName("register");
+		}
+//	    } catch (Exception me) { // TODO: Catch email failure exceptions
 //	        return new ModelAndView("emailError", "newUser", newUser);
 //	    }
 		

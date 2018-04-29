@@ -7,6 +7,9 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class LoginController {
 	
+	/**
+	 * Go to login page
+	 */
 	@RequestMapping(value="/login")
     public ModelAndView login(ModelAndView modelAndView) {
 		modelAndView.setViewName("login");
@@ -18,16 +21,23 @@ public class LoginController {
 	 */
 	@RequestMapping(value="/login-error")
     public ModelAndView loginError(ModelAndView modelAndView) {
+		modelAndView.setViewName("login");
 		modelAndView.addObject("error", "Invalid username or password");
 		return login(modelAndView);
 	}
 	
+	/**
+	 * Go to logout success page
+	 */
 	@RequestMapping(value="/logout-success")
     public ModelAndView logout(ModelAndView modelAndView) {
 		modelAndView.setViewName("logout-success");
 		return modelAndView;
 	}
 	
+	/**
+	 * Go to log in landing page (My Account)
+	 */
 	@RequestMapping(value="/login-success")
     public ModelAndView loginLandingPage(ModelAndView modelAndView) {
 		modelAndView.setViewName("user/myAccount");

@@ -12,15 +12,8 @@ import javax.persistence.Table;
 @Table(name = "ROLES")
 @SequenceGenerator(name="seq", initialValue=0, allocationSize=1, sequenceName="ROLE_SEQUENCE")
 public class Role {
-//@Entity
-//@Table(name="ROLES")
-//@SequenceGenerator(name="seq", initialValue=0, allocationSize=1, sequenceName="ROLE_SEQUENCE")
-//public class Role {
-//		@Id
-//		@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq")
-//		private Long Id;
+
 	@Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq")
 	@Column(name="id")
 	private int id;
@@ -40,6 +33,5 @@ public class Role {
 	public void setRole(String role) {
 		this.role = role;
 	}
-	
 	
 }

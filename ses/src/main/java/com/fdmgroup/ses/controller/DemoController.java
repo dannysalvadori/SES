@@ -11,10 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fdmgroup.ses.model.Role;
 import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.model.VerificationToken;
-import com.fdmgroup.ses.repository.RoleRepository;
 import com.fdmgroup.ses.repository.UserRepository;
 import com.fdmgroup.ses.repository.VerificationTokenRepository;
 
@@ -27,9 +25,6 @@ public class DemoController {
 	@Autowired
 	private VerificationTokenRepository vtRepo;
 	
-	@Autowired
-	private RoleRepository roleRepo;
-
 	@RequestMapping(value="/")
     public ModelAndView index() {
 		return new ModelAndView("index");

@@ -8,6 +8,8 @@ import com.fdmgroup.ses.model.User;
 
 public class OnRegistrationCompleteEvent extends ApplicationEvent {
 
+	private static final long serialVersionUID = 5293415357615596831L;
+	
 	private String appUrl;
     private Locale locale;
     private User user;
