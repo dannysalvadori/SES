@@ -2,15 +2,12 @@ package com.fdmgroup.ses.listener;
 
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Component;
 
 import com.fdmgroup.ses.model.User;
-import com.fdmgroup.ses.model.VerificationToken;
 import com.fdmgroup.ses.registration.OnRegistrationCompleteEvent;
-import com.fdmgroup.ses.repository.VerificationTokenRepository;
 
 @Component
 public class RegistrationListener implements ApplicationListener<OnRegistrationCompleteEvent> {

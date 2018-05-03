@@ -2,10 +2,6 @@ package com.fdmgroup.ses.controllerTest;
 
 import static org.junit.Assert.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +14,6 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fdmgroup.ses.controller.RegistrationController;
-import com.fdmgroup.ses.model.Role;
 import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.repository.RoleRepository;
 import com.fdmgroup.ses.repository.UserRepository;
