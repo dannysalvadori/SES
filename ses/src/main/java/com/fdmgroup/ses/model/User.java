@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -31,7 +32,7 @@ public class User {
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq")
 	@Column(name = "id")
-	private int id;
+	private Integer id;
 	
 	@Column(name = "email")
 	@Email(message = "*Please provide a valid Email")
@@ -57,7 +58,7 @@ public class User {
 	@Column(name = "active")
 	private int active;
 	
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles;
 
@@ -65,7 +66,7 @@ public class User {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

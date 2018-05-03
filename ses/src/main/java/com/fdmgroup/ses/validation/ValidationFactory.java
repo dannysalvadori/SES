@@ -1,4 +1,4 @@
-package com.fdmgroup.ses.Validation;
+package com.fdmgroup.ses.validation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

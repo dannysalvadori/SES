@@ -8,8 +8,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.WebRequest;
 
-import com.fdmgroup.ses.Validation.SesValidationException;
-import com.fdmgroup.ses.Validation.ValidationFactory;
 import com.fdmgroup.ses.model.Role;
 import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.model.VerificationToken;
@@ -17,6 +15,8 @@ import com.fdmgroup.ses.registration.OnRegistrationCompleteEvent;
 import com.fdmgroup.ses.repository.RoleRepository;
 import com.fdmgroup.ses.repository.UserRepository;
 import com.fdmgroup.ses.repository.VerificationTokenRepository;
+import com.fdmgroup.ses.validation.SesValidationException;
+import com.fdmgroup.ses.validation.ValidationFactory;
 
 @Service("userService")
 public class UserServiceImpl implements UserService {
@@ -46,6 +46,10 @@ public class UserServiceImpl implements UserService {
 		Set<Role> userRoles = new HashSet<Role>();
 		userRoles.add(roleRepo.findByRole("ROLE_USER"));
 		newUser.setRoles(userRoles);
+		if (userRoles == null || userRoles.isEmpty()) {
+			// TODO: exception handling if no roles
+			System.out.println("NO ROLES!");
+		}
 		
 		// Perform validations
 		validationFactory.getValidator(newUser).validate();
@@ -67,6 +71,11 @@ public class UserServiceImpl implements UserService {
 		System.out.println("token: " + token);
 		VerificationToken newToken = new VerificationToken(user, token);
 		verificationTokenRepository.save(newToken);		
+	}
+
+	@Override
+	public void deleteUser(User user) {
+		userRepo.delete(user);
 	}
 
 }

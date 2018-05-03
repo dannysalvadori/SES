@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fdmgroup.ses.Validation.SesValidationException;
-import com.fdmgroup.ses.Validation.ValidationUtils;
 import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.service.UserService;
+import com.fdmgroup.ses.validation.SesValidationException;
+import com.fdmgroup.ses.validation.ValidationUtils;
 
 @Controller
 public class RegistrationController {

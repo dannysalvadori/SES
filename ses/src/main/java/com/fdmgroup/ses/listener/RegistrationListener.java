@@ -1,4 +1,4 @@
-package com.fdmgroup.ses.Listener;
+package com.fdmgroup.ses.listener;
 
 import java.util.UUID;
 
@@ -21,8 +21,8 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 //	@Autowired
 //	private MessageSource messages;
 	
-	@Autowired
-	private VerificationTokenRepository vtRepo;
+//	@Autowired
+//	private VerificationTokenRepository vtRepo;
 	
 	@Override
 	public void onApplicationEvent(OnRegistrationCompleteEvent event) {
@@ -35,8 +35,8 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 		System.out.println("Confirming reg............");
 		User user = event.getUser();
 		String token = UUID.randomUUID().toString();
-		VerificationToken vt = new VerificationToken(user, token);
-		vtRepo.save(vt);
+//		VerificationToken vt = new VerificationToken(user, token);
+//		vtRepo.save(vt);
 		
 		String recipientAddress = user.getEmail();
 		String subject = "StockSim - Registration Confirmation";

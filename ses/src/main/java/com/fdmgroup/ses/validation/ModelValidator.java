@@ -1,4 +1,4 @@
-package com.fdmgroup.ses.Validation;
+package com.fdmgroup.ses.validation;
 
 import java.util.HashSet;
 import java.util.Set;

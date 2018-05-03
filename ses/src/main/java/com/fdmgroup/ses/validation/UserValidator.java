@@ -1,4 +1,4 @@
-package com.fdmgroup.ses.Validation;
+package com.fdmgroup.ses.validation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,7 +36,6 @@ public class UserValidator extends ModelValidator {
 		if (!user.getPassword().equals(user.getConfirmationPassword())) {
 			failures.add("Passwords do not match.");
 		}
-		System.out.println("Failures: " + failures);
 		
 		throwFailures();
 	}
