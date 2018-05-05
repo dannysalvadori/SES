@@ -2,6 +2,8 @@ package com.fdmgroup.ses.controllerTest;
 
 import static org.junit.Assert.*;
 
+import java.math.BigDecimal;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -84,6 +86,7 @@ public class RegistrationControllerTest {
 		User resultUser = userRepo.findByEmail(VALID_TEST_EMAIL);
 		assertTrue("Null user", resultUser != null);
 		assertEquals("Wrong email", VALID_TEST_EMAIL, resultUser.getEmail());
+		assertEquals("Wrong amount of credit", new BigDecimal(50000), resultUser.getCredit());
 	}
 	
 	/**

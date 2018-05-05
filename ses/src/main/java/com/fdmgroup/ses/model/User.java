@@ -1,5 +1,6 @@
 package com.fdmgroup.ses.model;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -60,6 +61,9 @@ public class User {
 	@ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles;
+	
+	@Column(name = "credit")
+	private BigDecimal credit = new BigDecimal(50000.00);
 
 	public int getId() {
 		return id;
@@ -123,6 +127,14 @@ public class User {
 
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
+	}
+
+	public BigDecimal getCredit() {
+		return credit;
+	}
+
+	public void setCredit(BigDecimal credit) {
+		this.credit = credit;
 	}
 
 }
