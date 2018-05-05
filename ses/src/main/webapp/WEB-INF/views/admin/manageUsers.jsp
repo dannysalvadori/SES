@@ -47,11 +47,15 @@
 							<c:if test="${role.role=='ROLE_ADMIN'}">Yes</c:if>
 						</c:forEach></td>
 						<td class="text-center">
-							<a href="../admin/toggleActive?uid=${user.id}"><button type="button" class="btn btn-primary">
-								Toggle
-							</button></a>
+							<a href="../admin/toggleActive?uid=${user.id}">
+								<button type="button" class="btn-sm btn-primary">Toggle</button>
+							</a>
 						</td>
-						<td class="text-center">--button--</td>
+						<td class="text-center">
+							<a href="../admin/editUser?uid=${user.id}">
+								<button type="button" class="btn-sm btn-primary">Edit</button>
+							</a>
+						</td>
 					</tr>
 				</c:forEach>
 			</tbody>

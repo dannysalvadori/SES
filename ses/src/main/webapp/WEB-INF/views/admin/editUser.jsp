@@ -13,32 +13,25 @@
 	<jsp:include page="nav.jsp"/>
 	
 	<div class="container">
-		<h1>Sign Up</h1>
-		<c:if test="${success}">
-			<div class="alert alert-success">
-					Success!
-				</div>
-		</c:if>
+		<h1>Edit User: ${user.email}</h1>
 		
-		<c:forTokens items="${failures}" delims="|" var="failure">
-			<div class="alert alert-danger" id="asp-error">
-				<c:out value="${failure}"/>
-			</div>
-		</c:forTokens>
-		
-		<form:form action="registerUser" method="POST" modelAttribute="newUser" class="col-md-6 col-md-offset-3">
-			<label for="email">Email Address:</label>
-			<form:input id="email" path="email" type="email" placeholder="email" required="true" autofocus="true" class="form-control"/>
+		<form:form action="registerUser" method="POST" modelAttribute="user" class="col-md-6 col-md-offset-3">
+			<label for="email">Email Address <span style="color:red">(Requires verification)</span></label>
+			<form:input id="email" path="email" type="email" placeholder="${user.email}" class="form-control"/>
+			
 			<label for="password">Password</label>
-			<form:input id="password" path="password" placeholder="password" type="password" required="true" class="form-control"/>
+			<form:input id="password" path="password" placeholder="********" type="password" class="form-control"/>
+			
 			<label for="confirmPW">Password</label>
-			<form:input id="confirmPW" path="confirmationPassword" placeholder="confirm your password" type="password" required="true" class="form-control"/>
+			<form:input id="confirmPW" path="confirmationPassword" placeholder="confirm" type="password" class="form-control"/>
+			
 			<label for="name">First Name</label>
 			<form:input id="name" path="name" placeholder="first name" required="true" class="form-control"/>
+			
 			<label for="lastName">Last Name</label>
 			<form:input id="lastName" path="lastName" placeholder="last name" required="true" class="form-control"/>
+			
 			<br/>
-			<form:hidden path="active" value="1" required="true"/>
 			<input type="submit" value="Register" class="btn btn-primary"/>
 		</form:form>
 	</div>

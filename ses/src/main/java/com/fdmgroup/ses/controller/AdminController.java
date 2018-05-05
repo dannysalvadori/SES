@@ -53,6 +53,7 @@ public class AdminController {
 			userRepo.save(user);
 		} catch (Exception e) {
 			// TODO: exception handling
+			System.out.println("Bad! Exception happened!");
 		}
 		modelAndView.setViewName("admin/manageUsers");
 		modelAndView.addObject("users", userRepo.findAll());
@@ -69,14 +70,12 @@ public class AdminController {
     ) {
 		try {
 			User user = userRepo.findById(userId);
-			int activeReverseState = user.getActive() == 1 ? 0 : 1;
-			user.setActive(activeReverseState);
-			userRepo.save(user);
+			modelAndView.setViewName("admin/editUser");
+			modelAndView.addObject("user", user);
 		} catch (Exception e) {
 			// TODO: exception handling
+			System.out.println("Bad! Exception happened!");
 		}
-		modelAndView.setViewName("admin/manageUsers");
-		modelAndView.addObject("users", userRepo.findAll());
 		return modelAndView;
 	}
 	
