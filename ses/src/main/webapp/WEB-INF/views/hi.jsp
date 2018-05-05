@@ -7,7 +7,6 @@
 <title>Demo Index Page</title>
 </head>
 <body>
-	<jsp:include page="../nav.jsp"/>
 	Hi hi :D
 	<br/>
 	User count: ${userCount}

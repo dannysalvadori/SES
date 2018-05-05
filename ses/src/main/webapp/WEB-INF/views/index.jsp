@@ -7,7 +7,7 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
 	<title>Demo Index Page</title>
 </head>
-<body>	
+<body>
 	<jsp:include page="nav.jsp"/>
 	
 	<br/>

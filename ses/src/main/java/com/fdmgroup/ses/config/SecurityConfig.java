@@ -13,6 +13,12 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+	
+	@Autowired
+	DataSource dataSource;
+	
+	@Autowired // Defines user/password/role queries as custom properties in application.properties
+	QueryConfig queryConfig;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -28,14 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					.failureUrl("/login-error") // default mapping
 					.defaultSuccessUrl("/login-success")
 					.and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/logout-success");
-//				.formLogin()
 	}
-
-	@Autowired
-	DataSource dataSource;
-	
-	@Autowired // Defines user/password/role queries as custom properties in application.properties
-	QueryConfig queryConfig;
 	
 	@Autowired
 	public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {

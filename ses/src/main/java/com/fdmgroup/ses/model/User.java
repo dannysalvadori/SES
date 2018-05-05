@@ -13,46 +13,51 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.data.annotation.Transient;
 
 @Entity
-@Table(name = "USERS")
 @SequenceGenerator(name="seq", initialValue=0, allocationSize=1, sequenceName="USER_SEQUENCE")
+@Table(
+	name = "USERS",
+	uniqueConstraints=@UniqueConstraint(columnNames={"email"})
+)
 public class User {
 
 	@Id
-//	@GeneratedValue(strategy = GenerationType.AUTO)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq")
 	@Column(name = "id")
-	private int id;
+	private Integer id;
 	
 	@Column(name = "email")
-//	@Email(message = "*Please provide a valid Email")
-//	@NotEmpty(message = "*Please provide an email")
+	@Email(message = "*Please provide a valid Email")
+	@NotEmpty(message = "*Please provide an email")
 	private String email;
 	
 	@Column(name = "password")
-//	@Length(min = 5, message = "*Your password must have at least 5 characters")
-//	@NotEmpty(message = "*Please provide your password")
-	@Transient
+	@Length(min = 6, max = 50, message = "*Your password must have at least 6 characters")
+	@NotEmpty(message = "*Please provide your password")
 	private String password;
 	
+	@Transient
+	private String confirmationPassword;
+	
 	@Column(name = "name")
-//	@NotEmpty(message = "*Please provide your name")
+	@NotEmpty(message = "*Please provide your name")
 	private String name;
 	
 	@Column(name = "last_name")
-//	@NotEmpty(message = "*Please provide your last name")
+	@NotEmpty(message = "*Please provide your last name")
 	private String lastName;
 	
 	@Column(name = "active")
 	private int active;
 	
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles;
 
@@ -60,7 +65,7 @@ public class User {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -70,6 +75,14 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getConfirmationPassword() {
+		return confirmationPassword;
+	}
+
+	public void setConfirmationPassword(String confirmPassword) {
+		this.confirmationPassword = confirmPassword;
 	}
 
 	public String getName() {
