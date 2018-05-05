@@ -12,7 +12,6 @@
 <body>
 	<jsp:include page="nav.jsp"/>
 	
-	<br/>
 	<div class="container">
 		<h1>Sign Up</h1>
 		<c:if test="${success}">

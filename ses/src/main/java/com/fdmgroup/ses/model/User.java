@@ -32,7 +32,7 @@ public class User {
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq")
 	@Column(name = "id")
-	private Integer id;
+	private int id;
 	
 	@Column(name = "email")
 	@Email(message = "*Please provide a valid Email")

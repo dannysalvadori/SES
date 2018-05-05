@@ -10,9 +10,8 @@
 <body>
 	<jsp:include page="nav.jsp"/>
 	
-	<br/>
 	<div class="container">
-		<h1>Welcome to stockSim</h1>
+		<h1>Welcome to stockSim</h1>		
 		<br/>
 		<a href="hello"><button type="button" class="btn btn-primary">Say Hi</button></a>
 		<br/><br/>

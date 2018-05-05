@@ -11,7 +11,6 @@
 <body>
 	<jsp:include page="nav.jsp"/>
 	
-	<br/>
 	<div class="container">
 		<h1>Login</h1>
 		<c:if test="${successfulRegistration}">
@@ -21,7 +20,7 @@
 		</c:if>
 		<form name="loginForm" action="/login" method="POST" class="col-md-6 col-md-offset-3">
 	        <label for="username">User Name:</label>
-	        <input id="username" name="username" type="text" class="form-control"/>
+	        <input id="username" name="username" type="text" class="form-control" autofocus="true"/>
 	        <label for="password">Password:</label>
 	        <input id="password" name="password" type="password" class="form-control"/>
 	        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> <!--CSRF token for security (?)-->
