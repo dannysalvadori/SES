@@ -6,24 +6,30 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-	<title>stockSim Admin - Edit User</title>
+	<title>stockSim Admin - Create New Company</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
 </head>
 <body>
 	<jsp:include page="../nav.jsp"/>
 	
 	<div class="container">
-		<h1>Edit User: ${user.email}</h1>
+		<h1>Create New User</h1>
 		
-		<form:form action="../admin/doEditUser" method="POST" modelAttribute="user" class="col-md-6 col-md-offset-3">
-			<label for="email">Email Address <span style="color:red">(Requires verification)</span></label>
-			<form:input id="email" path="email" type="email" placeholder="${user.email}" class="form-control"/>
+		<c:forTokens items="${failures}" delims="|" var="failure">
+			<div class="alert alert-danger" id="asp-error">
+				<c:out value="${failure}"/>
+			</div>
+		</c:forTokens>
+		
+		<form:form action="../admin/doCreateUser" method="POST" modelAttribute="newUser" class="col-md-6 col-md-offset-3">
+			<label for="email">Email Address (Requires verification)</label>
+			<form:input id="email" path="email" type="email" placeholder="john.smith@example.com" class="form-control"/>
 			
 			<label for="password">Password</label>
 			<form:input id="password" path="password" placeholder="********" type="password" class="form-control"/>
 			
-			<label for="confirmPW">Confirm Password <span style="color:grey">(Leave blank if not changing password)</span></label>
-			<form:input id="confirmPW" path="confirmationPassword" placeholder="---" type="password" class="form-control"/>
+			<label for="confirmPW">Confirm Password</label>
+			<form:input id="confirmPW" path="confirmationPassword" placeholder="********" type="password" class="form-control"/>
 			
 			<label for="name">First Name</label>
 			<form:input id="name" path="name" placeholder="first name" required="true" class="form-control"/>
@@ -32,20 +38,10 @@
 			<form:input id="lastName" path="lastName" placeholder="last name" required="true" class="form-control"/>
 			
 			<label for="birthDate">Birthdate (optional)</label>
-			<form:input id="birthDate" path="birthDate" type="date" placeholder="${user.birthDate}" class="form-control"/>
-			
-			<label for="roles">Roles (ctrl+click to select multiple)</label>
-			<br/>
-			<form:select id="roles" multiple="true" path="roles">
-				<form:options items="${allRoles}" itemValue="id" itemLabel="role"/>
-			</form:select>
-			
-			<!-- Non-update fields must still be in form, or will be updated to NULL -->
-			<form:hidden path="id"/>
-			<form:hidden path="active"/>
+			<form:input id="birthDate" path="birthDate" type="date" class="form-control"/>
 			
 			<br/>
-			<input type="submit" value="Save" class="btn btn-primary"/>
+			<input type="submit" value="Save New" class="btn btn-primary"/>
 		</form:form>
 	</div>
 	

@@ -1,6 +1,7 @@
 package com.fdmgroup.ses.model;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -64,6 +65,8 @@ public class User {
 	
 	@Column(name = "credit")
 	private BigDecimal credit = new BigDecimal(50000.00);
+	
+	private Date birthDate;
 
 	public int getId() {
 		return id;
@@ -135,6 +138,14 @@ public class User {
 
 	public void setCredit(BigDecimal credit) {
 		this.credit = credit;
+	}
+
+	public Date getBirthDate() {
+		return birthDate;
+	}
+
+	public void setBirthDate(Date birthDate) {
+		this.birthDate = birthDate;
 	}
 
 }

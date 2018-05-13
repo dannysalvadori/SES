@@ -5,7 +5,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
-	<title>stockSim - Admin Home</title>
+	<title>stockSim Admin - Home</title>
 </head>
 <body>
 	<jsp:include page="../nav.jsp"></jsp:include>

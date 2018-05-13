@@ -27,16 +27,25 @@
 		</c:forTokens>
 		
 		<form:form action="registerUser" method="POST" modelAttribute="newUser" class="col-md-6 col-md-offset-3">
+
 			<label for="email">Email Address:</label>
 			<form:input id="email" path="email" type="email" placeholder="email" required="true" autofocus="true" class="form-control"/>
+
 			<label for="password">Password</label>
 			<form:input id="password" path="password" placeholder="password" type="password" required="true" class="form-control"/>
+
 			<label for="confirmPW">Password</label>
 			<form:input id="confirmPW" path="confirmationPassword" placeholder="confirm your password" type="password" required="true" class="form-control"/>
+
 			<label for="name">First Name</label>
 			<form:input id="name" path="name" placeholder="first name" required="true" class="form-control"/>
+			
 			<label for="lastName">Last Name</label>
 			<form:input id="lastName" path="lastName" placeholder="last name" required="true" class="form-control"/>
+			
+			<label for="birthDate">Birthdate (optional)</label>
+			<form:input id="birthDate" path="birthDate" type="date" class="form-control"/>
+			
 			<br/>
 			<form:hidden path="active" value="1" required="true"/>
 			<input type="submit" value="Register" class="btn btn-primary"/>
