@@ -11,9 +11,13 @@
 </head>
 <body>
 	<jsp:include page="../nav.jsp"/>
-	
+		
 	<div class="container">
 		<h1>Edit Company: ${company.symbol} - ${company.name}</h1>
+		
+		<a href="../admin/manageCompanies"><button type="button" class="btn-sm btn-danger">Cancel</button></a>
+		<br/>
+		<br/>
 		
 		<form:form action="../admin/doEditCompany" method="POST" modelAttribute="company" class="col-md-6 col-md-offset-3">
 			<label for="symbol">Symbol</label>

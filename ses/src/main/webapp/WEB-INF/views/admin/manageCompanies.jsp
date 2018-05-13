@@ -23,6 +23,8 @@
 		<h1>Manage Companies</h1>
 		<br/>
 		
+		<a href="../admin/adminHome"><button type="button" class="btn-sm btn-danger">Admin Home</button></a>
+		&nbsp;
 		<a href="../admin/createCompany"><button type="button" class="btn-sm btn-primary">Add New Company...</button></a>
 		<br/>
 		<br/>

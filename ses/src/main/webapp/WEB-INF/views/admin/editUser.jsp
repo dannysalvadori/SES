@@ -15,6 +15,16 @@
 	<div class="container">
 		<h1>Edit User: ${user.email}</h1>
 		
+		<a href="../admin/manageUsers"><button type="button" class="btn-sm btn-danger">Cancel</button></a>
+		<br/>
+		<br/>
+		
+		<c:forTokens items="${failures}" delims="|" var="failure">
+			<div class="alert alert-danger" id="asp-error">
+				<c:out value="${failure}"/>
+			</div>
+		</c:forTokens>
+		
 		<form:form action="../admin/doEditUser" method="POST" modelAttribute="user" class="col-md-6 col-md-offset-3">
 			<label for="email">Email Address <span style="color:red">(Requires verification)</span></label>
 			<form:input id="email" path="email" type="email" placeholder="${user.email}" class="form-control"/>
@@ -32,7 +42,8 @@
 			<form:input id="lastName" path="lastName" placeholder="last name" required="true" class="form-control"/>
 			
 			<label for="birthDate">Birthdate (optional)</label>
-			<form:input id="birthDate" path="birthDate" type="date" placeholder="${user.birthDate}" class="form-control"/>
+			<form:input id="birthDate" path="birthDate" type="date" placeholder="${user.birthDate}"
+				min="1900-01-01" max="2018-01-01" class="form-control"/>
 			
 			<label for="roles">Roles (ctrl+click to select multiple)</label>
 			<br/>

@@ -33,7 +33,7 @@ public class User {
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq")
 	@Column(name = "id")
-	private int id;
+	private Integer id;
 	
 	@Column(name = "email")
 	@Email(message = "*Please provide a valid Email")
@@ -68,7 +68,7 @@ public class User {
 	
 	private Date birthDate;
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 

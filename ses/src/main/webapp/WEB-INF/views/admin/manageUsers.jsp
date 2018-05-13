@@ -30,6 +30,8 @@
 		<h1>Manage Users</h1>
 		<br/>
 		
+		<a href="../admin/adminHome"><button type="button" class="btn-sm btn-danger">Admin Home</button></a>
+		&nbsp;		
 		<a href="../admin/createUser"><button type="button" class="btn-sm btn-primary">Add New User...</button></a>
 		<br/>
 		<br/>

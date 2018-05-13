@@ -66,7 +66,6 @@ public class AdminCRUDUserController {
 				return roleRepo.findById(id);
 			}
 		});		
-		
 	}
 	
 	/**
@@ -164,17 +163,20 @@ public class AdminCRUDUserController {
 	@RequestMapping(value="/admin/doEditUser")
     public ModelAndView doEditUser(
     		ModelAndView modelAndView,
+    		WebRequest request,
     		@ModelAttribute("user") User user
     ) {
 		try {
-//			userService.update(user);
-			userRepo.save(user);
+			userService.saveUser(user, request);
+//			userRepo.save(user);
 			modelAndView.setViewName("admin/manageUsers");
 			modelAndView.addObject("users", userRepo.findAll());
 			modelAndView.addObject("user", null);
-		} catch (Exception e) {
-			// TODO: exception handling
-			System.out.println("Bad! Exception happened!");
+		} catch (SesValidationException ex) {
+			System.out.println("Validation Failures: " + ValidationUtils.stringifyFailures(ex.getFailures()));
+			modelAndView.addObject("failures", ValidationUtils.stringifyFailures(ex.getFailures()));
+			modelAndView.addObject("allRoles", roleRepo.findAll());
+			modelAndView.setViewName("admin/editUser");
 		}
 		return modelAndView;
 	}
