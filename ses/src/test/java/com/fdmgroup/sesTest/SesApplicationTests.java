@@ -11,6 +11,8 @@ public class SesApplicationTests {
 
 	@Test
 	public void contextLoads() {
+		// TODO: write tests?	
+		assert(true);
 	}
 
 }
