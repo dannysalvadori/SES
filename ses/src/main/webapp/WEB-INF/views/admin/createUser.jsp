@@ -14,6 +14,7 @@
 	
 	<div class="container">
 		<h1>Create New User</h1>
+		<br/>
 		
 		<a href="../admin/manageUsers"><button type="button" class="btn-sm btn-danger">Cancel</button></a>
 		<br/>

@@ -14,6 +14,7 @@
 	
 	<div class="container">
 		<h1>Create Company</h1>
+		<br/>
 		
 		<a href="../admin/manageCompanies"><button type="button" class="btn-sm btn-danger">Cancel</button></a>
 		<br/>
