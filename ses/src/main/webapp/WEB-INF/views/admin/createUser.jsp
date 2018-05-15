@@ -15,6 +15,10 @@
 	<div class="container">
 		<h1>Create New User</h1>
 		
+		<a href="../admin/manageUsers"><button type="button" class="btn-sm btn-danger">Cancel</button></a>
+		<br/>
+		<br/>
+		
 		<c:forTokens items="${failures}" delims="|" var="failure">
 			<div class="alert alert-danger" id="asp-error">
 				<c:out value="${failure}"/>

@@ -15,6 +15,10 @@
 	<div class="container">
 		<h1>Create Company</h1>
 		
+		<a href="../admin/manageCompanies"><button type="button" class="btn-sm btn-danger">Cancel</button></a>
+		<br/>
+		<br/>
+		
 		<form:form action="../admin/doCreateCompany" method="POST" modelAttribute="company" class="col-md-6 col-md-offset-3">
 			<label for="symbol">Symbol</label>
 			<form:input id="symbol" path="symbol" placeholder="${company.symbol}" class="form-control"/>
