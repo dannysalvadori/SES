@@ -33,7 +33,7 @@ public class UserValidator extends ModelValidator {
 		
 		// Update
 		if (isUpdate) {
-			
+
 			User oldUser = userRepo.findById(user.getId());
 			
 			// Fail if email is changed to a taken address
@@ -56,6 +56,7 @@ public class UserValidator extends ModelValidator {
 			
 		// Insert
 		} else {
+			System.out.println("Is insert");
 			
 			if (userService.findUserByEmail(user.getEmail()) != null) {
 				failures.add("A user is already registered with this address.");
@@ -70,6 +71,7 @@ public class UserValidator extends ModelValidator {
 			}
 		
 		}
+		System.out.println("failures? : " + ValidationUtils.stringifyFailures(failures));
 		throwFailures();
 	}
 
