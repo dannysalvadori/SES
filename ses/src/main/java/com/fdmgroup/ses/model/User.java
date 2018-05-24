@@ -1,6 +1,7 @@
 package com.fdmgroup.ses.model;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -24,8 +25,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Entity
 @SequenceGenerator(name="seq", initialValue=0, allocationSize=1, sequenceName="USER_SEQUENCE")
 @Table(
-	name = "USERS",
-	uniqueConstraints=@UniqueConstraint(columnNames={"email"})
+	name = "USERS"//,
+//	uniqueConstraints=@UniqueConstraint(columnNames={"email"})
 )
 public class User {
 
@@ -64,8 +65,10 @@ public class User {
 	
 	@Column(name = "credit")
 	private BigDecimal credit = new BigDecimal(50000.00);
+	
+	private Date birthDate;
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
@@ -135,6 +138,14 @@ public class User {
 
 	public void setCredit(BigDecimal credit) {
 		this.credit = credit;
+	}
+
+	public Date getBirthDate() {
+		return birthDate;
+	}
+
+	public void setBirthDate(Date birthDate) {
+		this.birthDate = birthDate;
 	}
 
 }

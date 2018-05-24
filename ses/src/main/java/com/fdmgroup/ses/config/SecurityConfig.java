@@ -26,7 +26,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 				.antMatchers("/").permitAll()
 				.antMatchers("/user*").hasAnyRole("USER", "ADMIN")
-				.antMatchers("/admin*").hasRole("ADMIN") // "/admin*" gets any MAPPING (not end URI) matching /admin*
+				.antMatchers("/admin*", "/admin/**").hasRole("ADMIN")
+				// "/admin*" gets any MAPPING (not end URI) matching /admin___; /admin/** gets anything mapped admin/___
 				// N.B. While this role must be "ADMIN", Spring prepends "ROLE_" - it must be "ROLE_ADMIN" in the DB
 			.and()
 				.formLogin()

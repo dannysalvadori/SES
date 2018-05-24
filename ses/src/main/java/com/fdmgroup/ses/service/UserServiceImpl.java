@@ -40,26 +40,28 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void saveUser(User newUser, WebRequest request) throws SesValidationException {
+	public void saveUser(User user, WebRequest request) throws SesValidationException {
 		
-		// Set ROLE_USER
-		Set<Role> userRoles = new HashSet<Role>();
-		userRoles.add(roleRepo.findByRole("ROLE_USER"));
-		newUser.setRoles(userRoles);
-		if (userRoles == null || userRoles.isEmpty()) {
-			// TODO: exception handling if no roles
-			System.out.println("NO ROLES!");
+		// If no role assigned, set ROLE_USER
+		if (user.getRoles() == null || user.getRoles().isEmpty()) {
+			Set<Role> userRoles = new HashSet<Role>();
+			userRoles.add(roleRepo.findByRole("ROLE_USER"));
+			user.setRoles(userRoles);
+			if (userRoles == null || userRoles.isEmpty()) {
+				// TODO: exception handling if no roles
+				System.out.println("NO ROLES!");
+			}
 		}
 		
 		// Perform validations
-		validationFactory.getValidator(newUser).validate();
+		validationFactory.getValidator(user).validate();
 		
 		// Save user
-		userRepo.save(newUser);
+		userRepo.save(user);
 		
 		// Create and email verification token
 		String appUrl = request.getContextPath();
-		eventPublisher.publishEvent(new OnRegistrationCompleteEvent(newUser, request.getLocale(), appUrl));
+		eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, request.getLocale(), appUrl));
 	}
 
 	/**

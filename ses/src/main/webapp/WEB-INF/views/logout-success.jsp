@@ -10,7 +10,6 @@
 <body>	
 	<jsp:include page="nav.jsp"/>
 	
-	<br/>
 	<div class="container">
 		<h1>You have been logged out</h1>
 		<p>See you again soon!</p>

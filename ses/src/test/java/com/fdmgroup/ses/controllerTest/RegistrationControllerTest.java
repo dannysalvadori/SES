@@ -41,12 +41,12 @@ public class RegistrationControllerTest {
     WebRequest webRequest;
 	
 	private ModelAndView mav = new ModelAndView();
-	private final String VALID_TEST_EMAIL = "danny.salvadori@gmail.com";//"example@sesTest.com";
+	private final String VALID_TEST_EMAIL = String.valueOf(Math.random()) + "@sesTest.com";
 	
 	@Before
 	public void setUp() throws Exception {
 		User testUser = userRepo.findByEmail(VALID_TEST_EMAIL);
-		assertEquals("A user already exists with the test email", null, testUser);
+		assertEquals("A user already exists with the test email. Consider re-running test", null, testUser);
 	}
 	
 	/**

@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
+
 import com.fdmgroup.ses.config.QueryConfig;
 
 @SpringBootApplication(scanBasePackages="com.fdmgroup.ses")

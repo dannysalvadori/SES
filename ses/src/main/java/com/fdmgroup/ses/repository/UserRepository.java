@@ -7,6 +7,6 @@ import com.fdmgroup.ses.model.User;
 
 @Repository("userRepository")
 public interface UserRepository extends JpaRepository<User, Long> {
+	User findById(Integer id);
 	User findByEmail(String email);
-	User findById(int testId);
 }

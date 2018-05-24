@@ -1,8 +1,14 @@
 package com.fdmgroup.ses.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.WebRequest;
@@ -21,6 +27,15 @@ public class RegistrationController {
 	
 	@Autowired
 	ApplicationEventPublisher eventPublisher;
+	
+	/**
+	 * Instruct Spring Form how to bind date input
+	 * @param binder
+	 */
+	@InitBinder    
+	public void initBinder(WebDataBinder binder){
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true));
+	}
 
 	/**
 	 * Go to registration page
