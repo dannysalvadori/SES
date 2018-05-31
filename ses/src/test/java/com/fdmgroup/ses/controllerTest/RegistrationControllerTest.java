@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
 
+import javax.transaction.Transactional;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,6 +25,7 @@ import com.fdmgroup.ses.service.UserService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Transactional
 public class RegistrationControllerTest {
 	
 	@Autowired
@@ -171,7 +174,6 @@ public class RegistrationControllerTest {
 	
 	private User createUser() {
 		User u = new User();
-		u.setId(1000); // This will be overridden
 		u.setActive(1);
 		u.setEmail(VALID_TEST_EMAIL);
 		u.setPassword("123456");

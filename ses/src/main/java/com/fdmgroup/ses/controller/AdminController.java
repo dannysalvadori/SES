@@ -11,7 +11,7 @@ public class AdminController {
 	 * Go to Admin home page
 	 */
 	@RequestMapping(value="/admin/adminHome")
-    public ModelAndView login(ModelAndView modelAndView) {
+    public ModelAndView goToAdminHome(ModelAndView modelAndView) {
 		modelAndView.setViewName("admin/adminHome");
 		return modelAndView;
 	}

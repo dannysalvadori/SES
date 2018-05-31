@@ -11,7 +11,7 @@ public class LoginController {
 	 * Go to login page
 	 */
 	@RequestMapping(value="/login")
-    public ModelAndView login(ModelAndView modelAndView) {
+    public ModelAndView goToLogin(ModelAndView modelAndView) {
 		modelAndView.setViewName("login");
 		return modelAndView;
 	}
@@ -20,17 +20,17 @@ public class LoginController {
 	 * Returns to login page with an error message
 	 */
 	@RequestMapping(value="/login-error")
-    public ModelAndView loginError(ModelAndView modelAndView) {
+    public ModelAndView doLoginError(ModelAndView modelAndView) {
 		modelAndView.setViewName("login");
 		modelAndView.addObject("error", "Invalid username or password");
-		return login(modelAndView);
+		return goToLogin(modelAndView);
 	}
 	
 	/**
 	 * Go to logout success page
 	 */
 	@RequestMapping(value="/logout-success")
-    public ModelAndView logout(ModelAndView modelAndView) {
+    public ModelAndView doLogout(ModelAndView modelAndView) {
 		modelAndView.setViewName("logout-success");
 		return modelAndView;
 	}
@@ -39,7 +39,7 @@ public class LoginController {
 	 * Go to log in landing page (My Account)
 	 */
 	@RequestMapping(value="/login-success")
-    public ModelAndView loginLandingPage(ModelAndView modelAndView) {
+    public ModelAndView goToLoginLandingPage(ModelAndView modelAndView) {
 		modelAndView.setViewName("user/myAccount");
 		return modelAndView;
 	}
