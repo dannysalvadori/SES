@@ -31,7 +31,7 @@
 		<br/>
 		
 		<table id="myTable">
-			<thead >
+			<thead>
 				<tr>
 					<th>Symbol</th>
 					<th>Name</th>
