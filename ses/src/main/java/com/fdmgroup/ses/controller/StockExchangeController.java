@@ -1,8 +1,8 @@
 package com.fdmgroup.ses.controller;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+
+import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fdmgroup.ses.model.Company;
 import com.fdmgroup.ses.repository.CompanyRepository;
+import com.fdmgroup.ses.service.CompanyService;
 import com.fdmgroup.ses.stockExchange.TransactionForm;
 
 @Controller
@@ -19,9 +20,12 @@ public class StockExchangeController {
 	
 	@Autowired
 	CompanyRepository companyRepo;
+	
+	@Autowired
+	CompanyService stockService;
 
 	/**
-	 * Go to Admin home page
+	 * Go to Stock Exchange page TODO: move to nav controller. TODO: move "addCompanies" to service
 	 */
 	@RequestMapping(value="/user/stockExchange")
     public ModelAndView goToAdminHome(ModelAndView modelAndView) {
@@ -33,52 +37,69 @@ public class StockExchangeController {
 	/**
 	 * Request a purchase on a given stock
 	 */
-	@RequestMapping(value="/user/doBuyStocks")
+	@RequestMapping(value="/user/doPlaceOrder")
     public ModelAndView goToBuyStocks(
     		ModelAndView modelAndView,
     		@ModelAttribute("transactionForm") TransactionForm transactionForm
     ) {
-		System.out.println("buying stocks!!");
-//		System.out.println("transactionForm company count: " + transactionForm.getCompanies().size());
-//		for (Company comp : transactionForm.getCompanies()) {
-//			// If getSelected is FALSE or NULL (removed from page by datatables), ignore, else BUY
-//			System.out.print("comp: " + (comp == null ? "NULL" : "OK") + " -- ");
-//			if (comp != null) {
-//				System.out.print(comp.getSymbol());
-//				System.out.print(" (" + (comp.getSelected() == null ? null : comp.getSelected() == true ? "CHECK" : "X"));
-//				System.out.print("): buying " + comp.getTransactionQuantity() + "\n");
-//			}
-//		}
-		
-		List<Company> purchaseCompanies = new ArrayList<>();
+		// Refine transaction form
+		TransactionForm purchaseForm = new TransactionForm();
 		for (Company comp : transactionForm.getCompanies()) {
 			if (comp.getSelected() != null && comp.getSelected() == true
 					&& comp.getTransactionQuantity() != null && comp.getTransactionQuantity() > 0) {
-				purchaseCompanies.add(comp);
+				purchaseForm.getCompanies().add(comp);
 			}
 		}
-		
-		BigDecimal total = new BigDecimal(0);
-		for (Company c : purchaseCompanies) {
+		modelAndView.addObject("transactionForm", purchaseForm);
 
+		// Total up transaction price
+		BigDecimal total = new BigDecimal(0);
+		for (Company c : purchaseForm.getCompanies()) {
 			BigDecimal subTotal = c.getCurrentShareValue().multiply(new BigDecimal(c.getTransactionQuantity()));
-			
 			total = total.add(subTotal);
-			System.out.println("subtotal: " + subTotal);
-			System.out.println("total: " + total);
 		}
-		System.out.println("total done: " + total);
-		
-		modelAndView.addObject("purchaseCompanies", purchaseCompanies);
 		modelAndView.addObject("total", total);
 		
-		// ---- Debug only; return to SE page
-		modelAndView.setViewName("user/buyStocks");
-		addCompaniesToModel(modelAndView);
-		// ----
+		
+		modelAndView.setViewName("user/confirmPurchase");
 		return modelAndView;
 	}
 	
+	/**
+	 * Go to authentication page:
+	 * - TODO: Apply Broker validations
+	 * - TODO: Make user Provide credit card details 
+	 */
+	@RequestMapping(value="/user/authenticatePurchase")
+    public ModelAndView goToAuthenticatePurchase(
+    		ModelAndView modelAndView,
+    		@ModelAttribute("transactionForm") TransactionForm purchaseForm
+    ) {
+		modelAndView.setViewName("user/authenticatePurchase");
+		return modelAndView;
+	}
+	
+	/**
+	 * Complete a purchase. Assumes payment has already been authorised 
+	 */
+	@RequestMapping(value="/user/doPurchase")
+    public ModelAndView doPurchase(
+    		ModelAndView modelAndView,
+    		@ModelAttribute("transactionForm") TransactionForm purchaseForm
+    ) {
+		try {
+			
+			// TODO: stockService.purchaseStocks();
+			modelAndView.setViewName("user/purchaseComplete");
+		} catch (ValidationException ex) {
+			modelAndView.setViewName("user/purchaseFailed");
+		}
+		return modelAndView;
+	}
+	
+	/**
+	 * Adds all SE companies to model in a TransactionForm, as "transactionForm"
+	 */
 	private void addCompaniesToModel(ModelAndView mav) {
 		TransactionForm transactionForm = new TransactionForm();
 		transactionForm.setCompanies(companyRepo.findAll());

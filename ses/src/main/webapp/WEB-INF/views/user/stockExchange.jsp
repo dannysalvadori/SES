@@ -27,7 +27,7 @@
 		<h2>Purchase Stocks</h2>
 		<br/>
 		
-		<form:form action="../user/doBuyStocks" method="POST" modelAttribute="transactionForm">
+		<form:form action="../user/doPlaceOrder" method="POST" modelAttribute="transactionForm">
 		<table id="stockExchange">
 			<thead>
 				<tr>

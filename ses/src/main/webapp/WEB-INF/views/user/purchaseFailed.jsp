@@ -13,7 +13,7 @@
 	<jsp:include page="../nav.jsp"/>
 	
 	<div class="container">
-		<h1>Purchase Stocks</h1>
+		<h1>Confirm Purchase</h1>
 		<br/>
 		
 		<div class="alert alert-warning">
