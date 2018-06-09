@@ -33,7 +33,7 @@ public class TransactionHistory {
 	private BigDecimal unitPrice;
 	
 	@Column(name = "purchase_quantity")
-	private BigDecimal quantity;
+	private Long quantity;
 	
 	@Column(name = "purchase_value")
 	private BigDecimal value;
@@ -75,11 +75,11 @@ public class TransactionHistory {
 		this.unitPrice = unitPrice;
 	}
 	
-	public BigDecimal getQuantity() {
+	public Long getQuantity() {
 		return quantity;
 	}
 	
-	public void setQuantity(BigDecimal quantity) {
+	public void setQuantity(Long quantity) {
 		this.quantity = quantity;
 	}
 

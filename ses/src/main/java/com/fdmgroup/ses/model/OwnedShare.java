@@ -1,7 +1,5 @@
 package com.fdmgroup.ses.model;
 
-import java.math.BigDecimal;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,7 +27,7 @@ public class OwnedShare {
 	private Company company;
 	
 	@Column(name = "quantity")
-	private BigDecimal quantity = new BigDecimal(0);
+	private Long quantity;
 	
 	@OneToOne
 	private TransactionHistory transactionHistory;
@@ -58,11 +56,11 @@ public class OwnedShare {
 		this.company = company;
 	}
 
-	public BigDecimal getQuantity() {
+	public Long getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(BigDecimal quantity) {
+	public void setQuantity(Long quantity) {
 		this.quantity = quantity;
 	}
 

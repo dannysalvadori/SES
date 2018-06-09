@@ -2,18 +2,21 @@ package com.fdmgroup.ses.controller;
 
 import java.math.BigDecimal;
 
-import javax.validation.ValidationException;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fdmgroup.ses.model.Company;
+import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.repository.CompanyRepository;
-import com.fdmgroup.ses.service.CompanyService;
+import com.fdmgroup.ses.repository.UserRepository;
+import com.fdmgroup.ses.service.TransactionService;
 import com.fdmgroup.ses.stockExchange.TransactionForm;
+import com.fdmgroup.ses.validation.SesValidationException;
 
 @Controller
 public class StockExchangeController {
@@ -22,7 +25,10 @@ public class StockExchangeController {
 	CompanyRepository companyRepo;
 	
 	@Autowired
-	CompanyService stockService;
+	TransactionService transactionService;
+
+	@Autowired
+	UserRepository userRepo;
 
 	/**
 	 * Go to Stock Exchange page TODO: move to nav controller. TODO: move "addCompanies" to service
@@ -76,6 +82,7 @@ public class StockExchangeController {
     		@ModelAttribute("transactionForm") TransactionForm purchaseForm
     ) {
 		modelAndView.setViewName("user/authenticatePurchase");
+		modelAndView.addObject("transactionForm", purchaseForm);
 		return modelAndView;
 	}
 	
@@ -88,10 +95,11 @@ public class StockExchangeController {
     		@ModelAttribute("transactionForm") TransactionForm purchaseForm
     ) {
 		try {
-			
-			// TODO: stockService.purchaseStocks();
+			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			User user = userRepo.findByEmail(userDetails.getUsername());
+			transactionService.buyStocks(user, purchaseForm);
 			modelAndView.setViewName("user/purchaseComplete");
-		} catch (ValidationException ex) {
+		} catch (SesValidationException ex) {
 			modelAndView.setViewName("user/purchaseFailed");
 		}
 		return modelAndView;

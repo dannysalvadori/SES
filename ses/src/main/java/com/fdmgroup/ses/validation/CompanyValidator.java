@@ -1,23 +1,18 @@
 package com.fdmgroup.ses.validation;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fdmgroup.ses.model.Company;
-import com.fdmgroup.ses.repository.CompanyRepository;
 
 @Component
 public class CompanyValidator extends ModelValidator {
 	
-	@Autowired
-	private CompanyRepository companyRepo;
-
 	private Company company;
 
 	/**
 	 * Validates Company creations and updates:
 	 * # Stock value cannot fall below XXX or rise above YYY
-	 * # Stock amount cannot fall to 0 (how about ZZZ amount?)  
+	 * # Stock amount cannot fall to 0 (how about ZZZ amount?)
 	 */
 	@Override
 	public void validate() throws SesValidationException {
@@ -29,21 +24,21 @@ public class CompanyValidator extends ModelValidator {
 		// Update
 		if (isUpdate) {
 
-			Company oldCompany = companyRepo.findById(company.getId());
-			
-			// Fail if email is changed to a taken address
-			if (!oldCompany.getSymbol().equalsIgnoreCase(company.getSymbol())
-					&& companyRepo.findBySymbol(company.getSymbol()) != null
-			) {
-				failures.add("A user is already registered with this address.");
-			}
+//			Company oldCompany = companyRepo.findById(company.getId());
+//			
+//			// Fail if email is changed to a taken address
+//			if (!oldCompany.getSymbol().equalsIgnoreCase(company.getSymbol())
+//					&& companyRepo.findBySymbol(company.getSymbol()) != null
+//			) {
+//				failures.add("A user is already registered with this address.");
+//			}
 			
 		// Insert
 		} else {
 			
-			if (companyRepo.findBySymbol(company.getSymbol()) != null) {
-				failures.add("A user is already registered with this address.");
-			}
+//			if (companyRepo.findBySymbol(company.getSymbol()) != null) {
+//				failures.add("A user is already registered with this address.");
+//			}
 		
 		}
 		System.out.println("failures? : " + ValidationUtils.stringifyFailures(failures));

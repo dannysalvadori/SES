@@ -49,6 +49,10 @@ public class Company {
 	@Transient
 	private Boolean selected;
 	
+	public BigDecimal getTransactionValue() {
+		return currentShareValue.multiply(new BigDecimal(transactionQuantity));
+	}
+	
 	public Integer getId() {
 		return id;
 	}

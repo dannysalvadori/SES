@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri = "http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -27,6 +27,15 @@
 		</div>
 		
 		<br/>
+		
+		<form:form action="../user/doPurchase" method="POST" modelAttribute="transactionForm">
+			<c:forEach items="${transactionForm.companies}" var="company" varStatus="cStatus">
+				<form:hidden path="companies[${cStatus.index}].Symbol"/>
+				<form:hidden path="companies[${cStatus.index}].currentShareValue"/>
+				<form:hidden path="companies[${cStatus.index}].transactionQuantity"/>
+			</c:forEach>
+			<input type="submit" value="PROCEEDULATE!11" class="btn-sm btn-primary"/>
+		</form:form>
 		
 		<a href="../user/stockExchange"><button type="button" class="btn-sm btn-danger">Cancel</button></a>
 		&nbsp;

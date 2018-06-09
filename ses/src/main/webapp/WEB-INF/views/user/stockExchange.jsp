@@ -28,59 +28,60 @@
 		<br/>
 		
 		<form:form action="../user/doPlaceOrder" method="POST" modelAttribute="transactionForm">
-		<table id="stockExchange">
-			<thead>
-				<tr>
-					<th></th>
-					<th>Symbol</th>
-					<th>Name</th>
-					<th>Stocks Available</th>
-					<th>Current Value</th>
-					<th>Qty.</th>
-					<th class="text-center">Buy</th>
-				</tr>
-			</thead>
-			<tbody>
+			<table id="stockExchange">
+				<thead>
+					<tr>
+						<th></th>
+						<th>Symbol</th>
+						<th>Name</th>
+						<th>Stocks Available</th>
+						<th>Current Value</th>
+						<th>Qty.</th>
+						<th class="text-center">Buy</th>
+					</tr>
+				</thead>
+				<tbody>
 					<c:forEach items="${transactionForm.companies}" var="company" varStatus="cStatus">
 						<tr>
 							<td>
 								<form:checkbox path="companies[${cStatus.index}].selected"/>
 								<form:hidden path="companies[${cStatus.index}].Id"/>
 							</td>
-
+	
 							<td>
 								${company.symbol}
 								<form:hidden path="companies[${cStatus.index}].Symbol"/>
 							</td>
-
+	
 							<td>
 								${company.name}
 								<form:hidden path="companies[${cStatus.index}].Name"/>	
 							</td>
-
+	
 							<td>
 								<fmt:formatNumber value="${company.availableShares}" type="number" />
 							</td>
-
+	
 							<td>
 								<fmt:formatNumber value="${company.currentShareValue}" type="currency"/>
 								<form:hidden path="companies[${cStatus.index}].currentShareValue"/>
 							</td>
-
+	
 							<td>
 								<form:input path="companies[${cStatus.index}].transactionQuantity" type="number" min="1"/>
 								<!-- Required to make form submittable. Not sure why! -->
-								<form:input style="display:none;" path="${company.transactionQuantity}"/>
+								<form:hidden path="companies[${cStatus.index}].transactionQuantity"/>
+								<%-- <form:input style="display:none;" path="${company.transactionQuantity}"/> --%>
 							</td>
-
+	
 							<td><input type="submit" value="Buy" class="btn-sm btn-primary"/>
 						</tr>
 					</c:forEach>
-			</tbody>
-		</table>
-					<br/>
-					<input type="submit" value="Buy Selected" class="btn-sm btn-primary">
-				</form:form>
+				</tbody>
+			</table>
+			<br/>
+			<input type="submit" value="Buy Selected" class="btn-sm btn-primary">
+		</form:form>
 		
 	</div>
 </body>
