@@ -64,21 +64,19 @@
 							</td>
 						</tr>
 					</c:forEach>
-					<input type="submit" value="PROCEEDULATE!11" class="btn-sm btn-primary"/>
 					<tr>
 						<td colspan="4" class="text-right"><strong>Total:</strong></td>
 						<td><strong><fmt:formatNumber value="${total}" type="currency"/></strong></td>
 					</tr>
 				</tbody>
 			</table>
+		
+			<br/>
+		
+			<a href="../user/stockExchange"><button type="button" class="btn-sm btn-danger">Cancel</button></a>
+			&nbsp;
+			<input type="submit" value="Proceed to Payment" class="btn-sm btn-primary"/>
 		</form:form>
-		
-		<br/>
-		
-		<a href="../user/stockExchange"><button type="button" class="btn-sm btn-danger">Cancel</button></a>
-		&nbsp;
-		<a href="../user/authenticatePurchase"><button type="button" class="btn-sm btn-primary">Proceed to Payment</button></a>
-		<br/>
 			
 	</div>
 	

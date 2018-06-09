@@ -34,13 +34,11 @@
 				<form:hidden path="companies[${cStatus.index}].currentShareValue"/>
 				<form:hidden path="companies[${cStatus.index}].transactionQuantity"/>
 			</c:forEach>
-			<input type="submit" value="PROCEEDULATE!11" class="btn-sm btn-primary"/>
-		</form:form>
 		
-		<a href="../user/stockExchange"><button type="button" class="btn-sm btn-danger">Cancel</button></a>
-		&nbsp;
-		<a href="../user/doPurchase"><button type="button" class="btn-sm btn-warning">Place Order</button></a>
-		<br/>
+			<a href="../user/stockExchange"><button type="button" class="btn-sm btn-danger">Cancel</button></a>
+			&nbsp;
+			<input type="submit" value="Place Order" class="btn-sm btn-warning"/>
+		</form:form>
 			
 	</div>
 	
