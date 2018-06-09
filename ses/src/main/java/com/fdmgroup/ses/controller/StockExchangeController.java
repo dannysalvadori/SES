@@ -17,9 +17,14 @@ import com.fdmgroup.ses.repository.UserRepository;
 import com.fdmgroup.ses.service.TransactionService;
 import com.fdmgroup.ses.stockExchange.TransactionForm;
 import com.fdmgroup.ses.validation.SesValidationException;
+import com.fdmgroup.ses.validation.ValidationFactory;
+import com.fdmgroup.ses.validation.ValidationUtils;
 
 @Controller
 public class StockExchangeController {
+	
+	@Autowired
+	ValidationFactory validationFactory;
 	
 	@Autowired
 	CompanyRepository companyRepo;
@@ -34,7 +39,7 @@ public class StockExchangeController {
 	 * Go to Stock Exchange page TODO: move to nav controller. TODO: move "addCompanies" to service
 	 */
 	@RequestMapping(value="/user/stockExchange")
-    public ModelAndView goToAdminHome(ModelAndView modelAndView) {
+    public ModelAndView goToStockExchange(ModelAndView modelAndView) {
 		modelAndView.setViewName("user/stockExchange");
 		addCompaniesToModel(modelAndView);
 		return modelAndView;
@@ -44,7 +49,7 @@ public class StockExchangeController {
 	 * Request a purchase on a given stock
 	 */
 	@RequestMapping(value="/user/doPlaceOrder")
-    public ModelAndView goToBuyStocks(
+    public ModelAndView doPlaceOrder(
     		ModelAndView modelAndView,
     		@ModelAttribute("transactionForm") TransactionForm transactionForm
     ) {
@@ -56,18 +61,19 @@ public class StockExchangeController {
 				purchaseForm.getCompanies().add(comp);
 			}
 		}
-		modelAndView.addObject("transactionForm", purchaseForm);
-
-		// Total up transaction price
-		BigDecimal total = new BigDecimal(0);
-		for (Company c : purchaseForm.getCompanies()) {
-			BigDecimal subTotal = c.getCurrentShareValue().multiply(new BigDecimal(c.getTransactionQuantity()));
-			total = total.add(subTotal);
+		
+		try {
+			// If validation succeeds, override the model's transaction form with the refined form
+			validationFactory.getValidator(purchaseForm).validate();
+			modelAndView.addObject("transactionForm", purchaseForm);
+			modelAndView.addObject("total", purchaseForm.getTransactionValue());
+			modelAndView.setViewName("user/confirmPurchase");
+			
+		} catch (SesValidationException ex) {
+			modelAndView.addObject("failures", ValidationUtils.stringifyFailures(ex.getFailures()));
+			goToStockExchange(modelAndView);
 		}
-		modelAndView.addObject("total", total);
 		
-		
-		modelAndView.setViewName("user/confirmPurchase");
 		return modelAndView;
 	}
 	
@@ -100,6 +106,7 @@ public class StockExchangeController {
 			transactionService.buyStocks(user, purchaseForm);
 			modelAndView.setViewName("user/purchaseComplete");
 		} catch (SesValidationException ex) {
+			modelAndView.addObject("failures", ValidationUtils.stringifyFailures(ex.getFailures()));
 			modelAndView.setViewName("user/purchaseFailed");
 		}
 		return modelAndView;

@@ -26,7 +26,6 @@ public class TransactionHistoryService {
 	ValidationFactory validationFactory;
 	
 	public void createTransactionHistory(Company company, User user, OwnedShare ownedShare) {
-		System.out.println("Creating TX History");
 		TransactionHistory txHistory = new TransactionHistory();
 		Company dbCompany = companyRepo.findBySymbol(company.getSymbol());
 		txHistory.setCompany(dbCompany);

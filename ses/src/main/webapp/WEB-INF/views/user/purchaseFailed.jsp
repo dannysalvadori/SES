@@ -6,57 +6,28 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-	<title>stockSim - Purchase Stocks</title>
+	<title>stockSim - Purchase Failed</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
 </head>
 <body>
 	<jsp:include page="../nav.jsp"/>
 	
 	<div class="container">
-		<h1>Confirm Purchase</h1>
+		<h1>Purchase Failed</h1>
 		<br/>
 		
 		<div class="alert alert-warning">
-			Your purchase is not complete. Please review and confirm your order.  
+			Your purchase could not complete. Please review the following messages and try again.  
 		</div>
 		
-		<h2>Your Order</h2>
+		<c:forTokens items="${failures}" delims="|" var="failure">
+			<div class="alert alert-danger" id="asp-error">
+				<c:out value="${failure}"/>
+			</div>
+		</c:forTokens>
+
 		<br/>
-		<table class="table table-sm table-bordered">
-			<thead>
-				<tr class="table-primary">
-					<th>Symbol</th>
-					<th>Name</th>
-					<th>Current Value</th>
-					<th>Purchase Quantity</th>
-					<th>Subtotal</th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:forEach items="${purchaseCompanies}" var="company">
-					<tr>
-						<td><c:out value="${company.symbol}"/></td>
-						<td><c:out value="${company.name}"/></td>
-						<td><fmt:formatNumber value="${company.currentShareValue}" type="currency"/></td>
-						<td><fmt:formatNumber value="${company.transactionQuantity}" type="number"/></td>
-						<td>
-							<fmt:formatNumber value="${company.transactionQuantity * company.currentShareValue}" type="currency"/>
-						</td>
-					</tr>
-				</c:forEach>
-				<tr>
-					<td colspan="4" class="text-right"><strong>Total:</strong></td>
-					<td><strong><fmt:formatNumber value="${total}" type="currency"/></strong></td>
-				</tr>
-			</tbody>
-		</table>
-		
-		<br/>
-		
-		<a href="../user/stockExchange"><button type="button" class="btn-sm btn-danger">Cancel</button></a>
-		&nbsp;
-		<a href="../user/authenticatePurchase"><button type="button" class="btn-sm btn-primary">Proceed to Payment</button></a>
-		<br/>
+		<a href="../user/stockExchange"><button type="button" class="btn-sm btn-danger">Back to Stock Exchange</button></a>
 			
 	</div>
 	

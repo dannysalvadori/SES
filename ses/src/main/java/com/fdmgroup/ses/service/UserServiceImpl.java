@@ -86,12 +86,8 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void updateCredit(User user, TransactionForm transactionForm) {
-		System.out.println("Credit before: " + user.getCredit());
-		System.out.println("txValue: " + transactionForm.getTransactionValue());
-		System.out.println("Num companies in tx: " + transactionForm.getCompanies().size());
 		user.setCredit(user.getCredit().subtract(transactionForm.getTransactionValue()));
 		userRepo.save(user);
-		System.out.println("Credit after: " + user.getCredit());
 	}
 
 }

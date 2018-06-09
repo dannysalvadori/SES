@@ -7,21 +7,28 @@ import org.springframework.stereotype.Component;
 
 import com.fdmgroup.ses.model.Company;
 import com.fdmgroup.ses.model.User;
+import com.fdmgroup.ses.repository.CompanyRepository;
 import com.fdmgroup.ses.service.UserService;
 import com.fdmgroup.ses.stockExchange.TransactionForm;
 
 @Component
 public class TransactionValidator extends ModelValidator {
-	
+
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private CompanyRepository companyRepo;
 
 	private TransactionForm transactionForm;
 
 	/**
-	 * Validates Company creations and updates:
-	 * # Stock value cannot fall below XXX or rise above YYY
-	 * # Stock amount cannot fall to 0 (how about ZZZ amount?)
+	 * Validates transaction requests:
+	 * -- Purchases:
+	 * # User must have sufficient credit for the whole transaction
+	 * # Each company must have sufficient stock
+	 * -- Sales:
+	 * # TODO:
 	 */
 	@Override
 	public void validate() throws SesValidationException {
@@ -30,28 +37,38 @@ public class TransactionValidator extends ModelValidator {
 		
 		User user = userService.findCurrentUser();
 		BigDecimal userCredit = user.getCredit();
-		BigDecimal transactionValue = new BigDecimal(0);
-		
+		BigDecimal transactionValue = transactionForm.getTransactionValue();
 		Boolean purchase = transactionValue.compareTo(new BigDecimal(0)) > 0;
-		System.out.println("purchase? " + purchase);
 		
 		if (purchase) {
 			
-			for (Company company : transactionForm.getCompanies()) {
-				transactionValue = transactionValue
-				.add(
-						company.getCurrentShareValue()
-						.multiply(new BigDecimal(company.getTransactionQuantity()))
-				);
+			// User must have sufficient credit
+			if (userCredit.compareTo(transactionValue) < 0) {
+				failures.add("Insufficient credit: " // TODO: format currency
+						+ transactionValue + " required; "
+						+ "you have " + userCredit + " available.");
 			}
 			
-			if (userCredit.compareTo(transactionValue) < 0) {
-				failures.add("Insufficient credit. You have £" + userCredit + " available credit; £"
-						+ transactionValue + " is required to complete this transaction.");
+			// For each stock...
+			for (Company company : transactionForm.getCompanies()) {
+				
+				// ... companies must have sufficient available stock 
+				Company dbCompany = companyRepo.findBySymbol(company.getSymbol());
+				if (dbCompany.getAvailableShares() < company.getTransactionQuantity()) {
+					failures.add("Insufficient stocks for " + company.getSymbol() + ": "
+							+ company.getTransactionQuantity() + " requested; "
+							+ dbCompany.getAvailableShares() + " available.");
+				}
+				
 			}
+		
+		// Sale
+		} else {
+			
+			// TODO: sale conditions
+			
 		}
-
-		System.out.println("failures? : " + ValidationUtils.stringifyFailures(failures));
+		
 		throwFailures();
 	}
 

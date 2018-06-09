@@ -27,6 +27,12 @@
 		<h2>Purchase Stocks</h2>
 		<br/>
 		
+		<c:forTokens items="${failures}" delims="|" var="failure">
+			<div class="alert alert-danger" id="asp-error">
+				<c:out value="${failure}"/>
+			</div>
+		</c:forTokens>
+		
 		<form:form action="../user/doPlaceOrder" method="POST" modelAttribute="transactionForm">
 			<table id="stockExchange">
 				<thead>
@@ -69,9 +75,7 @@
 	
 							<td>
 								<form:input path="companies[${cStatus.index}].transactionQuantity" type="number" min="1"/>
-								<!-- Required to make form submittable. Not sure why! -->
 								<form:hidden path="companies[${cStatus.index}].transactionQuantity"/>
-								<%-- <form:input style="display:none;" path="${company.transactionQuantity}"/> --%>
 							</td>
 	
 							<td><input type="submit" value="Buy" class="btn-sm btn-primary"/>
