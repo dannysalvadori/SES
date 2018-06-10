@@ -43,6 +43,7 @@
 					<th class="text-center">Active?</th>
 					<th>First Name</th>
 					<th>Last Name</th>
+					<th>Credit</th>
 					<th class="text-center">Admin?</th>
 					<th class="text-center">Birthdate</th>
 					<th class="text-center">Activate/Deactivate</th>
@@ -65,10 +66,11 @@
 						</td>
 						<td>${user.name}</td>
 						<td>${user.lastName}</td>
+						<td class="text-right"><fmt:formatNumber value="${user.credit}" type="currency"/></td>
 						<td class="text-center"><c:forEach items="${user.roles}" var="role">
 							<c:if test="${role.role=='ROLE_ADMIN'}">Yes</c:if>
 						</c:forEach></td>
-						<td><fmt:formatDate value="${user.birthDate}" pattern="dd MMM yyyy" /></td>
+						<td><fmt:formatDate value="${user.birthDate}" pattern="dd/MM/yyyy" /></td>
 						<td class="text-center">
 							<a href="../admin/toggleActive?uid=${user.id}">
 								<button type="button" class="btn-sm btn-primary">Toggle</button>
