@@ -27,7 +27,7 @@
 		<h2>Purchase Stocks</h2>
 		<br/>
 		
-		<c:forTokens items="${failures}" delims="|" var="failure">
+		<c:forTokens items="${purchaseFailures}" delims="|" var="failure">
 			<div class="alert alert-danger" id="asp-error">
 				<c:out value="${failure}"/>
 			</div>

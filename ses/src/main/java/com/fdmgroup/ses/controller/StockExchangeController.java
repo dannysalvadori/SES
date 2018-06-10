@@ -1,6 +1,7 @@
 package com.fdmgroup.ses.controller;
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -70,7 +71,7 @@ public class StockExchangeController {
 			modelAndView.setViewName("user/confirmPurchase");
 			
 		} catch (SesValidationException ex) {
-			modelAndView.addObject("failures", ValidationUtils.stringifyFailures(ex.getFailures()));
+			modelAndView.addObject("purchaseFailures", ValidationUtils.stringifyFailures(ex.getFailures()));
 			goToStockExchange(modelAndView);
 		}
 		
@@ -113,11 +114,18 @@ public class StockExchangeController {
 	}
 	
 	/**
-	 * Adds all SE companies to model in a TransactionForm, as "transactionForm"
+	 * Adds all SE companies to model in a TransactionForm, as "transactionForm", provided they have at least one stock
+	 * available to purchase
 	 */
 	private void addCompaniesToModel(ModelAndView mav) {
 		TransactionForm transactionForm = new TransactionForm();
-		transactionForm.setCompanies(companyRepo.findAll());
+		List<Company> companies = new ArrayList<Company>();
+		for (Company company : companyRepo.findAll()) {
+			if (company.getAvailableShares() > 0) {
+				companies.add(company);
+			}
+		}
+		transactionForm.setCompanies(companies);
 		mav.addObject("transactionForm", transactionForm);
 	}
 	
