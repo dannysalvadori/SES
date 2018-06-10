@@ -66,7 +66,6 @@ public class UserValidator extends ModelValidator {
 			}
 		
 		}
-		System.out.println("failures? : " + ValidationUtils.stringifyFailures(failures));
 		throwFailures();
 	}
 

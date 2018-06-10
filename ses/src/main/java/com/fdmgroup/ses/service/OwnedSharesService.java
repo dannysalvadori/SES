@@ -28,11 +28,14 @@ public class OwnedSharesService {
 	ValidationFactory validationFactory;
 	
 	public OwnedShare createOwnedShares(Company company, User user) {
-		OwnedShare share = new OwnedShare();
 		Company dbCompany = companyRepo.findBySymbol(company.getSymbol());
+		OwnedShare share = ownedSharesRepo.findByOwnerAndCompany(user, dbCompany);
+		if (share == null) {
+			share = new OwnedShare();
+		};
 		share.setCompany(dbCompany);
 		share.setOwner(user);
-		share.setQuantity(company.getTransactionQuantity());
+		share.setQuantity(share.getQuantity() + company.getTransactionQuantity());
 		ownedSharesRepo.save(share);
 		return share;
 	}

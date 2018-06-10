@@ -41,7 +41,6 @@ public class CompanyValidator extends ModelValidator {
 //			}
 		
 		}
-		System.out.println("failures? : " + ValidationUtils.stringifyFailures(failures));
 		throwFailures();
 	}
 

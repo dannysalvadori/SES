@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.fdmgroup.ses.model.Company;
 import com.fdmgroup.ses.model.OwnedShare;
 import com.fdmgroup.ses.model.User;
 
@@ -12,4 +13,5 @@ import com.fdmgroup.ses.model.User;
 public interface OwnedSharesRepository extends JpaRepository<OwnedShare, Long> {
 	OwnedShare findById(int id);
 	List<OwnedShare> findByOwner(User owner);
+	OwnedShare findByOwnerAndCompany(User owner, Company company);
 }

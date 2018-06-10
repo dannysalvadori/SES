@@ -50,8 +50,6 @@ public class Company {
 	private Boolean selected;
 	
 	public BigDecimal getTransactionValue() {
-		System.out.println("currentShareValue: " + currentShareValue);
-		System.out.println("transactionQuantity: " + transactionQuantity);
 		return currentShareValue.multiply(new BigDecimal(transactionQuantity));
 	}
 	

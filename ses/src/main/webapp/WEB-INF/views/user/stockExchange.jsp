@@ -12,8 +12,20 @@
 	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
 	<script>
 		$(document).ready( function () {
-		    $('#stockExchange').DataTable();
-		    $('#salesExchange').DataTable();
+		    $('#stockExchange').DataTable( {
+				"iDisplayLength": 20,
+				"lengthMenu": [5, 10, 20, 50],
+				"language": {
+					"emptyTable": "Shares are not available to purchase now"
+		    	}
+		    } );
+		    $('#salesExchange').DataTable( {
+				"iDisplayLength": 5,
+				"lengthMenu": [5, 10, 20, 50],
+				"language": {
+					"emptyTable": "You do not own any shares"
+		    	}
+		    } );
 		} );
 	</script>
 	<title>stockSim - Stock Exchange</title>
@@ -27,7 +39,6 @@
 		
 		<!-- PURCHASES -->
 		<h2>Purchase Stocks</h2>
-		<br/>
 		
 		<c:forTokens items="${purchaseFailures}" delims="|" var="failure">
 			<div class="alert alert-danger" id="asp-error">
@@ -36,29 +47,23 @@
 		</c:forTokens>
 		
 		<form:form action="../user/doPlaceOrder" method="POST" modelAttribute="transactionForm">
-			<input type="submit" value="Buy Selected" class="btn-sm btn-primary">
+			<input type="submit" value="BUY SELECTED STOCKS" class="btn-sm btn-primary float-right">
 			<br/>
 			<br/>
 			<table id="stockExchange">
 				<thead>
-					<tr>
-						<th></th>
+					<tr class="bg-primary text-white">
 						<th>Symbol</th>
 						<th>Name</th>
 						<th>Stocks Available</th>
 						<th>Current Value</th>
 						<th>Qty.</th>
-						<th class="text-center">Buy</th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
 					<c:forEach items="${transactionForm.companies}" var="company" varStatus="cStatus">
 						<tr>
-							<td>
-								<form:checkbox path="companies[${cStatus.index}].selected"/>
-								<form:hidden path="companies[${cStatus.index}].Id"/>
-							</td>
-	
 							<td>
 								${company.symbol}
 								<form:hidden path="companies[${cStatus.index}].Symbol"/>
@@ -83,14 +88,88 @@
 								<form:hidden path="companies[${cStatus.index}].transactionQuantity"/>
 							</td>
 	
-							<td><input type="submit" value="Buy" class="btn-sm btn-primary"/>
+							<td>
+								<form:checkbox path="companies[${cStatus.index}].selected"/>
+								<form:hidden path="companies[${cStatus.index}].Id"/>
+							</td>
 						</tr>
 					</c:forEach>
 				</tbody>
 			</table>
 			<br/>
-			<input type="submit" value="Buy Selected" class="btn-sm btn-primary">
+			<input type="submit" value="BUY SELECTED STOCKS" class="btn-sm btn-primary float-right">
 		</form:form>
+		
+		<br/>
+		<br/>
+		
+		<!-- SALES -->
+		<h2>Sell Stocks</h2>
+		<br/>
+		
+		<c:forTokens items="${saleFailures}" delims="|" var="failure">
+			<div class="alert alert-danger" id="asp-error">
+				<c:out value="${failure}"/>
+			</div>
+		</c:forTokens>
+		
+		<form:form action="../user/sellSelected" method="POST" modelAttribute="saleForm">
+			<table id="salesExchange">
+				<thead>
+					<tr class="bg-success text-white">
+						<th>Symbol</th>
+						<th>Name</th>
+						<th>Amount Owned</th>
+						<th>Avg. Purchase Price</th>
+						<th>Current Market Value</th>
+						<th>Qty.</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<c:forEach items="${saleForm.ownedShares}" var="ownedStock" varStatus="cStatus">
+						<tr>
+							<td>
+								${ownedStock.company.symbol}
+								<form:hidden path="ownedShares[${cStatus.index}].company.Symbol"/>
+							</td>
+	
+							<td>
+								${ownedStock.company.name}
+								<form:hidden path="ownedShares[${cStatus.index}].company.Name"/>	
+							</td>
+	
+							<td class="text-right">
+								<fmt:formatNumber value="${ownedStock.quantity}" type="number" />
+							</td>
+	
+							<td class="text-right">
+								<fmt:formatNumber value="${ownedStock.averagePurchasePrice}" type="currency" />
+							</td>
+	
+							<td class="text-right">
+								<fmt:formatNumber value="${ownedStock.company.currentShareValue}" type="currency"/>
+								<form:hidden path="ownedShares[${cStatus.index}].company.currentShareValue"/>
+							</td>
+	
+							<td>
+								<form:input path="ownedShares[${cStatus.index}].company.transactionQuantity" type="number" min="1"/>
+								<form:hidden path="ownedShares[${cStatus.index}].company.transactionQuantity"/>
+							</td>
+							
+							<td>
+								<form:checkbox path="ownedShares[${cStatus.index}].selected"/>
+								<form:hidden path="ownedShares[${cStatus.index}].Id"/>
+							</td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+			<br/>
+			<input type="submit" value="SELL SELECTED STOCKS" class="btn-sm btn-success float-right">
+		</form:form>
+		
+		<br/>
 		
 	</div>
 </body>

@@ -1,5 +1,7 @@
 package com.fdmgroup.ses.model;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -11,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @SequenceGenerator(name="seq", initialValue=0, allocationSize=1, sequenceName="OWNED_SHARES_SEQUENCE")
@@ -29,10 +32,30 @@ public class OwnedShare {
 	private Company company;
 	
 	@Column(name = "quantity")
-	private Long quantity;
+	private Long quantity = 0l;
 	
 	@OneToMany
 	private List<TransactionHistory> transactionHistory;
+	
+	/**
+	 * Used to control multi-select transactions
+	 */
+	@Transient
+	private Boolean selected;
+	
+	/**
+	 * Determines the average price paid for owned shares
+	 */
+	public BigDecimal getAveragePurchasePrice() {
+		BigDecimal total = new BigDecimal(0);
+		BigDecimal count = new BigDecimal(0);
+		System.out.println("transactionHistory size: " + transactionHistory.size());
+		for (TransactionHistory txHistory : transactionHistory) {
+			total = total.add(txHistory.getValue());
+			count = count.add(new BigDecimal(txHistory.getQuantity()));
+		}		
+		return total.divide(count).setScale(2, RoundingMode.HALF_UP);
+	}
 
 	public int getId() {
 		return id;
@@ -72,6 +95,14 @@ public class OwnedShare {
 
 	public void setTransactionHistory(List<TransactionHistory> transactionHistory) {
 		this.transactionHistory = transactionHistory;
+	}
+
+	public Boolean getSelected() {
+		return selected;
+	}
+
+	public void setSelected(Boolean selected) {
+		this.selected = selected;
 	}
 
 }
