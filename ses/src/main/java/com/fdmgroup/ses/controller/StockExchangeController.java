@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fdmgroup.ses.model.Company;
-import com.fdmgroup.ses.model.User;
+import com.fdmgroup.ses.model.OwnedShare;
 import com.fdmgroup.ses.repository.CompanyRepository;
-import com.fdmgroup.ses.repository.UserRepository;
+import com.fdmgroup.ses.service.OwnedSharesService;
 import com.fdmgroup.ses.service.TransactionService;
+import com.fdmgroup.ses.service.UserService;
+import com.fdmgroup.ses.stockExchange.SaleForm;
 import com.fdmgroup.ses.stockExchange.TransactionForm;
 import com.fdmgroup.ses.validation.SesValidationException;
 import com.fdmgroup.ses.validation.ValidationFactory;
@@ -32,9 +32,12 @@ public class StockExchangeController {
 	
 	@Autowired
 	TransactionService transactionService;
+	
+	@Autowired
+	OwnedSharesService ownedSharesService;
 
 	@Autowired
-	UserRepository userRepo;
+	UserService userService;
 
 	/**
 	 * Go to Stock Exchange page TODO: move to nav controller. TODO: move "addCompanies" to service
@@ -102,9 +105,7 @@ public class StockExchangeController {
     		@ModelAttribute("transactionForm") TransactionForm purchaseForm
     ) {
 		try {
-			UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			User user = userRepo.findByEmail(userDetails.getUsername());
-			transactionService.buyStocks(user, purchaseForm);
+			transactionService.buyStocks(userService.findCurrentUser(), purchaseForm);
 			modelAndView.setViewName("user/purchaseComplete");
 		} catch (SesValidationException ex) {
 			modelAndView.addObject("failures", ValidationUtils.stringifyFailures(ex.getFailures()));
@@ -118,8 +119,9 @@ public class StockExchangeController {
 	 * available to purchase
 	 */
 	private void addCompaniesToModel(ModelAndView mav) {
+		// Add available stocks for purchase
 		TransactionForm transactionForm = new TransactionForm();
-		List<Company> companies = new ArrayList<Company>();
+		List<Company> companies = new ArrayList<>();
 		for (Company company : companyRepo.findAll()) {
 			if (company.getAvailableShares() > 0) {
 				companies.add(company);
@@ -127,6 +129,17 @@ public class StockExchangeController {
 		}
 		transactionForm.setCompanies(companies);
 		mav.addObject("transactionForm", transactionForm);
+		
+		// Add the user's stocks available to be sold
+		SaleForm saleForm = new SaleForm();
+		List<OwnedShare> ownedShares = new ArrayList<>();
+		for (OwnedShare ownedShare : ownedSharesService.findAllForCurrentUser()) {
+			if (ownedShare.getQuantity() > 0) {
+				ownedShares.add(ownedShare);
+			}
+		}
+		saleForm.setOwnedShares(ownedShares);
+		mav.addObject("saleForm", saleForm);
 	}
 	
 }

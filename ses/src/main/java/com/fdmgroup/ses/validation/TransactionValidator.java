@@ -38,34 +38,30 @@ public class TransactionValidator extends ModelValidator {
 		User user = userService.findCurrentUser();
 		BigDecimal userCredit = user.getCredit();
 		BigDecimal transactionValue = transactionForm.getTransactionValue();
-		Boolean purchase = transactionValue.compareTo(new BigDecimal(0)) > 0;
+//		Boolean purchase = transactionValue.compareTo(new BigDecimal(0)) > 0;
 		
-		if (purchase) {
-			
-			// User must have sufficient credit
-			if (userCredit.compareTo(transactionValue) < 0) {
-				failures.add("Insufficient credit: " // TODO: format currency
-						+ transactionValue + " required; "
-						+ "you have " + userCredit + " available.");
-			}
-			
-			// For each stock...
-			for (Company company : transactionForm.getCompanies()) {
-				
-				// ... companies must have sufficient available stock 
-				Company dbCompany = companyRepo.findBySymbol(company.getSymbol());
-				if (dbCompany.getAvailableShares() < company.getTransactionQuantity()) {
-					failures.add("Insufficient stocks for " + company.getSymbol() + ": "
-							+ company.getTransactionQuantity() + " requested; "
-							+ dbCompany.getAvailableShares() + " available.");
-				}
-				
-			}
+		// At least one company must be selected
+		if (transactionForm.getCompanies().size() < 1) {
+			failures.add("You must select at least one stock.");
+		}
 		
-		// Sale
-		} else {
+		// User must have sufficient credit
+		if (userCredit.compareTo(transactionValue) < 0) {
+			failures.add("Insufficient credit: " // TODO: format currency
+					+ transactionValue + " required; "
+					+ "you have " + userCredit + " available.");
+		}
+		
+		// For each stock...
+		for (Company company : transactionForm.getCompanies()) {
 			
-			// TODO: sale conditions
+			// ... companies must have sufficient available stock 
+			Company dbCompany = companyRepo.findBySymbol(company.getSymbol());
+			if (dbCompany.getAvailableShares() < company.getTransactionQuantity()) {
+				failures.add("Insufficient stocks for " + company.getSymbol() + ": "
+						+ company.getTransactionQuantity() + " requested; "
+						+ dbCompany.getAvailableShares() + " available.");
+			}
 			
 		}
 		

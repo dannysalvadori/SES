@@ -1,5 +1,7 @@
 package com.fdmgroup.ses.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,9 @@ public class OwnedSharesService {
 	
 	@Autowired
 	private CompanyRepository companyRepo;
+	
+	@Autowired
+	private UserService userService;
 
 	@Autowired
 	ValidationFactory validationFactory;
@@ -30,6 +35,11 @@ public class OwnedSharesService {
 		share.setQuantity(company.getTransactionQuantity());
 		ownedSharesRepo.save(share);
 		return share;
+	}
+
+	public List<OwnedShare> findAllForCurrentUser() {
+		User user = userService.findCurrentUser();
+		return ownedSharesRepo.findByOwner(user);
 	}
 	
 }

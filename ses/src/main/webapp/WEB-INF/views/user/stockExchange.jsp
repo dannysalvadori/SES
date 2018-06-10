@@ -13,6 +13,7 @@
 	<script>
 		$(document).ready( function () {
 		    $('#stockExchange').DataTable();
+		    $('#salesExchange').DataTable();
 		} );
 	</script>
 	<title>stockSim - Stock Exchange</title>
@@ -24,6 +25,7 @@
 		<h1>Stock Exchange</h1>
 		<br/>
 		
+		<!-- PURCHASES -->
 		<h2>Purchase Stocks</h2>
 		<br/>
 		
@@ -34,6 +36,9 @@
 		</c:forTokens>
 		
 		<form:form action="../user/doPlaceOrder" method="POST" modelAttribute="transactionForm">
+			<input type="submit" value="Buy Selected" class="btn-sm btn-primary">
+			<br/>
+			<br/>
 			<table id="stockExchange">
 				<thead>
 					<tr>
@@ -64,11 +69,11 @@
 								<form:hidden path="companies[${cStatus.index}].Name"/>	
 							</td>
 	
-							<td>
+							<td class="text-right">
 								<fmt:formatNumber value="${company.availableShares}" type="number" />
 							</td>
 	
-							<td>
+							<td class="text-right">
 								<fmt:formatNumber value="${company.currentShareValue}" type="currency"/>
 								<form:hidden path="companies[${cStatus.index}].currentShareValue"/>
 							</td>

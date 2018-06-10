@@ -45,8 +45,8 @@
 					<tr>
 						<td>${company.symbol}</td>
 						<td>${company.name}</td>
-						<td><fmt:formatNumber value="${company.availableShares}" type="number" /></td>
-						<td><fmt:formatNumber value="${company.currentShareValue}" type="currency" /></td>
+						<td class="text-right"><fmt:formatNumber value="${company.availableShares}" type="number" /></td>
+						<td class="text-right"><fmt:formatNumber value="${company.currentShareValue}" type="currency" /></td>
 						<td class="text-center">
 							<a href="../admin/editCompany?cid=${company.id}">
 								<button type="button" class="btn-sm btn-primary">Edit</button>

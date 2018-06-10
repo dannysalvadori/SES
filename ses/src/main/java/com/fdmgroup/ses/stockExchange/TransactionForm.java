@@ -8,12 +8,9 @@ import com.fdmgroup.ses.model.Company;
 
 public class TransactionForm {
 
-	List<Company> companies;
+	List<Company> companies = new ArrayList<>();
 
 	public List<Company> getCompanies() {
-		if (companies == null) {
-			companies = new ArrayList<>();
-		}
 		return companies;
 	}
 

@@ -1,12 +1,14 @@
 package com.fdmgroup.ses.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -29,8 +31,8 @@ public class OwnedShare {
 	@Column(name = "quantity")
 	private Long quantity;
 	
-	@OneToOne
-	private TransactionHistory transactionHistory;
+	@OneToMany
+	private List<TransactionHistory> transactionHistory;
 
 	public int getId() {
 		return id;
@@ -64,11 +66,11 @@ public class OwnedShare {
 		this.quantity = quantity;
 	}
 
-	public TransactionHistory getTransactionHistory() {
+	public List<TransactionHistory> getTransactionHistory() {
 		return transactionHistory;
 	}
 
-	public void setTransactionHistory(TransactionHistory transactionHistory) {
+	public void setTransactionHistory(List<TransactionHistory> transactionHistory) {
 		this.transactionHistory = transactionHistory;
 	}
 
