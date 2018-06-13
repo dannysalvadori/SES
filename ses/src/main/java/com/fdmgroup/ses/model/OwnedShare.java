@@ -4,11 +4,13 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
@@ -34,7 +36,8 @@ public class OwnedShare {
 	@Column(name = "quantity")
 	private Long quantity = 0l;
 	
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "owned_share_id") // TODO, onetoMany is inefficient!
 	private List<TransactionHistory> transactionHistory;
 	
 	/**
@@ -54,7 +57,7 @@ public class OwnedShare {
 			total = total.add(txHistory.getValue());
 			count = count.add(new BigDecimal(txHistory.getQuantity()));
 		}		
-		return total.divide(count).setScale(2, RoundingMode.HALF_UP);
+		return total.divide(count, 2, RoundingMode.HALF_UP);
 	}
 
 	public int getId() {
