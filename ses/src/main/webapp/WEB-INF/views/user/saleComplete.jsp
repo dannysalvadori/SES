@@ -6,18 +6,18 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-	<title>stockSim - Purchase Complete</title>
+	<title>stockSim - Sale Complete</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
 </head>
 <body>
 	<jsp:include page="../nav.jsp"/>
 	
 	<div class="container">
-		<h1>Purchase Complete</h1>
+		<h1>Sale Complete</h1>
 		<br/>
 		
 		<div class="alert alert-success">
-			Thank you. Your purchase is now complete. You can view your transactions under
+			Thank you. Your sale is now complete. You can view your transactions under
 			 <a href="../user/myAccount">My Account</a> or make another transaction via the
 			 <a href="../user/stockExchange">Stock Exchange</a>.
 		</div>

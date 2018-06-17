@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import com.fdmgroup.ses.model.Company;
 import com.fdmgroup.ses.model.User;
+import com.fdmgroup.ses.stockExchange.SaleForm;
 import com.fdmgroup.ses.stockExchange.TransactionForm;
 
 @Component
@@ -16,6 +17,8 @@ public class ValidationFactory {
 	private CompanyValidator companyValidator;
 	@Autowired
 	private TransactionValidator transactionValidator;
+	@Autowired
+	private SaleValidator saleValidator;
 	
 	/**
 	 * Returns the SesValidator implementation correct to the given object's Class
@@ -33,10 +36,14 @@ public class ValidationFactory {
 		} else if (object.getClass() == Company.class) {
 			companyValidator.setCompany((Company) object);
 			validator = companyValidator;
-		
+			
 		} else if (object.getClass() == TransactionForm.class) {
 			transactionValidator.setTransactionForm((TransactionForm) object);
 			validator = transactionValidator;
+		
+		} else if (object.getClass() == SaleForm.class) {
+			saleValidator.setSaleForm((SaleForm) object);
+			validator = saleValidator;
 		}
 		
 		return validator;

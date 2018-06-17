@@ -17,6 +17,7 @@ import com.fdmgroup.ses.registration.OnRegistrationCompleteEvent;
 import com.fdmgroup.ses.repository.RoleRepository;
 import com.fdmgroup.ses.repository.UserRepository;
 import com.fdmgroup.ses.repository.VerificationTokenRepository;
+import com.fdmgroup.ses.stockExchange.SaleForm;
 import com.fdmgroup.ses.stockExchange.TransactionForm;
 import com.fdmgroup.ses.validation.SesValidationException;
 import com.fdmgroup.ses.validation.ValidationFactory;
@@ -87,6 +88,12 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void updateCredit(User user, TransactionForm transactionForm) {
 		user.setCredit(user.getCredit().subtract(transactionForm.getTransactionValue()));
+		userRepo.save(user);
+	}
+
+	@Override
+	public void updateCredit(User user, SaleForm saleForm) {
+		user.setCredit(user.getCredit().subtract(saleForm.getTransactionValue()));
 		userRepo.save(user);
 	}
 

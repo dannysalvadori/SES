@@ -1,5 +1,6 @@
 package com.fdmgroup.ses.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,9 +39,13 @@ public class StockExchangeController {
 
 	@Autowired
 	UserService userService;
-
+	
+	/* ****************************************************
+	 *                     Nav Methods                    *
+	 ******************************************************/
+	
 	/**
-	 * Go to Stock Exchange page TODO: move to nav controller. TODO: move "addCompanies" to service
+	 * Go to Stock Exchange page TODO: move to nav controller. TODO: move "addCompanies" somewhere
 	 */
 	@RequestMapping(value="/user/stockExchange")
     public ModelAndView goToStockExchange(ModelAndView modelAndView) {
@@ -48,6 +53,38 @@ public class StockExchangeController {
 		addCompaniesToModel(modelAndView);
 		return modelAndView;
 	}
+	
+	/**
+	 * Adds all SE companies to model in a TransactionForm, as "transactionForm", provided they have at least one stock
+	 * available to purchase
+	 */
+	private void addCompaniesToModel(ModelAndView mav) {
+		// Add available stocks for purchase
+		TransactionForm transactionForm = new TransactionForm();
+		List<Company> companies = new ArrayList<>();
+		for (Company company : companyRepo.findAll()) {
+			if (company.getAvailableShares() > 0) {
+				companies.add(company);
+			}
+		}
+		transactionForm.setCompanies(companies);
+		mav.addObject("transactionForm", transactionForm);
+		
+		// Add the user's stocks available to be sold
+		SaleForm saleForm = new SaleForm();
+		List<OwnedShare> ownedShares = new ArrayList<>();
+		for (OwnedShare ownedShare : ownedSharesService.findAllForCurrentUser()) {
+			if (ownedShare.getQuantity() > 0) {
+				ownedShares.add(ownedShare);
+			}
+		}
+		saleForm.setOwnedShares(ownedShares);
+		mav.addObject("saleForm", saleForm);
+	}
+	
+	/* ****************************************************
+	 *                   Purchase Methods                 *
+	 ******************************************************/
 	
 	/**
 	 * Request a purchase on a given stock
@@ -114,32 +151,59 @@ public class StockExchangeController {
 		return modelAndView;
 	}
 	
+	/* ****************************************************
+	 *                     Sale Methods                   *
+	 ******************************************************/
+	
 	/**
-	 * Adds all SE companies to model in a TransactionForm, as "transactionForm", provided they have at least one stock
-	 * available to purchase
+	 * Request a purchase on a given stock
 	 */
-	private void addCompaniesToModel(ModelAndView mav) {
-		// Add available stocks for purchase
-		TransactionForm transactionForm = new TransactionForm();
-		List<Company> companies = new ArrayList<>();
-		for (Company company : companyRepo.findAll()) {
-			if (company.getAvailableShares() > 0) {
-				companies.add(company);
+	@RequestMapping(value="/user/goToSellSelected")
+    public ModelAndView goToSellSelected(
+    		ModelAndView modelAndView,
+    		@ModelAttribute("saleForm") SaleForm saleForm
+    ) {
+		// Refine transaction form
+		SaleForm refinedForm = new SaleForm();
+		for (OwnedShare share : saleForm.getOwnedShares()) {
+			Company comp = share.getCompany();
+			if (share.getSelected() != null && share.getSelected() == true
+					&& comp.getTransactionQuantity() != null && comp.getTransactionQuantity() > 0) {
+				refinedForm.getOwnedShares().add(share);
 			}
 		}
-		transactionForm.setCompanies(companies);
-		mav.addObject("transactionForm", transactionForm);
 		
-		// Add the user's stocks available to be sold
-		SaleForm saleForm = new SaleForm();
-		List<OwnedShare> ownedShares = new ArrayList<>();
-		for (OwnedShare ownedShare : ownedSharesService.findAllForCurrentUser()) {
-			if (ownedShare.getQuantity() > 0) {
-				ownedShares.add(ownedShare);
-			}
+		// TODO: create sale form validator! - user must have correct number of stocks to sell
+		try {
+			// If validation succeeds, override the model's transaction form with the refined form
+			validationFactory.getValidator(saleForm).validate();
+			modelAndView.addObject("saleForm", refinedForm);
+			modelAndView.addObject("total", refinedForm.getTransactionValue());
+			modelAndView.setViewName("user/confirmSale");
+		} catch (SesValidationException ex) {
+			modelAndView.addObject("saleFailures", ValidationUtils.stringifyFailures(ex.getFailures()));
+			goToStockExchange(modelAndView);
 		}
-		saleForm.setOwnedShares(ownedShares);
-		mav.addObject("saleForm", saleForm);
+			
+		return modelAndView;
+	}
+	
+	/**
+	 * Complete a purchase. Assumes payment has already been authorised 
+	 */
+	@RequestMapping(value="/user/doSale")
+    public ModelAndView doSale(
+    		ModelAndView modelAndView,
+    		@ModelAttribute("saleForm") SaleForm saleForm
+    ) {
+		try {
+			transactionService.sellStocks(userService.findCurrentUser(), saleForm);
+			modelAndView.setViewName("user/saleComplete");
+		} catch (SesValidationException ex) {
+			modelAndView.addObject("failures", ValidationUtils.stringifyFailures(ex.getFailures()));
+			modelAndView.setViewName("user/saleFailed");
+		}
+		return modelAndView;
 	}
 	
 }

@@ -113,7 +113,7 @@
 			</div>
 		</c:forTokens>
 		
-		<form:form action="../user/sellSelected" method="POST" modelAttribute="saleForm">
+		<form:form action="../user/goToSellSelected" method="POST" modelAttribute="saleForm">
 			<table id="salesExchange">
 				<thead>
 					<tr class="bg-success text-white">
@@ -140,11 +140,13 @@
 							</td>
 	
 							<td class="text-right">
-								<fmt:formatNumber value="${ownedStock.quantity}" type="number" />
+								<fmt:formatNumber value="${ownedStock.quantity}" type="number"/>
+								<form:hidden path="ownedShares[${cStatus.index}].quantity"/>
 							</td>
 	
 							<td class="text-right">
 								<fmt:formatNumber value="${ownedStock.averagePurchasePrice}" type="currency" />
+								<form:hidden path="ownedShares[${cStatus.index}].averagePurchasePrice"/>
 							</td>
 	
 							<td class="text-right">

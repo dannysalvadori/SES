@@ -22,7 +22,7 @@
 		
 		<form:form action="../admin/doCreateCompany" method="POST" modelAttribute="company" class="col-md-6 col-md-offset-3">
 			<label for="symbol">Symbol</label>
-			<form:input id="symbol" path="symbol" placeholder="${company.symbol}" class="form-control"/>
+			<form:input id="symbol" path="symbol" placeholder="${company.symbol}" class="form-control" autofocus="true"/>
 			
 			<label for="name">Name</label>
 			<form:input id="name" path="name" placeholder="${company.name}" class="form-control"/>

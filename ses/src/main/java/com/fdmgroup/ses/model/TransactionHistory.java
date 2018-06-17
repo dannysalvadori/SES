@@ -29,10 +29,10 @@ public class TransactionHistory {
 	@ManyToOne
 	private Company company;
 	
-	@Column(name = "purchase_unit_price")
+	@Column(name = "transaction_unit_price")
 	private BigDecimal unitPrice;
 	
-	@Column(name = "purchase_quantity")
+	@Column(name = "transaction_quantity")
 	private Long quantity;
 	
 	@Column(name = "purchase_value")

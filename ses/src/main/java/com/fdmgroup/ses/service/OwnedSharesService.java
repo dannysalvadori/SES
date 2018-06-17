@@ -27,7 +27,7 @@ public class OwnedSharesService {
 	@Autowired
 	ValidationFactory validationFactory;
 	
-	public OwnedShare createOwnedShares(Company company, User user) {
+	public OwnedShare upsertOwnedShares(Company company, User user) {
 		Company dbCompany = companyRepo.findBySymbol(company.getSymbol());
 		OwnedShare share = ownedSharesRepo.findByOwnerAndCompany(user, dbCompany);
 		if (share == null) {

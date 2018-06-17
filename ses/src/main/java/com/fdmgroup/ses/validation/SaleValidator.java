@@ -6,21 +6,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fdmgroup.ses.model.Company;
+import com.fdmgroup.ses.model.OwnedShare;
 import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.repository.CompanyRepository;
+import com.fdmgroup.ses.repository.OwnedSharesRepository;
 import com.fdmgroup.ses.service.UserService;
+import com.fdmgroup.ses.stockExchange.SaleForm;
 import com.fdmgroup.ses.stockExchange.TransactionForm;
 
 @Component
-public class TransactionValidator extends ModelValidator {
+public class SaleValidator extends ModelValidator {
 
 	@Autowired
 	private UserService userService;
 
 	@Autowired
+	private OwnedSharesRepository ownedSharesRepo;
+	
+	@Autowired
 	private CompanyRepository companyRepo;
 
-	private TransactionForm transactionForm;
+	private SaleForm saleForm;
 
 	/**
 	 * Validates transaction requests:
@@ -36,39 +42,33 @@ public class TransactionValidator extends ModelValidator {
 		failures.clear();
 		
 		User user = userService.findCurrentUser();
-		BigDecimal userCredit = user.getCredit();
-		BigDecimal transactionValue = transactionForm.getTransactionValue();
 		
-		// At least one company must be selected
-		if (transactionForm.getCompanies().size() < 1) {
-			failures.add("You must select at least one stock.");
-		}
-		
-		// User must have sufficient credit
-		if (userCredit.compareTo(transactionValue) < 0) {
-			failures.add("Insufficient credit: " // TODO: format currency
-					+ transactionValue + " required; "
-					+ "you have " + userCredit + " available.");
+		// At least one share must be selected
+		if (saleForm.getOwnedShares().size() < 1) {
+			failures.add("You must select at least one stock to sell.");
 		}
 		
 		// For each stock...
-		for (Company company : transactionForm.getCompanies()) {
+		for (OwnedShare share : saleForm.getOwnedShares()) {
 			
-			// ... companies must have sufficient available stock 
+			Company company = share.getCompany();
+			Long saleQuantity = company.getTransactionQuantity();
 			Company dbCompany = companyRepo.findBySymbol(company.getSymbol());
-			if (dbCompany.getAvailableShares() < company.getTransactionQuantity()) {
+			Long dbOwnedQuantity = ownedSharesRepo.findByOwnerAndCompany(user, dbCompany).getQuantity();
+			
+			// ... you must own sufficient stock to be able to sell it 
+			if (dbOwnedQuantity < saleQuantity) {
 				failures.add("Insufficient stocks for " + company.getSymbol() + ": "
-						+ company.getTransactionQuantity() + " requested; "
-						+ dbCompany.getAvailableShares() + " available.");
+						+ saleQuantity + " to be sold; "
+						+ dbOwnedQuantity + " owned.");
 			}
 			
 		}
-		
 		throwFailures();
 	}
 
-	public void setTransactionForm(TransactionForm form) {
-		this.transactionForm = form;
+	public void setSaleForm(SaleForm form) {
+		this.saleForm = form;
 	}
 
 }

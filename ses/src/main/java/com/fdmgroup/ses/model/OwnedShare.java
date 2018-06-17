@@ -47,17 +47,31 @@ public class OwnedShare {
 	private Boolean selected;
 	
 	/**
+	 * Used to track the user's average price of purchase for shares of this stock
+	 */
+	@Transient
+	private BigDecimal averagePurchasePrice;
+	
+	/**
 	 * Determines the average price paid for owned shares
 	 */
 	public BigDecimal getAveragePurchasePrice() {
-		BigDecimal total = new BigDecimal(0);
-		BigDecimal count = new BigDecimal(0);
-		System.out.println("transactionHistory size: " + transactionHistory.size());
-		for (TransactionHistory txHistory : transactionHistory) {
-			total = total.add(txHistory.getValue());
-			count = count.add(new BigDecimal(txHistory.getQuantity()));
-		}		
-		return total.divide(count, 2, RoundingMode.HALF_UP);
+		if (averagePurchasePrice == null) {
+			BigDecimal total = new BigDecimal(0);
+			BigDecimal count = new BigDecimal(0);
+			for (TransactionHistory txHistory : transactionHistory) {
+				if (txHistory.getQuantity() > 0) {
+					total = total.add(txHistory.getValue());
+					count = count.add(new BigDecimal(txHistory.getQuantity()));
+				}
+			}		
+			averagePurchasePrice = total.divide(count, 2, RoundingMode.HALF_UP);
+		}
+		return averagePurchasePrice;
+	}
+	
+	public void setAveragePurchasePrice(BigDecimal averagePurchasePrice) {
+		this.averagePurchasePrice = averagePurchasePrice;
 	}
 
 	public int getId() {

@@ -6,26 +6,28 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-	<title>stockSim - Purchase Complete</title>
+	<title>stockSim - Purchase Failed</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
 </head>
 <body>
 	<jsp:include page="../nav.jsp"/>
 	
 	<div class="container">
-		<h1>Purchase Complete</h1>
+		<h1>Sale Failed</h1>
 		<br/>
 		
-		<div class="alert alert-success">
-			Thank you. Your purchase is now complete. You can view your transactions under
-			 <a href="../user/myAccount">My Account</a> or make another transaction via the
-			 <a href="../user/stockExchange">Stock Exchange</a>.
+		<div class="alert alert-warning">
+			Your sale could not complete. Please review the following messages and try again.  
 		</div>
-			
-		<a href="../user/stockExchange"><button type="button" class="btn-sm btn-primary">Return to Stock Exchange</button></a>
-		&nbsp;
-		<a href="../user/myAccount"><button type="button" class="btn-sm btn-primary">Go to Account</button></a>
+		
+		<c:forTokens items="${failures}" delims="|" var="failure">
+			<div class="alert alert-danger" id="asp-error">
+				<c:out value="${failure}"/>
+			</div>
+		</c:forTokens>
+
 		<br/>
+		<a href="../user/stockExchange"><button type="button" class="btn-sm btn-danger">Back to Stock Exchange</button></a>
 			
 	</div>
 	

@@ -26,9 +26,9 @@ public class SaleForm {
 	 */
 	public BigDecimal getTransactionValue() {
 		BigDecimal txValue = new BigDecimal(0);
-//		for (Company company : companies) {
-//			txValue = txValue.add(company.getTransactionValue());
-//		}
+		for (OwnedShare share : ownedShares) {
+			txValue = txValue.add(share.getCompany().getTransactionValue());
+		}
 		return txValue;
 	}
 	
