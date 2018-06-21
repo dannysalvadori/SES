@@ -176,7 +176,7 @@ public class StockExchangeController {
 		// TODO: create sale form validator! - user must have correct number of stocks to sell
 		try {
 			// If validation succeeds, override the model's transaction form with the refined form
-			validationFactory.getValidator(saleForm).validate();
+			validationFactory.getValidator(refinedForm).validate();
 			modelAndView.addObject("saleForm", refinedForm);
 			modelAndView.addObject("total", refinedForm.getTransactionValue());
 			modelAndView.setViewName("user/confirmSale");
