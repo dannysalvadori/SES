@@ -1,6 +1,5 @@
 package com.fdmgroup.ses.controller;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,19 +25,19 @@ import com.fdmgroup.ses.validation.ValidationUtils;
 public class StockExchangeController {
 	
 	@Autowired
-	ValidationFactory validationFactory;
+	private ValidationFactory validationFactory;
 	
 	@Autowired
-	CompanyRepository companyRepo;
+	private CompanyRepository companyRepo;
 	
 	@Autowired
-	TransactionService transactionService;
+	private TransactionService transactionService;
 	
 	@Autowired
-	OwnedSharesService ownedSharesService;
+	private OwnedSharesService ownedSharesService;
 
 	@Autowired
-	UserService userService;
+	private UserService userService;
 	
 	/* ****************************************************
 	 *                     Nav Methods                    *
@@ -50,15 +49,16 @@ public class StockExchangeController {
 	@RequestMapping(value="/user/stockExchange")
     public ModelAndView goToStockExchange(ModelAndView modelAndView) {
 		modelAndView.setViewName("user/stockExchange");
-		addCompaniesToModel(modelAndView);
+		addStocksToModel(modelAndView);
 		return modelAndView;
 	}
 	
 	/**
 	 * Adds all SE companies to model in a TransactionForm, as "transactionForm", provided they have at least one stock
-	 * available to purchase
+	 * available to purchase. The current user's owned shares are added to a SaleForm under "saleForm", again provided
+	 * the owned quantity is one or greater.
 	 */
-	private void addCompaniesToModel(ModelAndView mav) {
+	private void addStocksToModel(ModelAndView mav) {
 		// Add available stocks for purchase
 		TransactionForm transactionForm = new TransactionForm();
 		List<Company> companies = new ArrayList<>();
@@ -87,7 +87,7 @@ public class StockExchangeController {
 	 ******************************************************/
 	
 	/**
-	 * Request a purchase on a given stock
+	 * Request to purchase selected stock
 	 */
 	@RequestMapping(value="/user/doPlaceOrder")
     public ModelAndView doPlaceOrder(
@@ -173,7 +173,6 @@ public class StockExchangeController {
 			}
 		}
 		
-		// TODO: create sale form validator! - user must have correct number of stocks to sell
 		try {
 			// If validation succeeds, override the model's transaction form with the refined form
 			validationFactory.getValidator(refinedForm).validate();

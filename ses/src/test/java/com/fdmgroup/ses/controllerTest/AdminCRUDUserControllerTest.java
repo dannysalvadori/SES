@@ -286,7 +286,8 @@ public class AdminCRUDUserControllerTest {
 		
 		// Confirm validation failure
 		Object failures = mav.getModel().get("failures");
-		assertTrue("Validation didn't fail",
+		assertTrue("Validation didn't fail", failures != null);
+		assertTrue("Wrong failures",
 				((String) failures).equals("A user is already registered with this address."));
 	}
 	

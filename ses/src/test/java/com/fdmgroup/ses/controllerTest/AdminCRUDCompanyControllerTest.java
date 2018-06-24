@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fdmgroup.ses.controller.AdminCRUDCompanyController;
 import com.fdmgroup.ses.model.Company;
 import com.fdmgroup.ses.repository.CompanyRepository;
+import com.fdmgroup.ses.utils.DataFactory;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -149,7 +150,7 @@ public class AdminCRUDCompanyControllerTest {
 	 *******************************************/
 
 	private Company createCompany() {
-		Company c = new Company();
+		Company c = DataFactory.createCompany();
 		c.setName(VALID_TEST_SYMBOL);
 		c.setSymbol(VALID_TEST_SYMBOL);
 		c.setAvailableShares(100l);
