@@ -5,6 +5,8 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.WebRequest;
 
@@ -15,6 +17,8 @@ import com.fdmgroup.ses.registration.OnRegistrationCompleteEvent;
 import com.fdmgroup.ses.repository.RoleRepository;
 import com.fdmgroup.ses.repository.UserRepository;
 import com.fdmgroup.ses.repository.VerificationTokenRepository;
+import com.fdmgroup.ses.stockExchange.SaleForm;
+import com.fdmgroup.ses.stockExchange.TransactionForm;
 import com.fdmgroup.ses.validation.SesValidationException;
 import com.fdmgroup.ses.validation.ValidationFactory;
 
@@ -34,11 +38,6 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	ValidationFactory validationFactory;
 	
-	@Override
-	public User findUserByEmail(String email) {
-		return userRepo.findByEmail(email);
-	}
-
 	@Override
 	public void saveUser(User user, WebRequest request) throws SesValidationException {
 		
@@ -78,6 +77,24 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void deleteUser(User user) {
 		userRepo.delete(user);
+	}
+
+	@Override
+	public User findCurrentUser() {
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return userRepo.findByEmail(userDetails.getUsername());
+	}
+
+	@Override
+	public void updateCredit(User user, TransactionForm transactionForm) {
+		user.setCredit(user.getCredit().subtract(transactionForm.getTransactionValue()));
+		userRepo.save(user);
+	}
+
+	@Override
+	public void updateCredit(User user, SaleForm saleForm) {
+		user.setCredit(user.getCredit().subtract(saleForm.getTransactionValue()));
+		userRepo.save(user);
 	}
 
 }

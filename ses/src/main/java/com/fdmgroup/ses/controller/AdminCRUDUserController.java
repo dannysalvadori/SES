@@ -72,7 +72,7 @@ public class AdminCRUDUserController {
 	 * Go to the user management page
 	 */
 	@RequestMapping(value="/admin/manageUsers")
-    public ModelAndView manageUsers(ModelAndView modelAndView) {
+    public ModelAndView goToManageUsers(ModelAndView modelAndView) {
 		modelAndView.setViewName("admin/manageUsers");
 		modelAndView.addObject("users", userRepo.findAll());
 		return modelAndView;
@@ -82,7 +82,7 @@ public class AdminCRUDUserController {
 	 * Go to the create new user page
 	 */
 	@RequestMapping(value="/admin/createUser")
-    public ModelAndView createUser(ModelAndView modelAndView) {
+    public ModelAndView goToCreateUser(ModelAndView modelAndView) {
 		User newUser = new User();
 		modelAndView.setViewName("admin/createUser");
 		modelAndView.addObject("newUser", newUser);
@@ -140,7 +140,7 @@ public class AdminCRUDUserController {
 	 * Go to edit user page for a given user
 	 */
 	@RequestMapping(value="/admin/editUser")
-    public ModelAndView editUser(
+    public ModelAndView goToEditUser(
     		ModelAndView modelAndView,
     		@RequestParam(name="uid") int userId
     ) {

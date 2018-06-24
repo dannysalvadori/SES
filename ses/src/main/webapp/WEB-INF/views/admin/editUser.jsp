@@ -30,6 +30,9 @@
 			<label for="email">Email Address <span style="color:red">(Requires verification)</span></label>
 			<form:input id="email" path="email" type="email" placeholder="${user.email}" class="form-control"/>
 			
+			<label for="credit">Credit</label>
+			<form:input id="credit" path="credit" type="currency" placeholder="${user.credit}" class="form-control"/>
+			
 			<label for="password">Password</label>
 			<form:input id="password" path="password" placeholder="********" type="password" class="form-control"/>
 			

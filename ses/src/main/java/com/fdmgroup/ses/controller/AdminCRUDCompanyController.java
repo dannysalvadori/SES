@@ -20,7 +20,7 @@ public class AdminCRUDCompanyController {
 	 * Go to the company management page
 	 */
 	@RequestMapping(value="/admin/manageCompanies")
-    public ModelAndView manageCompanies(ModelAndView modelAndView) {
+    public ModelAndView goToManageCompanies(ModelAndView modelAndView) {
 		modelAndView.setViewName("admin/manageCompanies");
 		modelAndView.addObject("companies", companyRepo.findAll());
 		return modelAndView;
@@ -30,7 +30,7 @@ public class AdminCRUDCompanyController {
 	 * Go to the create new company page
 	 */
 	@RequestMapping(value="/admin/createCompany")
-    public ModelAndView createCompany(ModelAndView modelAndView) {
+    public ModelAndView goToCreateCompany(ModelAndView modelAndView) {
 		Company company = new Company();
 		modelAndView.setViewName("admin/createCompany");
 		modelAndView.addObject("company", company);
@@ -61,7 +61,7 @@ public class AdminCRUDCompanyController {
 	 * Go to edit company page for a given company
 	 */
 	@RequestMapping(value="/admin/editCompany")
-    public ModelAndView editCompany(
+    public ModelAndView goToEditCompany(
     		ModelAndView modelAndView,
     		@RequestParam(name="cid") int companyId
     ) {

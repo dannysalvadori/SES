@@ -5,13 +5,9 @@ import org.springframework.stereotype.Component;
 
 import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.repository.UserRepository;
-import com.fdmgroup.ses.service.UserService;
 
 @Component
 public class UserValidator extends ModelValidator {
-	
-	@Autowired
-	private UserService userService;
 	
 	@Autowired
 	private UserRepository userRepo;
@@ -38,7 +34,7 @@ public class UserValidator extends ModelValidator {
 			
 			// Fail if email is changed to a taken address
 			if (!oldUser.getEmail().equalsIgnoreCase(user.getEmail())
-					&& userService.findUserByEmail(user.getEmail()) != null
+					&& userRepo.findByEmail(user.getEmail()) != null
 			) {
 				failures.add("A user is already registered with this address.");
 			}
@@ -57,7 +53,7 @@ public class UserValidator extends ModelValidator {
 		// Insert
 		} else {
 			
-			if (userService.findUserByEmail(user.getEmail()) != null) {
+			if (userRepo.findByEmail(user.getEmail()) != null) {
 				failures.add("A user is already registered with this address.");
 			}
 			
@@ -70,7 +66,6 @@ public class UserValidator extends ModelValidator {
 			}
 		
 		}
-		System.out.println("failures? : " + ValidationUtils.stringifyFailures(failures));
 		throwFailures();
 	}
 

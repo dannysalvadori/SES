@@ -89,7 +89,7 @@ public class AdminCRUDUserControllerTest {
 	 */
 	@Test
 	public void goToManageUsersTest() {
-		mav = ctrl.manageUsers(mav);
+		mav = ctrl.goToManageUsers(mav);
 		assertEquals("Wrong view name", "admin/manageUsers", mav.getViewName());
 		Object usersModelObject = mav.getModel().get("users");
 		assertNotEquals(null, usersModelObject);
@@ -107,7 +107,7 @@ public class AdminCRUDUserControllerTest {
 	 */
 	@Test
 	public void goToCreateUserTest() {
-		mav = ctrl.createUser(mav);
+		mav = ctrl.goToCreateUser(mav);
 		assertEquals("Wrong view name", "admin/createUser", mav.getViewName());
 		assertNotEquals(null, mav.getModel().get("newUser"));
 		assertTrue("newUser is wrong type", mav.getModel().get("newUser") instanceof User);
@@ -239,7 +239,7 @@ public class AdminCRUDUserControllerTest {
 	@Test
 	public void goToEditUserTest() {
 		User testUser = insertTestUser();
-		mav = ctrl.editUser(mav, testUser.getId());
+		mav = ctrl.goToEditUser(mav, testUser.getId());
 		assertEquals("Wrong view name", "admin/editUser", mav.getViewName());
 		assertNotEquals(null, mav.getModel().get("user"));
 		assertTrue("user is wrong type", mav.getModel().get("user") instanceof User);
@@ -286,7 +286,8 @@ public class AdminCRUDUserControllerTest {
 		
 		// Confirm validation failure
 		Object failures = mav.getModel().get("failures");
-		assertTrue("Validation didn't fail",
+		assertTrue("Validation didn't fail", failures != null);
+		assertTrue("Wrong failures",
 				((String) failures).equals("A user is already registered with this address."));
 	}
 	

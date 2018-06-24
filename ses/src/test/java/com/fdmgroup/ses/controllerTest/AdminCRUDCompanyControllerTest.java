@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fdmgroup.ses.controller.AdminCRUDCompanyController;
 import com.fdmgroup.ses.model.Company;
 import com.fdmgroup.ses.repository.CompanyRepository;
+import com.fdmgroup.ses.utils.DataFactory;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -65,7 +66,7 @@ public class AdminCRUDCompanyControllerTest {
 	 */
 	@Test
 	public void goToManageCompaniesTest() {
-		mav = ctrl.manageCompanies(mav);
+		mav = ctrl.goToManageCompanies(mav);
 		assertEquals("Wrong view name", "admin/manageCompanies", mav.getViewName());
 		Object companiesModelObject = mav.getModel().get("companies");
 		assertNotEquals(null, companiesModelObject);
@@ -83,7 +84,7 @@ public class AdminCRUDCompanyControllerTest {
 	 */
 	@Test
 	public void goToCreateCompanyTest() {
-		mav = ctrl.createCompany(mav);
+		mav = ctrl.goToCreateCompany(mav);
 		assertEquals("Wrong view name", "admin/createCompany", mav.getViewName());
 		assertNotEquals(null, mav.getModel().get("company"));
 		assertTrue("newUser is wrong type", mav.getModel().get("company") instanceof Company);
@@ -116,7 +117,7 @@ public class AdminCRUDCompanyControllerTest {
 	@Test
 	public void goToEditCompanyTest() {
 		Company testCompany = insertTestCompany();
-		mav = ctrl.editCompany(mav, testCompany.getId());
+		mav = ctrl.goToEditCompany(mav, testCompany.getId());
 		assertEquals("Wrong view name", "admin/editCompany", mav.getViewName());
 		Object companyModelObject = mav.getModel().get("company");
 		assertNotEquals("Model company object was null", null, companyModelObject);
@@ -149,7 +150,7 @@ public class AdminCRUDCompanyControllerTest {
 	 *******************************************/
 
 	private Company createCompany() {
-		Company c = new Company();
+		Company c = DataFactory.createCompany();
 		c.setName(VALID_TEST_SYMBOL);
 		c.setSymbol(VALID_TEST_SYMBOL);
 		c.setAvailableShares(100l);

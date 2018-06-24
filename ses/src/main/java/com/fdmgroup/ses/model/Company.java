@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -23,7 +24,7 @@ public class Company {
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq")
 	@Column(name = "id")
-	private int id;
+	private Integer id;
 	
 	@Column(name = "symbol")
 	@NotEmpty(message = "*Please provide a valid company trading symbol")
@@ -39,7 +40,20 @@ public class Company {
 	@Column(name = "current_value")
 	private BigDecimal currentShareValue;
 	
-	public int getId() {
+	@Transient
+	private Long transactionQuantity;
+	
+	/**
+	 * Used to control multi-select transactions
+	 */
+	@Transient
+	private Boolean selected;
+	
+	public BigDecimal getTransactionValue() {
+		return currentShareValue.multiply(new BigDecimal(transactionQuantity));
+	}
+	
+	public Integer getId() {
 		return id;
 	}
 
@@ -77,6 +91,22 @@ public class Company {
 
 	public void setCurrentShareValue(BigDecimal currentShareValue) {
 		this.currentShareValue = currentShareValue;
+	}
+
+	public Long getTransactionQuantity() {
+		return transactionQuantity;
+	}
+
+	public void setTransactionQuantity(Long transactionQuantity) {
+		this.transactionQuantity = transactionQuantity;
+	}
+
+	public Boolean getSelected() {
+		return selected;
+	}
+
+	public void setSelected(Boolean selected) {
+		this.selected = selected;
 	}
 
 }
