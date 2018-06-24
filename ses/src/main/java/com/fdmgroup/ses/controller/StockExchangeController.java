@@ -183,7 +183,7 @@ public class StockExchangeController {
 			modelAndView.addObject("saleFailures", ValidationUtils.stringifyFailures(ex.getFailures()));
 			goToStockExchange(modelAndView);
 		}
-			
+		
 		return modelAndView;
 	}
 	
