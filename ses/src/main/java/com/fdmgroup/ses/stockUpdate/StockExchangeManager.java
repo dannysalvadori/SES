@@ -18,7 +18,7 @@ public class StockExchangeManager {
 			BigDecimal variance = new BigDecimal(1 + ((5 - (Math.random()*10)) / 100)); // 0% <= variance < 5%
 			c.setCurrentShareValue(currentValue.multiply(variance));
 		}
-		companyRepo.save(allStocks);		
+		companyRepo.save(allStocks);
 	}
 
 }
