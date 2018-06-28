@@ -15,13 +15,26 @@
 		<h1>My Account</h1>
 		<h2>User Details</h2>
 		
+		<table>
+			<tr>
+				<td class="text-right">Email Address:</td>	<td>${user.email}</td>
+				<td class="text-right">Credit:</td>			<td>${user.credit}</td>
+			</tr>
+			<tr>
+				<td class="text-right">Surname:</td>		<td>${user.lastName}</td>
+				<td class="text-right">First Name:</td>		<td>${user.name}</td>
+			</tr>
+			<tr>
+				<td class="text-right">Birthdate:</td>		<td><fmt:formatDate value="${user.birthDate}" pattern="dd/MM/yyyy"/></td>
+			</tr>
+			<tr>
+				<td colspan=3 class="text-right"><a href="hello"><button type="button" class="btn-sm btn-primary">
+						Edit Details</button></a></td>
+				<td colspan=3 class="text-right"><a href="hello"><button type="button" class="btn-sm btn-primary">
+						Change Password</button></a></td>
+			</tr>
+		</table>
 		
-		<br/>
-		<br/>
-		<br/>
-		<a href="hello"><button type="button" class="btn btn-primary">Some links</button></a>
-		<br/><br/>
-		<a href="/user/stockExchange"><button type="button" class="btn btn-primary">Stock Exchange</button></a>
 	</div>
 	
 </body>

@@ -33,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.formLogin()
 					.loginPage("/login") // Without this, Boot's own default page is used
 					.failureUrl("/login-error") // default mapping
-					.defaultSuccessUrl("/login-success")
+					.defaultSuccessUrl("/user/myAccount")
 					.and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/logout-success");
 	}
 	
