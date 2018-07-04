@@ -10,6 +10,7 @@ import com.fdmgroup.ses.validation.SesValidationException;
 public interface UserService {
 	public User findCurrentUser();
 	public void saveUser(User user, WebRequest request) throws SesValidationException;
+	public void saveUser(User user) throws SesValidationException;
 	public void createVerificationToken(User user, String token);
 	public void deleteUser(User user);
 	public void updateCredit(User user, TransactionForm transactionForm);
