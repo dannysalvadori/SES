@@ -13,4 +13,5 @@ import com.fdmgroup.ses.model.User;
 public interface TransactionHistoryRepository extends JpaRepository<TransactionHistory, Long> {
 	TransactionHistory findById(int id);
 	List<TransactionHistory> findByOwnerAndCompany(User owner, Company company);
+	List<TransactionHistory> findByOwner(User owner);
 }

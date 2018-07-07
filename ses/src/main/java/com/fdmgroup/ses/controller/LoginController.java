@@ -35,13 +35,4 @@ public class LoginController {
 		return modelAndView;
 	}
 	
-	/**
-	 * Go to log in landing page (My Account)
-	 */
-	@RequestMapping(value="/login-success")
-    public ModelAndView goToLoginLandingPage(ModelAndView modelAndView) {
-		modelAndView.setViewName("user/myAccount");
-		return modelAndView;
-	}
-	
 }

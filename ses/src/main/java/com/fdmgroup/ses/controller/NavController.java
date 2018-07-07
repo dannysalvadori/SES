@@ -5,16 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class NavController {
-	
-	/**
-	 * Go to Admin home page
-	 */
-	@RequestMapping(value="/user/myAccount")
-    public ModelAndView goToMyAccount(ModelAndView modelAndView) {
-		modelAndView.setViewName("user/myAccount");
-		return modelAndView;
-	}
+public class NavController {	
 	
 	/**
 	 * Go to Admin home page

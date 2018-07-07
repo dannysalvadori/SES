@@ -6,20 +6,20 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-	<title>Sign Up to StockSim</title>
+	<title>stockSim - Edit Details</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
 </head>
 <body>
-	<jsp:include page="nav.jsp"/>
+	<jsp:include page="../nav.jsp"/>
 	
 	<div class="container">
-		<h1>Sign Up</h1>
-		<c:if test="${success}">
-			<div class="alert alert-success">
-					Success!
-				</div>
-		</c:if>
+		<h1>Edit Details</h1>
+		<br/>
+		
+		<a href="../user/myAccount"><button type="button" class="btn-sm btn-danger">Cancel</button></a>
+		<br/>
+		<br/>
 		
 		<c:forTokens items="${failures}" delims="|" var="failure">
 			<div class="alert alert-danger" id="asp-error">
@@ -27,17 +27,10 @@
 			</div>
 		</c:forTokens>
 		
-		<form:form action="registerUser" method="POST" modelAttribute="newUser" class="col-md-6 col-md-offset-3">
-
-			<label for="email">Email Address:</label>
-			<form:input id="email" path="email" type="email" placeholder="email" required="true" autofocus="true" class="form-control"/>
-
-			<label for="password">Password</label>
-			<form:input id="password" path="password" placeholder="password" type="password" required="true" class="form-control"/>
-
-			<label for="confirmPW">Password</label>
-			<form:input id="confirmPW" path="confirmationPassword" placeholder="confirm your password" type="password" required="true" class="form-control"/>
-
+		<form:form action="../user/doEditDetails" method="POST" modelAttribute="user" class="col-md-6 col-md-offset-3">
+			<label for="email">Email Address <span style="color:red">(Requires verification)</span></label>
+			<form:input id="email" path="email" type="email" placeholder="${user.email}" class="form-control"/>
+			
 			<label for="name">First Name</label>
 			<form:input id="name" path="name" placeholder="first name" required="true" class="form-control"/>
 			
@@ -45,11 +38,19 @@
 			<form:input id="lastName" path="lastName" placeholder="last name" required="true" class="form-control"/>
 			
 			<label for="birthDate">Birthdate (optional)</label>
-			<form:input id="birthDate" path="birthDate" type="date" class="form-control"/>
+			<form:input id="birthDate" path="birthDate" type="date" placeholder="${user.birthDate}"
+				min="1900-01-01" max="2018-01-01" class="form-control"/>
+			
+			<!-- Non-update fields must still be in form, or will be updated to NULL -->
+			<form:hidden path="id"/>
+			<form:hidden path="active"/>
+			<form:hidden path="password"/>
+			<form:hidden path="confirmationPassword"/>
+			<form:hidden path="credit"/>
+			<form:hidden path="roles"/>
 			
 			<br/>
-			<form:hidden path="active" value="1" required="true"/>
-			<input type="submit" value="Register" class="btn btn-primary"/>
+			<input type="submit" value="Save" class="btn btn-primary"/>
 		</form:form>
 	</div>
 	

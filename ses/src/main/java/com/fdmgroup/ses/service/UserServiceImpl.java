@@ -62,6 +62,15 @@ public class UserServiceImpl implements UserService {
 		String appUrl = request.getContextPath();
 		eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, request.getLocale(), appUrl));
 	}
+	
+	@Override
+	public void saveUser(User user) throws SesValidationException {
+		// Perform validations
+		validationFactory.getValidator(user).validate();
+		
+		// Save user
+		userRepo.save(user);
+	}
 
 	/**
 	 * Creates a unique verification token for a given User 
