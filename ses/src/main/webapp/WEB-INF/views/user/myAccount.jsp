@@ -29,7 +29,7 @@
 		    } );
 		} );
 	</script>
-	<title>Demo Index Page</title>
+	<title>stockSim - My Account</title>
 </head>
 <body>	
 	<jsp:include page="../nav.jsp"/>
@@ -37,7 +37,6 @@
 	<br/>
 	<div class="container">
 		<h1>My Account</h1>
-		<h2>User Details</h2>
 		
 		<div class="panel panel-info">
 			<div class="panel-heading">
