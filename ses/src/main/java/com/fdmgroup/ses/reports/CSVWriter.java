@@ -11,6 +11,7 @@ public class CSVWriter<T> extends ReportWriter<T> {
 	};
 	
 	protected String writeRow(T row) {
+		System.out.println("writing row...");
 		String rowOutput = "";
 		for (String column : report.getRowDefinition().getColumnValueMap().keySet()) {
 			String fieldName = report.getRowDefinition().getColumnValueMap().get(column);
@@ -21,6 +22,7 @@ public class CSVWriter<T> extends ReportWriter<T> {
 			// Remove trailing comma and add line break
 			rowOutput = rowOutput.substring(0, rowOutput.lastIndexOf(",")) + "\n";
 		}
+		System.out.println("Addind output: " + rowOutput);
 		return rowOutput;
 				
 	}

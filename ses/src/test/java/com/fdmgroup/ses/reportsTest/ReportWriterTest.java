@@ -2,6 +2,8 @@ package com.fdmgroup.ses.reportsTest;
 
 import static org.junit.Assert.*;
 
+import java.math.BigDecimal;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,8 +11,13 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.fdmgroup.ses.model.Company;
+import com.fdmgroup.ses.model.OwnedShare;
 import com.fdmgroup.ses.reports.CSVWriter;
 import com.fdmgroup.ses.reports.CompanyReport;
+import com.fdmgroup.ses.reports.Report;
+import com.fdmgroup.ses.reports.ReportBuilder;
+import com.fdmgroup.ses.reports.ReportWriter;
+import com.fdmgroup.ses.reports.ReportWriterFactory;
 import com.fdmgroup.ses.reports.XMLWriter;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -37,20 +44,26 @@ public class ReportWriterTest {
 //		System.out.println(ReportWriterUtils.getFieldValue(Company.class, company, "Name"));
 //		System.out.println(ReportWriterUtils.getFieldValue(Company.class, company, "TransactionQuantity"));
 		
-		CompanyReport report = new CompanyReport();
-		report.getRowDefinition().getColumnValueMap().put("Symbol", "Symbol");
-		report.getRowDefinition().getColumnValueMap().put("Purchase Quantity", "TransactionQuantity");
-		report.getRowDefinition().getColumnValueMap().put("Stock Name", "Name");
-		report.getRowDefinition().getColumnValueMap().put("Shares Available Now", "AvailableShares");
-		report.getRows().add(company);
+//		CompanyReport report = new CompanyReport();
+		Report<?> report = new ReportBuilder().buildReport(OwnedShare.class);
+//		report.getRowDefinition().getColumnValueMap().put("Symbol", "Symbol");
+//		report.getRowDefinition().getColumnValueMap().put("Purchase Quantity", "TransactionQuantity");
+//		report.getRowDefinition().getColumnValueMap().put("Stock Name", "Name");
+//		report.getRowDefinition().getColumnValueMap().put("Shares Available Now", "AvailableShares");
+//		report.getRows().add(company);
 		
-		CSVWriter<Company> csvWriter = new CSVWriter<>(report, Company.class);
-		XMLWriter<Company> xmlWriter = new XMLWriter<>(report, Company.class);
+		report.getRowDefinition().getColumnValueMap().put("Company", "Company");
+		report.getRowDefinition().getColumnValueMap().put("Average Purchase Price", "AveragePurchasePrice");
+		report.getRowDefinition().getColumnValueMap().put("Quantity Owned", "Quantity");
 		
-		System.out.println("Here comes the CSV....");
-		System.out.println(csvWriter.writeReport());
-		System.out.println("And now here comes the XML...");
-		System.out.println(xmlWriter.writeReport());
+		ReportWriter<?> writer = ReportWriterFactory.getReportWriter("CSV", OwnedShare.class, report);
+		
+//		CSVWriter<Company> csvWriter = new CSVWriter<>(report, Company.class);
+//		XMLWriter<Company> xmlWriter = new XMLWriter<>(report, Company.class);
+		
+		System.out.println("Here comes the report...");
+		System.out.println(writer.writeReport());
+		
 	}
 	
 }

@@ -15,6 +15,10 @@ public abstract class Report<T> {
 	public List<T> getRows() {
 		return rows;
 	}
+	
+	public void setRows(List<T> rows) {
+		this.rows = rows;
+	}
 
 	public RowDefinition getRowDefinition() {
 		return rowDefinition;
