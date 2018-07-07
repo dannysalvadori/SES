@@ -138,12 +138,11 @@ public class MyAccountController {
     ) {
 		try {
 			userService.saveUser(user);
-			modelAndView.setViewName("user/myAccount");
+			modelAndView = goToMyAccount(modelAndView);
 		} catch (SesValidationException ex) {
 			modelAndView.addObject("failures", ValidationUtils.stringifyFailures(ex.getFailures()));
-			modelAndView.setViewName("user/changePassword");
+			modelAndView = goToChangePassword(modelAndView);
 		}
-		modelAndView.addObject("user", userService.findCurrentUser());
 		return modelAndView;
 	}
 	
