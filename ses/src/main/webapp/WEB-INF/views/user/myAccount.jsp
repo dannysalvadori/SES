@@ -163,6 +163,8 @@
 						</c:forEach>
 					</tbody>
 				</table>
+				<br/>
+				<a href="../user/reports"><button type="button" class="float-right btn-sm btn-primary">Export...</button></a>
 			</div>
 		</div>
 		
