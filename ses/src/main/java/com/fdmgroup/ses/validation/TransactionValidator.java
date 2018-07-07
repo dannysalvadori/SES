@@ -33,7 +33,6 @@ public class TransactionValidator extends ModelValidator {
 	@Override
 	public void validate() throws SesValidationException {
 
-		System.out.println("real txValidator working!...");
 		failures.clear();
 		
 		User user = userService.findCurrentUser();

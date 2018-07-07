@@ -1,7 +1,9 @@
 package com.fdmgroup.ses.controller;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +16,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fdmgroup.ses.model.OwnedShare;
+import com.fdmgroup.ses.model.TransactionHistory;
 import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.repository.RoleRepository;
+import com.fdmgroup.ses.repository.TransactionHistoryRepository;
 import com.fdmgroup.ses.repository.UserRepository;
+import com.fdmgroup.ses.service.OwnedSharesService;
 import com.fdmgroup.ses.service.UserService;
+import com.fdmgroup.ses.stockExchange.SaleForm;
 import com.fdmgroup.ses.validation.SesValidationException;
 import com.fdmgroup.ses.validation.ValidationUtils;
 
@@ -28,10 +35,16 @@ public class MyAccountController {
 	UserService userService;
 	
 	@Autowired
+	OwnedSharesService ownedSharesService;
+	
+	@Autowired
 	UserRepository userRepo;
 	
 	@Autowired
 	RoleRepository roleRepo;
+	
+	@Autowired
+	TransactionHistoryRepository txHistoryRepo;
 	
 	/**
 	 * Instruct Spring Form how to bind dates
@@ -63,6 +76,34 @@ public class MyAccountController {
 				return roleRepo.findById(id);
 			}
 		});
+	}
+	
+	/**
+	 * Go to user home page
+	 */
+	@RequestMapping(value="/user/myAccount")
+    public ModelAndView goToMyAccount(ModelAndView modelAndView) {
+		User currentUser = userService.findCurrentUser();
+		
+		modelAndView.addObject("user", currentUser);
+		modelAndView.setViewName("user/myAccount");
+		
+		// Add the user's stocks available to be sold
+		SaleForm saleForm = new SaleForm();
+		List<OwnedShare> ownedShares = new ArrayList<>();
+		for (OwnedShare ownedShare : ownedSharesService.findAllForCurrentUser()) {
+			if (ownedShare.getQuantity() > 0) {
+				ownedShares.add(ownedShare);
+			}
+		}
+		saleForm.setOwnedShares(ownedShares);
+		modelAndView.addObject("saleForm", saleForm);
+		
+		// Get user's transaction history
+		List<TransactionHistory> userTXHistory = txHistoryRepo.findByOwner(currentUser);
+		modelAndView.addObject("userTXHistory", userTXHistory);
+		
+		return modelAndView;
 	}
 	
 	/**

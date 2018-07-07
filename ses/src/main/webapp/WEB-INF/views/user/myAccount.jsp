@@ -12,12 +12,20 @@
 	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
 	<script>
 		$(document).ready( function () {
-		    $('#salesExchange').DataTable( {
-				"iDisplayLength": 5,
+		    $('#ownedShares').DataTable( {
+				"iDisplayLength": 10,
 				"lengthMenu": [5, 10, 20, 50],
 				"language": {
 					"emptyTable": "You do not own any shares"
 		    	}
+		    } );
+		    $('#transactionHistory').DataTable( {
+				"iDisplayLength": 5,
+				"lengthMenu": [5, 10, 20, 50],
+				"language": {
+					"emptyTable": "You haven't made any transactions"
+		    	},
+		    	"order": [[ 0, "desc" ]]
 		    } );
 		} );
 	</script>
@@ -63,7 +71,7 @@
 				<h3 class="panel-title">Your Stocks</h3>
 			</div>
 			<div class="panel-body">
-				<table id="salesExchange">
+				<table id="ownedShares">
 					<thead>
 						<tr class="bg-success text-white">
 							<th>Symbol</th>
@@ -114,7 +122,47 @@
 				<h3 class="panel-title">Transaction History</h3>
 			</div>
 			<div class="panel-body">
-				Render your transactions here...	
+				<table id="transactionHistory">
+					<thead>
+						<tr class="bg-info text-white">
+							<th>Exchange Date</th>
+							<th>Symbol</th>
+							<th>Company Name</th>
+							<th>Transaction Quantity</th>
+							<th>Unit Price</th>
+							<th>Sale/Purchase Value</th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach items="${userTXHistory}" var="txHistory">
+							<tr>
+								<td>
+									<fmt:formatDate value="${txHistory.exchangeDate}" pattern="dd/MM/YYYY HH:MM"/>
+								</td>
+		
+								<td>
+									${txHistory.company.symbol}	
+								</td>
+								
+								<td>
+									${txHistory.company.name}	
+								</td>
+		
+								<td class="text-right">
+									<fmt:formatNumber value="${txHistory.quantity}" type="number"/>
+								</td>
+		
+								<td class="text-right">
+									<fmt:formatNumber value="${txHistory.unitPrice}" type="currency" />
+								</td>
+		
+								<td class="text-right">
+									<fmt:formatNumber value="${txHistory.value}" type="currency"/>
+								</td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
 			</div>
 		</div>
 		
