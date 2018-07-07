@@ -2,8 +2,10 @@ package com.fdmgroup.ses.reports;
 
 public abstract class ReportWriter<T> {
 	protected Report<T> report;
-	public ReportWriter(Report<T> report) {
+	protected final Class<T> type;
+	public ReportWriter(Report<T> report, Class<T> type) {
 		this.report = report;
+		this.type = type;
 	}
 	public final String writeReport() {
 		String body = writeOpen(report);

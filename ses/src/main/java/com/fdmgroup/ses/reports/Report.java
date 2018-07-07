@@ -20,4 +20,6 @@ public abstract class Report<T> {
 		return rowDefinition;
 	}
 
+	public abstract String generateTitle();
+
 }
