@@ -1,7 +1,5 @@
 package com.fdmgroup.ses.validation;
 
-import java.math.BigDecimal;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +10,6 @@ import com.fdmgroup.ses.repository.CompanyRepository;
 import com.fdmgroup.ses.repository.OwnedSharesRepository;
 import com.fdmgroup.ses.service.UserService;
 import com.fdmgroup.ses.stockExchange.SaleForm;
-import com.fdmgroup.ses.stockExchange.TransactionForm;
 
 @Component
 public class SaleValidator extends ModelValidator {

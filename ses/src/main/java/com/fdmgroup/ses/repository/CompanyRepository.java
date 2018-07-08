@@ -7,6 +7,6 @@ import com.fdmgroup.ses.model.Company;
 
 @Repository("companyRepository")
 public interface CompanyRepository extends JpaRepository<Company, Long> {
-	Company findById(int id);
+	Company findById(Integer id);
 	Company findBySymbol(String symbol);
 }

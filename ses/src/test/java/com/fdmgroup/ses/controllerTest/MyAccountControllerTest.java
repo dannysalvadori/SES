@@ -25,7 +25,6 @@ import com.fdmgroup.ses.repository.TransactionHistoryRepository;
 import com.fdmgroup.ses.service.OwnedSharesService;
 import com.fdmgroup.ses.service.UserServiceImpl;
 import com.fdmgroup.ses.stockExchange.SaleForm;
-import com.fdmgroup.ses.stockExchange.TransactionForm;
 import com.fdmgroup.ses.utils.DataFactory;
 import com.fdmgroup.ses.validation.UserValidator;
 import com.fdmgroup.ses.validation.ValidationFactory;
@@ -110,8 +109,9 @@ public class MyAccountControllerTest {
 		Object txHistoryObject = mav.getModel().get("userTXHistory");
 		assertNotEquals("userTXHistory model object shouldn't be null", null, txHistoryObject);
 		assertTrue("userTXHistory object is wrong type", txHistoryObject instanceof List<?>);
-		List<TransactionHistory> txHistory = (List<TransactionHistory>) txHistoryObject;
+		List<?> txHistory = (List<?>) txHistoryObject;
 		assertEquals("Wrong number of transaction history lines", 1, txHistory.size());
+		assertTrue("TxHistory was not of class TransactionHistory", txHistory.get(0) instanceof TransactionHistory);
 	}
 	
 	/**
