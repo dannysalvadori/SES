@@ -45,7 +45,7 @@ public class ReportWriterTest {
 //		System.out.println(ReportWriterUtils.getFieldValue(Company.class, company, "TransactionQuantity"));
 		
 //		CompanyReport report = new CompanyReport();
-		Report<?> report = new ReportBuilder().buildReport(OwnedShare.class);
+		Report<?> report = null;// = new ReportBuilder().buildReport(OwnedShare.class);
 //		report.getRowDefinition().getColumnValueMap().put("Symbol", "Symbol");
 //		report.getRowDefinition().getColumnValueMap().put("Purchase Quantity", "TransactionQuantity");
 //		report.getRowDefinition().getColumnValueMap().put("Stock Name", "Name");
@@ -56,7 +56,7 @@ public class ReportWriterTest {
 		report.getRowDefinition().getColumnValueMap().put("Average Purchase Price", "AveragePurchasePrice");
 		report.getRowDefinition().getColumnValueMap().put("Quantity Owned", "Quantity");
 		
-		ReportWriter<?> writer = ReportWriterFactory.getReportWriter("CSV", OwnedShare.class, report);
+		ReportWriter<?> writer = ReportWriterFactory.getReportWriter("CSV", report);
 		
 //		CSVWriter<Company> csvWriter = new CSVWriter<>(report, Company.class);
 //		XMLWriter<Company> xmlWriter = new XMLWriter<>(report, Company.class);

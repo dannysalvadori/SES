@@ -11,4 +11,8 @@ public class RowDefinition {
 		return columnValueMap;
 	}
 
+	public void putColumnValueMapping(String key, String value) {
+		columnValueMap.put(key, value);		
+	}
+
 }

@@ -2,7 +2,6 @@ package com.fdmgroup.ses.reports;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 import com.fdmgroup.ses.model.Company;
 
@@ -10,21 +9,23 @@ public class CompanyReport extends Report<Company> {
 
 	public CompanyReport() {
 		super();
-	}
-	
-	public List<Company> getRows() {
-		return rows;
-	}
-
-	public RowDefinition getRowDefinition() {
-		return rowDefinition;
+		rowDefinition.putColumnValueMapping("Company Symbol", "Symbol");
+		rowDefinition.putColumnValueMapping("Company Name", "Name");
+		rowDefinition.putColumnValueMapping("Value", "CurrentShareValue");
+		rowDefinition.putColumnValueMapping("Volume", "AvailableShares");
+//		rowDefinition.putColumnValueMapping("Gains", "Gains"); // gains?? TODO: dafuq is this?
 	}
 
 	@Override
-	public String generateTitle() {
+	protected void setTitle() {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 		LocalDateTime now = LocalDateTime.now();
-		return dtf.format(now);
+		title = "Public Stocks Report (" + dtf.format(now) + ")";
+	}
+
+	@Override
+	public String generateFileName() {
+		return title + ".xml";
 	}
 
 }

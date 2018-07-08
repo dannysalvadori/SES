@@ -1,39 +1,34 @@
 package com.fdmgroup.ses.reports;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fdmgroup.ses.model.Company;
 import com.fdmgroup.ses.model.OwnedShare;
+import com.fdmgroup.ses.service.CompanyService;
 import com.fdmgroup.ses.service.OwnedSharesService;
-import com.fdmgroup.ses.utils.DataFactory;
 
 @Component
 public class ReportBuilder {
 	
-	@Autowired
 	private OwnedSharesService ownedSharesService;
+	private CompanyService companyService;
+	
+	public ReportBuilder(OwnedSharesService ownedSharesService, CompanyService companyService) {
+		this.ownedSharesService = ownedSharesService;
+		this.companyService = companyService;
+	}
 	
 	public Report<?> buildReport(Class<?> type) {
 		Report<?> report;
 		
-		List<OwnedShare> ownedShares = new ArrayList<>();
-		ownedShares.add(DataFactory.createOwnedShare());
-		ownedShares.add(DataFactory.createOwnedShare());
-		ownedShares.add(DataFactory.createOwnedShare());
-		
 		if (type == Company.class) {
-			System.out.println("Wrong");
 			report = new CompanyReport();
+			((Report<Company>)report)
+					.setRows(companyService.findAll()); // TODO: apply filters
 		} else {
-			System.out.println("Hi kids!");
 			report = new OwnedSharesReport();
 			((Report<OwnedShare>)report)
-//					.setRows(ownedSharesService.findAllForCurrentUser());
-					.setRows(ownedShares);
+					.setRows(ownedSharesService.findAllForCurrentUser());
 		}
 		
 		return report;

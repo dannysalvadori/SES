@@ -22,6 +22,15 @@
 				 files. Use the form below to specify which information you want to report, and in which format.
 			</div>
 		</div>
+		
+		<div class="panel panel-info">
+			<div class="panel-heading">
+				<h3 class="panel-title">Customise your Report</h3>
+			</div>
+			<div class="panel-body">
+				<a href="../user/requestReport"><button type="button" class="btn-sm btn-primary">Let's do it!</button></a>
+			</div>
+		</div>
 	</div>
 	
 </body>

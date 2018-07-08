@@ -8,13 +8,13 @@ public class ReportWriterFactory {
 	/**
 	 * Returns the SesValidator implementation correct to the given object's Class
 	 */
-	public static ReportWriter<?> getReportWriter(String format, Class<?> type, Report report) {
+	public static ReportWriter<?> getReportWriter(String format, Report report) {
 		ReportWriter<?> reportWriter;
 		
 		if (format.equalsIgnoreCase("XML")) {
-			reportWriter = new XMLWriter<>(report, type);
+			reportWriter = new XMLWriter<>(report);
 		} else {
-			reportWriter = new CSVWriter<>(report, type);
+			reportWriter = new CSVWriter<>(report);
 		}
 		
 		return reportWriter;
