@@ -55,7 +55,7 @@ public class ReportsController {
 		
 		Report<?> report = new ReportBuilder(ownedSharesService, companyService).buildReport(Company.class);
 		
-		ReportWriter<?> writer = ReportWriterFactory.getReportWriter("CSV", report);
+		ReportWriter<?> writer = ReportWriterFactory.getReportWriter("XML", report);
 		
 		System.out.println("Here comes the report...");
 		String reportBody = writer.writeReport();

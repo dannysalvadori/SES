@@ -1,11 +1,11 @@
 package com.fdmgroup.ses.reports;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class RowDefinition {
 
-	private Map<String, String> columnValueMap = new HashMap<>(); // TODO: use ordered map!!
+	private Map<String, String> columnValueMap = new LinkedHashMap<>(); // Maintains FIFO order
 	
 	public Map<String, String> getColumnValueMap() {
 		return columnValueMap;
