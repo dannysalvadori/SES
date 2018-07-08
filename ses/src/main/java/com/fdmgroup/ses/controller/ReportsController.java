@@ -45,7 +45,7 @@ public class ReportsController {
 	 * Go to reports home page
 	 */
 	@RequestMapping(value="/user/requestReport")
-    public ResponseEntity<InputStreamResource> letsDoIt(ModelAndView modelAndView, HttpServletResponse response) {
+    public ResponseEntity<InputStreamResource> requestReport(ModelAndView modelAndView, HttpServletResponse response) {
 		
 		Report<?> report = new ReportBuilder(ownedSharesService, companyService).buildReport(Company.class);
 		
