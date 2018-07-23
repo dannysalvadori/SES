@@ -48,12 +48,12 @@
 					<tbody>
 						<tr>
 							<td>
-								<form:select path="${reportForm.type}">
+								<form:select path="type">
 									<form:options items="${reportTypes}"/>
 								</form:select>
 							</td>
 							<td>
-								<form:select path="${reportForm.format}">
+								<form:select path="format">
 									<form:options items="${reportFormats}"/>
 								</form:select>									
 							</td>

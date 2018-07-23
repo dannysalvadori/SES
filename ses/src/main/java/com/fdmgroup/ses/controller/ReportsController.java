@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -50,28 +51,28 @@ public class ReportsController {
 	 * Go to reports home page
 	 */
 	@RequestMapping(value="/user/doRequestReport")
-    public ResponseEntity<InputStreamResource> requestReport(ModelAndView modelAndView, HttpServletResponse response) {
+    public ResponseEntity<InputStreamResource> requestReport(
+    		ModelAndView modelAndView,
+    		HttpServletResponse response,
+    		@ModelAttribute("reportForm") ReportForm reportForm
+    ) {
+		// Set report type and format
+		Report<?> report = new ReportBuilder(ownedSharesService, companyService).buildReport(reportForm.getType());
+		ReportWriter<?> writer = ReportWriterFactory.getReportWriter(reportForm.getFormat(), report);
 		
-		Report<?> report = new ReportBuilder(ownedSharesService, companyService).buildReport(Company.class);
-		
-		ReportWriter<?> writer = ReportWriterFactory.getReportWriter("XML", report);
-		
-		System.out.println("Here comes the report...");
+		// Write downloadable file
 		String reportBody = writer.writeReport();
-		System.out.println(reportBody);
-		modelAndView.setViewName("user/myAccount");
-		
 		InputStream stream = new ByteArrayInputStream(reportBody.getBytes(StandardCharsets.UTF_8));
 		InputStreamResource resource = new InputStreamResource(stream);
-		
 		MediaType mediaType = new MediaType("text", "html");
-		
-		return ResponseEntity.ok()
+		ResponseEntity<InputStreamResource> responseEntity = ResponseEntity.ok()
 				.header(HttpHeaders.CONTENT_DISPOSITION,
 						"attachment;filename=" + report.generateFileName() + writer.getFileExtension())
 				.contentType(mediaType)
 				.contentLength(reportBody.length())
 				.body(resource);
+		
+		return responseEntity;
 	}
 		
 }

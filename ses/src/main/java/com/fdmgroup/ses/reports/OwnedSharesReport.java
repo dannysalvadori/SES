@@ -25,7 +25,7 @@ public class OwnedSharesReport extends Report<OwnedShare> {
 
 	@Override
 	public String generateFileName() {
-		return title + ".csv";
+		return title;
 	}
 
 }

@@ -25,7 +25,7 @@ public class CompanyReport extends Report<Company> {
 
 	@Override
 	public String generateFileName() {
-		return title + ".xml";
+		return title;
 	}
 
 }
