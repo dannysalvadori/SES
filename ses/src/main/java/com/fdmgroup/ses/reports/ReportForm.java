@@ -1,29 +1,29 @@
 package com.fdmgroup.ses.reports;
 
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.fdmgroup.ses.model.Company;
 import com.fdmgroup.ses.model.OwnedShare;
 
 public class ReportForm {
 	
-	private List<String> availableFormats;
-	private static final String FORMAT_CSV = "CSV"; 
-	private static final String FORMAT_XML = "CSV"; 
+	// Constants
+	private Set<String> availableFormats;
 	private Map<String, Class<?>> availableTypes;
+	private static final String FORMAT_CSV = "CSV"; 
+	private static final String FORMAT_XML = "XML"; 
 	private static final String TYPE_COMPANY = "company"; 
 	private static final String TYPE_OWNED_SHARE = "ownedshare"; 
 	
+	// Form properties
 	private String format;
-	
 	private Class<?> type;
 	
 	public ReportForm() {
-		availableFormats = new LinkedList<>();
+		availableFormats = new HashSet<>();
 		availableFormats.add(FORMAT_CSV);
 		availableFormats.add(FORMAT_XML);
 		availableTypes = new LinkedHashMap<>();
@@ -39,10 +39,11 @@ public class ReportForm {
 	 * @param Allow format to be set only to available formats
 	 */
 	public void setFormat(String format) {
-		for (String validFormat : availableFormats) {
-			if (format.equalsIgnoreCase(validFormat)) {
-				this.format = format;
-			}
+		if (availableFormats.contains(format)) {
+			this.format = format;
+		} else {
+			// TODO: throw exception
+			System.out.println("Bad report format specified: " + format);
 		}
 	}
 	
@@ -53,7 +54,20 @@ public class ReportForm {
 	public void setType(String typeString) {
 		if (availableTypes.containsKey(typeString)) {
 			this.type = availableTypes.get(typeString);
-		}			
+		} else {
+			// TODO: throw exception
+			System.out.println("Bad report type specified: " + format);
+		}
 	}
+
+	public Set<String> getAvailableFormats() {
+		return availableFormats;
+	}
+
+	public Set<String> getAvailableTypes() {
+		return availableTypes.keySet();
+	}
+	
+	
 	
 }

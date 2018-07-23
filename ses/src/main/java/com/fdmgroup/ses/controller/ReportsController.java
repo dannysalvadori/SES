@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fdmgroup.ses.model.Company;
 import com.fdmgroup.ses.reports.Report;
 import com.fdmgroup.ses.reports.ReportBuilder;
+import com.fdmgroup.ses.reports.ReportForm;
 import com.fdmgroup.ses.reports.ReportWriter;
 import com.fdmgroup.ses.reports.ReportWriterFactory;
 import com.fdmgroup.ses.service.CompanyService;
@@ -38,13 +39,17 @@ public class ReportsController {
 	@RequestMapping(value="/user/reports")
     public ModelAndView goToReports(ModelAndView modelAndView) {
 		modelAndView.setViewName("user/reports");
+		ReportForm reportForm = new ReportForm();
+		modelAndView.addObject("reportForm", reportForm);
+		modelAndView.addObject("reportFormats", reportForm.getAvailableFormats());
+		modelAndView.addObject("reportTypes", reportForm.getAvailableTypes());
 		return modelAndView;
 	}
 	
 	/**
 	 * Go to reports home page
 	 */
-	@RequestMapping(value="/user/requestReport")
+	@RequestMapping(value="/user/doRequestReport")
     public ResponseEntity<InputStreamResource> requestReport(ModelAndView modelAndView, HttpServletResponse response) {
 		
 		Report<?> report = new ReportBuilder(ownedSharesService, companyService).buildReport(Company.class);

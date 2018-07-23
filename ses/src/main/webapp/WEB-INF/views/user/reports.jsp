@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -28,8 +29,44 @@
 				<h3 class="panel-title">Customise your Report</h3>
 			</div>
 			<div class="panel-body">
-				<a href="../user/requestReport"><button type="button" class="btn-sm btn-primary">Let's do it!</button></a>
+				<a href="../user/doRequestReport"><button type="button" class="btn-sm btn-primary">Let's do it!</button></a>
 			</div>
+			<br/>
+			<br/>
+			
+			<form:form action="../user/doRequestReport" method="POST" modelAttribute="reportForm">
+				<br/>
+				<br/>
+				<table id="reportForm">
+					<thead>
+						<tr class="bg-primary text-white">
+							<th>Type</th>
+							<th>Format</th>
+							<th>Other stuff</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<form:select path="${reportForm.type}">
+									<form:options items="${reportTypes}"/>
+								</form:select>
+							</td>
+							<td>
+								<form:select path="${reportForm.format}">
+									<form:options items="${reportFormats}"/>
+								</form:select>									
+							</td>
+							<td>
+								Stuff :)
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<br/>
+				<input type="submit" value="Generate Report" class="btn-sm btn-primary float-right">
+			</form:form>
+			
 		</div>
 	</div>
 	
