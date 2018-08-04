@@ -40,15 +40,16 @@ public class ReportsController {
 	@RequestMapping(value="/user/reports")
     public ModelAndView goToReports(ModelAndView modelAndView) {
 		modelAndView.setViewName("user/reports");
-		ReportForm reportForm = new ReportForm();
+		ReportForm reportForm = new ReportForm(companyService);
 		modelAndView.addObject("reportForm", reportForm);
 		modelAndView.addObject("reportFormats", reportForm.getAvailableFormats());
 		modelAndView.addObject("reportTypes", reportForm.getAvailableTypes());
+		modelAndView.addObject("availableStockSymbols", reportForm.getAvailableStockSymbols());
 		return modelAndView;
 	}
 	
 	/**
-	 * Go to reports home page
+	 * Generate report download
 	 */
 	@RequestMapping(value="/user/doRequestReport")
     public ResponseEntity<InputStreamResource> requestReport(
@@ -57,10 +58,10 @@ public class ReportsController {
     		@ModelAttribute("reportForm") ReportForm reportForm
     ) {
 		// Set report type and format
-		Report<?> report = new ReportBuilder(ownedSharesService, companyService).buildReport(reportForm.getType());
+		Report<?> report = new ReportBuilder(ownedSharesService, companyService).buildReport(reportForm);
 		ReportWriter<?> writer = ReportWriterFactory.getReportWriter(reportForm.getFormat(), report);
 		
-		// Write downloadable file
+		// Write downloadable file TODO: extract into fileUtils class
 		String reportBody = writer.writeReport();
 		InputStream stream = new ByteArrayInputStream(reportBody.getBytes(StandardCharsets.UTF_8));
 		InputStreamResource resource = new InputStreamResource(stream);

@@ -58,7 +58,9 @@
 								</form:select>									
 							</td>
 							<td>
-								Stuff :)
+								<form:select multiple="true" path="stockSymbols">
+									<form:options items="${availableStockSymbols}"/>
+								</form:select>
 							</td>
 						</tr>
 					</tbody>

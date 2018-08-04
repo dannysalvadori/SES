@@ -1,6 +1,7 @@
 package com.fdmgroup.ses.service;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,17 @@ public class OwnedSharesService {
 	public List<OwnedShare> findAllForCurrentUser() {
 		User user = userService.findCurrentUser();
 		return ownedSharesRepo.findByOwner(user);
+	}
+
+	public List<OwnedShare> findBySymbolForCurrentUser(Set<String> symbols) {
+		List<OwnedShare> ownedShares;
+		if (symbols == null || symbols.isEmpty()) {
+			ownedShares = findAllForCurrentUser();
+		} else {
+			User user = userService.findCurrentUser();
+			ownedShares = ownedSharesRepo.findByOwnerAndCompanySymbolIn(user, symbols);
+		}
+		return ownedShares;
 	}
 	
 }

@@ -8,7 +8,7 @@ public class XMLWriter<T> extends ReportWriter<T> {
 	
 	protected String writeOpen(Report<T> report) {
 		String output = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-				+ "<report title=" + report.getTitle() + ">"
+				+ "<report title=\"" + report.getTitle() + "\">"
 				+ "<body>";
 		return output;
 	};

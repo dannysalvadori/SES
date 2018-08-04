@@ -4,15 +4,18 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import com.fdmgroup.ses.model.Company;
 import com.fdmgroup.ses.model.OwnedShare;
+import com.fdmgroup.ses.service.CompanyService;
 
 public class ReportForm {
 	
 	// Constants
 	private Set<String> availableFormats;
 	private Map<String, Class<?>> availableTypes;
+	private Set<String> availableStockSymbols;
 	private static final String FORMAT_CSV = "CSV"; 
 	private static final String FORMAT_XML = "XML"; 
 	private static final String TYPE_COMPANY = "company"; 
@@ -21,7 +24,12 @@ public class ReportForm {
 	// Form properties
 	private String format;
 	private Class<?> type;
+	private Set<String> stockSymbols;
 	
+	
+	/**
+	 * Default constructor required for Spring
+	 */
 	public ReportForm() {
 		availableFormats = new HashSet<>();
 		availableFormats.add(FORMAT_CSV);
@@ -29,6 +37,22 @@ public class ReportForm {
 		availableTypes = new LinkedHashMap<>();
 		availableTypes.put(TYPE_COMPANY, Company.class);
 		availableTypes.put(TYPE_OWNED_SHARE, OwnedShare.class);
+	}
+	
+	/**
+	 * Populates available file formats, report types and stock symbols
+	 */
+	public ReportForm(CompanyService companyService) {
+		availableFormats = new HashSet<>();
+		availableFormats.add(FORMAT_CSV);
+		availableFormats.add(FORMAT_XML);
+		availableTypes = new LinkedHashMap<>();
+		availableTypes.put(TYPE_COMPANY, Company.class);
+		availableTypes.put(TYPE_OWNED_SHARE, OwnedShare.class);
+		availableStockSymbols = new TreeSet<>();
+		for (Company company : companyService.findAll()) {
+			availableStockSymbols.add(company.getSymbol());
+		}
 	}
 	
 	public String getFormat() {
@@ -59,6 +83,14 @@ public class ReportForm {
 			System.out.println("Bad report type specified: " + format);
 		}
 	}
+	
+	public Set<String> getStockSymbols() {
+		return stockSymbols;
+	}
+	
+	public void setStockSymbols(Set<String> stockSymbols) {
+		this.stockSymbols = stockSymbols;
+	}
 
 	public Set<String> getAvailableFormats() {
 		return availableFormats;
@@ -68,6 +100,8 @@ public class ReportForm {
 		return availableTypes.keySet();
 	}
 	
-	
+	public Set<String> getAvailableStockSymbols() {
+		return availableStockSymbols;
+	}
 	
 }

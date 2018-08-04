@@ -1,6 +1,7 @@
 package com.fdmgroup.ses.service;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,16 @@ public class CompanyService {
 
 	public List<Company> findAll() {
 		return companyRepo.findAll();
+	}
+
+	public List<Company> findBySymbol(Set<String> symbols) {
+		List<Company> companies;
+		if (symbols == null || symbols.isEmpty()) {
+			companies = findAll();
+		} else {
+			companies = companyRepo.findBySymbolIn(symbols);
+		}
+		return companies;
 	}
 	
 }

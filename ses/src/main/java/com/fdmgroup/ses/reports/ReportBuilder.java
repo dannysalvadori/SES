@@ -1,5 +1,7 @@
 package com.fdmgroup.ses.reports;
 
+import java.util.Set;
+
 import org.springframework.stereotype.Component;
 
 import com.fdmgroup.ses.model.Company;
@@ -18,17 +20,20 @@ public class ReportBuilder {
 		this.companyService = companyService;
 	}
 	
-	public Report<?> buildReport(Class<?> type) {
+	public Report<?> buildReport(ReportForm reportForm) {
+		
+		Class<?> type = reportForm.getType();
+		Set<String> stockSymbols = reportForm.getStockSymbols();
 		Report<?> report;
 		
 		if (type == Company.class) {
 			report = new CompanyReport();
 			((Report<Company>)report)
-					.setRows(companyService.findAll()); // TODO: apply filters
+					.setRows(companyService.findBySymbol(stockSymbols)); // TODO: apply filters
 		} else {
 			report = new OwnedSharesReport();
 			((Report<OwnedShare>)report)
-					.setRows(ownedSharesService.findAllForCurrentUser());
+					.setRows(ownedSharesService.findBySymbolForCurrentUser(stockSymbols));
 		}
 		
 		return report;

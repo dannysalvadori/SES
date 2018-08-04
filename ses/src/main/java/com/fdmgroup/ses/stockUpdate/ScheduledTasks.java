@@ -11,9 +11,20 @@ public class ScheduledTasks {
 
 	@Autowired
 	private CompanyRepository companyRepo;
+
+	@Scheduled(cron="0 59 7 * * *") // Every day at 07:59
+	public void openStockExchange() {
+		new StockExchangeManager().openStockExchange(companyRepo);
+    }
 	
-	@Scheduled(fixedRate = 5*60*1000)
+	@Scheduled(cron="0 */5 8-16 * * *") // Every five minutes between 08:00 and 16:55
 	public void fluctuateStockValues() {
 		new StockExchangeManager().fluctuateValues(companyRepo);
     }
+	
+	@Scheduled(cron="0 0 17 * * *") // Every day at 17:00
+	public void closeStockExchange() {
+		new StockExchangeManager().closeStockExchange(companyRepo);
+    }
+	
 }
