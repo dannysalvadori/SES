@@ -57,7 +57,6 @@ public class Company {
 	@Transient
 	private Long transactionQuantity;
 	
-	
 	/**
 	 * Used to control multi-select transactions
 	 */

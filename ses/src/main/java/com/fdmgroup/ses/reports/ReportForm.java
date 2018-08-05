@@ -26,7 +26,6 @@ public class ReportForm {
 	private Class<?> type;
 	private Set<String> stockSymbols;
 	
-	
 	/**
 	 * Default constructor required for Spring
 	 */

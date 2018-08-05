@@ -9,7 +9,6 @@ import com.fdmgroup.ses.repository.CompanyRepository;
 @Component
 public class ScheduledTasks {
 	
-	
 	/**
 	 * Workaround for limitations on cron expressions: fluctuateStockValues should be every five minutes between 08:00
 	 * and 16:25, but is actually scheduled until 16:55. After close, it should fail to execute.
