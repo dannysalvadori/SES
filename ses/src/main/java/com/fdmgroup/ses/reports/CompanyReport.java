@@ -13,7 +13,7 @@ public class CompanyReport extends Report<Company> {
 		rowDefinition.putColumnValueMapping("Company Name", "Name");
 		rowDefinition.putColumnValueMapping("Value", "CurrentShareValue");
 		rowDefinition.putColumnValueMapping("Volume", "AvailableShares");
-//		rowDefinition.putColumnValueMapping("Gains", "Gains"); // gains?? TODO: dafuq is this?
+		rowDefinition.putColumnValueMapping("Gains", "Gains");
 	}
 
 	@Override
