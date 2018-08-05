@@ -15,7 +15,7 @@ import com.fdmgroup.ses.config.QueryConfig;
 public class SesApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SesApplication.class, args);		
+		SpringApplication.run(SesApplication.class, args);
 	}
 	
 	@Override

@@ -6,7 +6,6 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.anything;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -21,7 +20,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.servlet.ModelAndView;
@@ -33,7 +31,6 @@ import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.repository.CompanyRepository;
 import com.fdmgroup.ses.service.OwnedSharesService;
 import com.fdmgroup.ses.service.TransactionService;
-import com.fdmgroup.ses.service.UserService;
 import com.fdmgroup.ses.service.UserServiceImpl;
 import com.fdmgroup.ses.stockExchange.SaleForm;
 import com.fdmgroup.ses.stockExchange.TransactionForm;
@@ -248,7 +245,7 @@ public class StockExchangeControllerTest {
 	public void doPlaceOrderValidationFailTest() {
 		
 		TransactionForm txForm = new TransactionForm();
-		BigDecimal expectedTotal = new BigDecimal(55.58).setScale(2, RoundingMode.HALF_UP);
+//		BigDecimal expectedTotal = new BigDecimal(55.58).setScale(2, RoundingMode.HALF_UP);
 		
 		SesValidationException stubValidationException = new SesValidationException();
 		Set<String> stubFailures = new HashSet<>();

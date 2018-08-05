@@ -1,6 +1,8 @@
 package com.fdmgroup.ses.model;
 
 import java.math.BigDecimal;
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -39,6 +41,18 @@ public class Company {
 	
 	@Column(name = "current_value")
 	private BigDecimal currentShareValue;
+	
+	@Column(name = "last_trade")
+	private Date lastTrade;
+	
+	@Column(name = "open")
+	private BigDecimal openValue;
+	
+	@Column(name = "close")
+	private BigDecimal closeValue;
+	
+	@Column(name = "gains")
+	private BigDecimal gains;	
 	
 	@Transient
 	private Long transactionQuantity;
@@ -107,6 +121,38 @@ public class Company {
 
 	public void setSelected(Boolean selected) {
 		this.selected = selected;
+	}
+
+	public Date getLastTrade() {
+		return lastTrade;
+	}
+
+	public void setLastTrade(Date lastTrade) {
+		this.lastTrade = lastTrade;
+	}
+
+	public BigDecimal getOpenValue() {
+		return openValue;
+	}
+
+	public void setOpenValue(BigDecimal openValue) {
+		this.openValue = openValue;
+	}
+
+	public BigDecimal getCloseValue() {
+		return closeValue;
+	}
+
+	public void setCloseValue(BigDecimal closeValue) {
+		this.closeValue = closeValue;
+	}
+
+	public BigDecimal getGains() {
+		return gains;
+	}
+
+	public void setGains(BigDecimal gains) {
+		this.gains = gains;
 	}
 
 }
