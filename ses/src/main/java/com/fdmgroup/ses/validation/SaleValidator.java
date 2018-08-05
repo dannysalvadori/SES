@@ -41,7 +41,6 @@ public class SaleValidator extends ModelValidator {
 		User user = userService.findCurrentUser();
 		
 		// At least one share must be selected
-		System.out.println("selected shares :" + saleForm.getOwnedShares().size());
 		if (saleForm.getOwnedShares().size() < 1) {
 			failures.add("You must select at least one stock to sell.");
 		}

@@ -1,5 +1,6 @@
 package com.fdmgroup.ses.service;
 
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Set;
 
@@ -18,6 +19,7 @@ public class CompanyService {
 	public void updateAvailableShares(Company company) {
 		Company dbCompany = companyRepo.findBySymbol(company.getSymbol());
 		dbCompany.setAvailableShares(dbCompany.getAvailableShares()-company.getTransactionQuantity());
+		dbCompany.setLastTrade(GregorianCalendar.getInstance().getTime());
 		companyRepo.save(dbCompany);
 	}
 

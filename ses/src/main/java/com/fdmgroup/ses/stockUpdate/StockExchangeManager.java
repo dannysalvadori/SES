@@ -20,7 +20,8 @@ public class StockExchangeManager {
 			c.setCurrentShareValue(currentValue.multiply(variance));
 			
 			// Update gains
-			c.setGains(c.getCurrentShareValue().subtract(c.getOpenValue()));
+			BigDecimal openValue = c.getOpenValue() == null ? new BigDecimal(0) : c.getOpenValue();
+			c.setGains(c.getCurrentShareValue().subtract(openValue));
 		}
 		companyRepo.save(allStocks);
 	}
@@ -44,7 +45,8 @@ public class StockExchangeManager {
 		List<Company> allStocks = companyRepo.findAll();
 		for (Company c : allStocks) {
 			c.setCloseValue(c.getCurrentShareValue());
-			c.setGains(c.getCurrentShareValue().subtract(c.getOpenValue()));
+			BigDecimal openValue = c.getOpenValue() == null ? new BigDecimal(0) : c.getOpenValue();
+			c.setGains(c.getCurrentShareValue().subtract(openValue));
 		}
 		companyRepo.save(allStocks);
 	}
