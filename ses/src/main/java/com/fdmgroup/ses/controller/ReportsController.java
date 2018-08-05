@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fdmgroup.ses.model.Company;
 import com.fdmgroup.ses.reports.Report;
 import com.fdmgroup.ses.reports.ReportBuilder;
 import com.fdmgroup.ses.reports.ReportForm;

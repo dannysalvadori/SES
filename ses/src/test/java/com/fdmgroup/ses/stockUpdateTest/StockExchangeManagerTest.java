@@ -5,11 +5,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import org.junit.Before;
@@ -17,8 +14,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.scheduling.TriggerContext;
-import org.springframework.scheduling.support.CronTrigger;
 
 import com.fdmgroup.ses.model.Company;
 import com.fdmgroup.ses.repository.CompanyRepository;
@@ -88,39 +83,4 @@ public class StockExchangeManagerTest {
 		}
 	}
 	
-	@Test
-	public void testScheduler(){
-	    // to test if a cron expression runs only from Monday to Friday
-	    org.springframework.scheduling.support.CronTrigger trigger = 
-	                                      new CronTrigger("0 */5 8-16 * * *");
-	    Calendar today = Calendar.getInstance();
-	    today.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
-
-	    SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss EEEE"); 
-	    final Date yesterday = today.getTime();
-	    System.out.println("Yesterday was : " + df.format(yesterday));
-	    Date nextExecutionTime = trigger.nextExecutionTime(
-	        new TriggerContext() {
-
-	            @Override
-	            public Date lastScheduledExecutionTime() {
-	                return yesterday;
-	            }
-
-	            @Override
-	            public Date lastActualExecutionTime() {
-	                return yesterday;
-	            }
-
-	            @Override
-	            public Date lastCompletionTime() {
-	                return yesterday;
-	            }
-	        });
-
-	    String message = "Next Execution date: " + df.format(nextExecutionTime);
-	    System.out.println(message);
-
-	}
-
 }
