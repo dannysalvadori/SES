@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.WebRequest;
 
@@ -31,6 +32,8 @@ public class UserServiceImpl implements UserService {
     private RoleRepository roleRepo;
 	@Autowired
 	private VerificationTokenRepository verificationTokenRepository;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Autowired
 	ApplicationEventPublisher eventPublisher;
@@ -55,7 +58,8 @@ public class UserServiceImpl implements UserService {
 		// Perform validations
 		validationFactory.getValidator(user).validate();
 		
-		// Save user
+		// Hash pw, then save user
+		hashPassword(user);
 		userRepo.save(user);
 		
 		// Create and email verification token
@@ -69,6 +73,7 @@ public class UserServiceImpl implements UserService {
 		validationFactory.getValidator(user).validate();
 		
 		// Save user
+		hashPassword(user);
 		userRepo.save(user);
 	}
 
@@ -104,6 +109,16 @@ public class UserServiceImpl implements UserService {
 	public void updateCredit(User user, SaleForm saleForm) {
 		user.setCredit(user.getCredit().subtract(saleForm.getTransactionValue()));
 		userRepo.save(user);
+	}
+	
+	/**
+	 * Hashes the user's passord as long as it is not already hashed.
+	 * Depends on the limitation of a password's unhashed length to less than 60 characters 
+	 */
+	private void hashPassword(User user) {
+		if (user.getPassword().length() != 60) {
+			user.setPassword(passwordEncoder.encode(user.getPassword()));
+		}
 	}
 
 }
