@@ -67,6 +67,43 @@
 		
 		<div class="panel panel-info">
 			<div class="panel-heading">
+				<h3 class="panel-title">Credit Card Details</h3>
+			</div>
+			<div class="panel-body">
+				<table width="100%" class="table">
+					<tr>
+						<th class="text-center">Card Number</th>
+						<th class="text-center">Card Holder</th>
+						<th class="text-center">Expiration Date</th>
+						<th class="text-center">Edit</th>
+						<th class="text-center">Delete</th>
+					</tr>
+					<tr>
+						<td class="text-right">XXXX XXXX XXXX 4920</td>
+						<td class="text-right">Ms Jane Doe</td>
+						<td class="text-right">01/27</td>
+						<td class="text-center">
+							<a href="../user/editCard?id=\${card.id}">
+								<button type="button" class="btn-sm btn-primary">Edit</button>
+							</a>
+						</td>
+						<td class="text-center">
+							<a href="../user/editCard?id=\${card.id}">
+								<button type="button" class="btn-sm btn-danger">Delete</button>
+							</a>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="4"></td>
+						<td class="text-right"><a href="../user/goToNewCreditCard"><button type="button" class="btn-sm btn-success">
+								Add New Card</button></a></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		
+		<div class="panel panel-info">
+			<div class="panel-heading">
 				<h3 class="panel-title">Your Stocks</h3>
 			</div>
 			<div class="panel-body">

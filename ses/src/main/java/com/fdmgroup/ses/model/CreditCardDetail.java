@@ -1,32 +1,45 @@
 package com.fdmgroup.ses.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 @Entity
-@SequenceGenerator(name="seq", initialValue=0, allocationSize=1, sequenceName="CREDIT_CARD_SEQUENCE")
+@SequenceGenerator(name = "seq", initialValue = 0, allocationSize = 1, sequenceName = "CREDIT_CARD_SEQUENCE")
 @Table(name = "CREDIT_CARD_DETAIL")
 public class CreditCardDetail {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
 	@Column(name = "id")
 	private Integer id;
-	
-	@Column(name = "user")
-	@NotEmpty(message = "*Please provide the user")
+
+	/**
+	 * The user who is registering this card
+	 */
+	@ManyToOne
 	private User user;
-	
+
+	/**
+	 * Distinct to user; the card holder's name as printed on the card (may be different to the user)
+	 */
+	@Column(name = "card_holder")
+	private String cardHolderName;
+
 	@Column(name = "card_number")
-	@NotEmpty(message = "*Please provide the card number. This will be encrypted for security")
 	private String cardNumber;
+
+	private Date expiryDate;
+	
+	@Column()
+	private int expired = 0; // 0 = FALSE, anything else = TRUE
 
 	public Integer getId() {
 		return id;
@@ -43,6 +56,14 @@ public class CreditCardDetail {
 	public void setUser(User user) {
 		this.user = user;
 	}
+	
+	public String getCardHolderName() {
+		return cardHolderName;
+	}
+	
+	public void setCardHolderName(String cardHolderName) {
+		this.cardHolderName = cardHolderName;
+	}
 
 	public String getCardNumber() {
 		return cardNumber;
@@ -51,5 +72,21 @@ public class CreditCardDetail {
 	public void setCardNumber(String cardNumber) {
 		this.cardNumber = cardNumber;
 	}
-	
+
+	public Date getExpiryDate() {
+		return expiryDate;
+	}
+
+	public void setExpiryDate(Date expiryDate) {
+		this.expiryDate = expiryDate;
+	}
+
+	public int getExpired() {
+		return expired;
+	}
+
+	public void setExpired(int expired) {
+		this.expired = expired;
+	}
+
 }
