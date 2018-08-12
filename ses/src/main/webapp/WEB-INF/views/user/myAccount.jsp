@@ -34,9 +34,9 @@
 <body>	
 	<jsp:include page="../nav.jsp"/>
 	
-	<br/>
 	<div class="container">
 		<h1>My Account</h1>
+		<br/>
 		
 		<div class="panel panel-info">
 			<div class="panel-heading">

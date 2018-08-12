@@ -116,6 +116,7 @@ public class UserServiceImpl implements UserService {
 	 * Depends on the limitation of a password's unhashed length to less than 60 characters 
 	 */
 	private void hashPassword(User user) {
+		// Since PW length is limited to 50, but encrypted length is 60, this checks if PW is already encryped
 		if (user.getPassword().length() != 60) {
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
 		}

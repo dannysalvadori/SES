@@ -18,8 +18,8 @@ public class ReportForm {
 	private Set<String> availableStockSymbols;
 	private static final String FORMAT_CSV = "CSV"; 
 	private static final String FORMAT_XML = "XML"; 
-	private static final String TYPE_COMPANY = "company"; 
-	private static final String TYPE_OWNED_SHARE = "ownedshare"; 
+	private static final String TYPE_COMPANY = "Public Stocks"; 
+	private static final String TYPE_OWNED_SHARE = "My Owned Stocks"; 
 	
 	// Form properties
 	private String format;
