@@ -1,10 +1,13 @@
 package com.fdmgroup.ses.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.fdmgroup.ses.model.CreditCardDetail;
+import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.repository.CreditCardDetailRepository;
 import com.fdmgroup.ses.validation.SesValidationException;
 import com.fdmgroup.ses.validation.ValidationFactory;
@@ -15,17 +18,54 @@ public class CreditCardService {
 	@Autowired
 	private CreditCardDetailRepository creditCardRepo;
 	@Autowired
+	private UserService userService;
+	@Autowired
 	private PasswordEncoder passwordEncoder;
 	@Autowired
 	private ValidationFactory validationFactory;
 	
+	/**
+	 * Insert/Update a CreditCardDetail instance
+	 * @throws SesValidationException
+	 */
 	public void saveCreditCard(CreditCardDetail creditCardDetail) throws SesValidationException {	
 		// Perform validations
 		validationFactory.getValidator(creditCardDetail).validate();
 		
-		// Hash card number, then save details
+		// Save final 4 digits as card signature, then hash the card number and save
+		creditCardDetail.setCardSignature(creditCardDetail.getCardNumber().substring(12, 16));
 		hashCardNumber(creditCardDetail);
 		creditCardRepo.save(creditCardDetail);
+	}
+	
+	/**
+	 * Gets all credit card details for the currently logged in user 
+	 */
+	public List<CreditCardDetail> findAllForCurrentUser() {
+		User user = userService.findCurrentUser();
+		return creditCardRepo.findByUser(user);
+	}
+	
+	/**
+	 * Deletes the specified card, provided it belongs to the user trying to delete it!
+	 * @throws SesValidationException if the logged in user does not own the card to be deleted
+	 */
+	public void deleteCreditCard(Integer cardId) throws SesValidationException {
+		Boolean belongsToCurrentUser = false;
+		for (CreditCardDetail card : findAllForCurrentUser()) {
+			if (card.getId() == cardId) {
+				belongsToCurrentUser = true;
+				break;
+			}
+		}
+		if (belongsToCurrentUser) {
+			CreditCardDetail dbCard = creditCardRepo.findById(cardId);
+			creditCardRepo.delete(dbCard);
+		} else {
+			SesValidationException ex = new SesValidationException();
+			ex.addFailure("Bad card ID!");
+			throw ex;
+		}
 	}
 	
 	/**

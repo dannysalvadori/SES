@@ -14,6 +14,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fdmgroup.ses.model.CreditCardDetail;
@@ -93,7 +94,7 @@ public class MyAccountController {
 		modelAndView.addObject("user", currentUser);
 		modelAndView.setViewName("user/myAccount");
 		
-		// Add the user's stocks available to be sold
+		// Add the user's owned stocks to the model
 		SaleForm saleForm = new SaleForm();
 		List<OwnedShare> ownedShares = new ArrayList<>();
 		for (OwnedShare ownedShare : ownedSharesService.findAllForCurrentUser()) {
@@ -103,6 +104,9 @@ public class MyAccountController {
 		}
 		saleForm.setOwnedShares(ownedShares);
 		modelAndView.addObject("saleForm", saleForm);
+		
+		// Add credit card details to model
+		modelAndView.addObject("creditCardDetails", creditCardService.findAllForCurrentUser());
 		
 		// Get user's transaction history
 		List<TransactionHistory> userTXHistory = txHistoryRepo.findByOwner(currentUser);
@@ -204,6 +208,22 @@ public class MyAccountController {
 			modelAndView.setViewName("user/createCreditCardDetail");
 		}
 		return modelAndView;
+	}
+	
+	/**
+	 * Submit delete request for given credit card detail
+	 */
+	@RequestMapping(value="/user/deleteCard")
+    public ModelAndView goToDeleteCard(
+    		ModelAndView modelAndView,
+    		@RequestParam(name="id") Integer cardId
+    ) {
+		try {
+			creditCardService.deleteCreditCard(cardId);
+		} catch (SesValidationException ex) {
+			modelAndView.addObject("cardFailures", ValidationUtils.stringifyFailures(ex.getFailures()));
+		}
+		return goToMyAccount(modelAndView);
 	}
 	
 }

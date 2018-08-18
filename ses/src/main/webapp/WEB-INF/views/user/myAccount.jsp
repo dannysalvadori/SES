@@ -70,29 +70,30 @@
 				<h3 class="panel-title">Credit Card Details</h3>
 			</div>
 			<div class="panel-body">
+				<c:forTokens items="${cardFailures}" delims="|" var="failure">
+					<div class="alert alert-danger" id="asp-error">
+						<c:out value="${failure}"/>
+					</div>
+				</c:forTokens>
 				<table width="100%" class="table">
 					<tr>
 						<th class="text-center">Card Number</th>
 						<th class="text-center">Card Holder</th>
 						<th class="text-center">Expiration Date</th>
-						<th class="text-center">Edit</th>
 						<th class="text-center">Delete</th>
 					</tr>
-					<tr>
-						<td class="text-right">XXXX XXXX XXXX 4920</td>
-						<td class="text-right">Ms Jane Doe</td>
-						<td class="text-right">01/27</td>
-						<td class="text-center">
-							<a href="../user/editCard?id=\${card.id}">
-								<button type="button" class="btn-sm btn-primary">Edit</button>
-							</a>
-						</td>
-						<td class="text-center">
-							<a href="../user/editCard?id=\${card.id}">
-								<button type="button" class="btn-sm btn-danger">Delete</button>
-							</a>
-						</td>
-					</tr>
+					<c:forEach items="${creditCardDetails}" var="creditCard">
+						<tr>
+							<td class="text-center">XXXX XXXX XXXX ${creditCard.cardSignature}</td>
+							<td class="text-center">${creditCard.cardHolderName}</td>
+							<td class="text-center"><fmt:formatDate value="${creditCard.expiryDate}" pattern="MM/yyyy"/></td>
+							<td class="text-center">
+								<a href="../user/deleteCard?id=${creditCard.id}">
+									<button type="button" class="btn-sm btn-danger">Delete</button>
+								</a>
+							</td>
+						</tr>
+					</c:forEach>
 					<tr>
 						<td colspan="4"></td>
 						<td class="text-right"><a href="../user/goToNewCreditCard"><button type="button" class="btn-sm btn-success">

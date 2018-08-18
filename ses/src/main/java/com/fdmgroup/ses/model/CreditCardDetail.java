@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @SequenceGenerator(name = "seq", initialValue = 0, allocationSize = 1, sequenceName = "CREDIT_CARD_SEQUENCE")
 @Table(name = "CREDIT_CARD_DETAIL")
 public class CreditCardDetail {
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq")
 	@Column(name = "id")
@@ -35,6 +35,9 @@ public class CreditCardDetail {
 
 	@Column(name = "card_number")
 	private String cardNumber;
+	
+	@Column(name = "card_signature")
+	private String cardSignature;
 
 	private Date expiryDate;
 	
@@ -87,6 +90,14 @@ public class CreditCardDetail {
 
 	public void setExpired(int expired) {
 		this.expired = expired;
+	}
+
+	public String getCardSignature() {
+		return cardSignature;
+	}
+
+	public void setCardSignature(String cardSignature) {
+		this.cardSignature = cardSignature;
 	}
 
 }
