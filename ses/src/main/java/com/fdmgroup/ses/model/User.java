@@ -23,10 +23,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @SequenceGenerator(name="seq", initialValue=0, allocationSize=1, sequenceName="USER_SEQUENCE")
-@Table(
-	name = "USERS"//,
-//	uniqueConstraints=@UniqueConstraint(columnNames={"email"})
-)
+@Table(name = "USERS")
 public class User {
 
 	@Id

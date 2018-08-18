@@ -24,18 +24,23 @@
 		<h2>Card Details</h2>
 		<br/>
 		<div class="alert alert-info">
-			TODO -- credit card stuff :)  
+			Select a credit card to confirm your purchase.
 		</div>
 		
 		<br/>
-		
+	
 		<form:form action="../user/doPurchase" method="POST" modelAttribute="transactionForm">
+			<form:select path="creditCardId">
+				<form:options items="${transactionForm.creditCards}" itemValue="id" itemLabel="cardSignature"/>
+			</form:select>
 			<c:forEach items="${transactionForm.companies}" var="company" varStatus="cStatus">
 				<form:hidden path="companies[${cStatus.index}].Symbol"/>
 				<form:hidden path="companies[${cStatus.index}].currentShareValue"/>
 				<form:hidden path="companies[${cStatus.index}].transactionQuantity"/>
 			</c:forEach>
-		
+			
+			<br/>
+			<br/>
 			<a href="../user/stockExchange"><button type="button" class="btn-sm btn-danger">Cancel</button></a>
 			&nbsp;
 			<input type="submit" value="Place Order" class="btn-sm btn-warning"/>

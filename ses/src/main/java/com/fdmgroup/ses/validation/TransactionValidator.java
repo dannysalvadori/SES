@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import com.fdmgroup.ses.model.Company;
 import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.repository.CompanyRepository;
+import com.fdmgroup.ses.service.CreditCardService;
 import com.fdmgroup.ses.service.UserService;
 import com.fdmgroup.ses.stockExchange.TransactionForm;
 
@@ -19,6 +20,9 @@ public class TransactionValidator extends ModelValidator {
 
 	@Autowired
 	private CompanyRepository companyRepo;
+
+	@Autowired
+	private CreditCardService creditCardService;
 
 	private TransactionForm transactionForm;
 
@@ -38,6 +42,11 @@ public class TransactionValidator extends ModelValidator {
 		User user = userService.findCurrentUser();
 		BigDecimal userCredit = user.getCredit();
 		BigDecimal transactionValue = transactionForm.getTransactionValue();
+		
+		// Must have at least one registered credit card
+		if (creditCardService.findAllForCurrentUser().isEmpty()) {
+			failures.add("Purchases require a valid credit card. Visit \"My Account\" to register a card.");
+		}
 		
 		// At least one company must be selected
 		if (transactionForm.getCompanies().size() < 1) {

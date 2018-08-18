@@ -67,6 +67,44 @@
 		
 		<div class="panel panel-info">
 			<div class="panel-heading">
+				<h3 class="panel-title">Credit Card Details</h3>
+			</div>
+			<div class="panel-body">
+				<c:forTokens items="${cardFailures}" delims="|" var="failure">
+					<div class="alert alert-danger" id="asp-error">
+						<c:out value="${failure}"/>
+					</div>
+				</c:forTokens>
+				<table width="100%" class="table">
+					<tr>
+						<th class="text-center">Card Number</th>
+						<th class="text-center">Card Holder</th>
+						<th class="text-center">Expiration Date</th>
+						<th class="text-center">Delete</th>
+					</tr>
+					<c:forEach items="${creditCardDetails}" var="creditCard">
+						<tr>
+							<td class="text-center">XXXX XXXX XXXX ${creditCard.cardSignature}</td>
+							<td class="text-center">${creditCard.cardHolderName}</td>
+							<td class="text-center"><fmt:formatDate value="${creditCard.expiryDate}" pattern="MM/yyyy"/></td>
+							<td class="text-center">
+								<a href="../user/deleteCard?id=${creditCard.id}">
+									<button type="button" class="btn-sm btn-danger">Delete</button>
+								</a>
+							</td>
+						</tr>
+					</c:forEach>
+					<tr>
+						<td colspan="4"></td>
+						<td class="text-right"><a href="../user/goToNewCreditCard"><button type="button" class="btn-sm btn-success">
+								Add New Card</button></a></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		
+		<div class="panel panel-info">
+			<div class="panel-heading">
 				<h3 class="panel-title">Your Stocks</h3>
 			</div>
 			<div class="panel-body">

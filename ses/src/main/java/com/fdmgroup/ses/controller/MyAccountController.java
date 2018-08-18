@@ -14,14 +14,17 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fdmgroup.ses.model.CreditCardDetail;
 import com.fdmgroup.ses.model.OwnedShare;
 import com.fdmgroup.ses.model.TransactionHistory;
 import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.repository.RoleRepository;
 import com.fdmgroup.ses.repository.TransactionHistoryRepository;
 import com.fdmgroup.ses.repository.UserRepository;
+import com.fdmgroup.ses.service.CreditCardService;
 import com.fdmgroup.ses.service.OwnedSharesService;
 import com.fdmgroup.ses.service.UserService;
 import com.fdmgroup.ses.stockExchange.SaleForm;
@@ -36,6 +39,9 @@ public class MyAccountController {
 	
 	@Autowired
 	OwnedSharesService ownedSharesService;
+	
+	@Autowired
+	CreditCardService creditCardService;
 	
 	@Autowired
 	UserRepository userRepo;
@@ -88,7 +94,7 @@ public class MyAccountController {
 		modelAndView.addObject("user", currentUser);
 		modelAndView.setViewName("user/myAccount");
 		
-		// Add the user's stocks available to be sold
+		// Add the user's owned stocks to the model
 		SaleForm saleForm = new SaleForm();
 		List<OwnedShare> ownedShares = new ArrayList<>();
 		for (OwnedShare ownedShare : ownedSharesService.findAllForCurrentUser()) {
@@ -98,6 +104,9 @@ public class MyAccountController {
 		}
 		saleForm.setOwnedShares(ownedShares);
 		modelAndView.addObject("saleForm", saleForm);
+		
+		// Add credit card details to model
+		modelAndView.addObject("creditCardDetails", creditCardService.findAllForCurrentUser());
 		
 		// Get user's transaction history
 		List<TransactionHistory> userTXHistory = txHistoryRepo.findByOwner(currentUser);
@@ -165,6 +174,56 @@ public class MyAccountController {
 		}
 		modelAndView.addObject("user", userService.findCurrentUser());
 		return modelAndView;
+	}
+	
+	/**
+	 * Adds the current user to the model and navigates to the newCreditCard page
+	 */
+	@RequestMapping(value="user/goToNewCreditCard")
+	public ModelAndView goToNewCreditCard(ModelAndView modelAndView) {
+		
+		// Add new CreditCardDetail dto to model
+		CreditCardDetail newCreditCardDetail = new CreditCardDetail();
+		modelAndView.addObject("newCreditCardDetail", newCreditCardDetail);
+		
+		modelAndView.setViewName("user/createCreditCardDetail");
+		return modelAndView;
+	}
+	
+	/**
+	 * Create new credit card detail. On success, redirect to my account page. On failure, reload creation page
+	 * reporting errors.
+	 */
+	@RequestMapping(value="user/doCreateCreditCardDetail")
+    public ModelAndView doCreateCreditCardDetail(
+    		ModelAndView modelAndView,
+    		@ModelAttribute("newCreditCardDetail") CreditCardDetail newCreditCardDetail
+    ) {
+		try {
+			newCreditCardDetail.setUser(userService.findCurrentUser());
+			creditCardService.saveCreditCard(newCreditCardDetail);
+			goToMyAccount(modelAndView);
+		} catch (SesValidationException ex) {
+			modelAndView.addObject("failures", ValidationUtils.stringifyFailures(ex.getFailures()));
+			modelAndView.setViewName("user/createCreditCardDetail");
+		}
+		return modelAndView;
+	}
+	
+	/**
+	 * Submit delete request for given credit card detail
+	 */
+	@RequestMapping(value="/user/deleteCard")
+    public ModelAndView goToDeleteCard(
+    		ModelAndView modelAndView,
+    		@RequestParam(name="id") Integer cardId
+    ) {
+		try {
+			creditCardService.deleteCreditCard(cardId);
+		} catch (SesValidationException ex) {
+			modelAndView.addObject("cardFailures", ValidationUtils.stringifyFailures(ex.getFailures()));
+		}
+		return goToMyAccount(modelAndView);
 	}
 	
 }

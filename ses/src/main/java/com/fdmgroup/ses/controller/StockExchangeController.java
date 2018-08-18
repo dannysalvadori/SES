@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fdmgroup.ses.model.Company;
 import com.fdmgroup.ses.model.OwnedShare;
 import com.fdmgroup.ses.repository.CompanyRepository;
+import com.fdmgroup.ses.service.CreditCardService;
 import com.fdmgroup.ses.service.OwnedSharesService;
 import com.fdmgroup.ses.service.TransactionService;
 import com.fdmgroup.ses.service.UserService;
@@ -35,6 +36,9 @@ public class StockExchangeController {
 	
 	@Autowired
 	private OwnedSharesService ownedSharesService;
+	
+	@Autowired
+	private CreditCardService creditCardService;
 
 	@Autowired
 	private UserService userService;
@@ -120,8 +124,6 @@ public class StockExchangeController {
 	
 	/**
 	 * Go to authentication page:
-	 * - TODO: Apply Broker validations
-	 * - TODO: Make user Provide credit card details 
 	 */
 	@RequestMapping(value="/user/authenticatePurchase")
     public ModelAndView goToAuthenticatePurchase(
@@ -129,6 +131,7 @@ public class StockExchangeController {
     		@ModelAttribute("transactionForm") TransactionForm purchaseForm
     ) {
 		modelAndView.setViewName("user/authenticatePurchase");
+		purchaseForm.setCreditCards(creditCardService.findAllForCurrentUser());
 		modelAndView.addObject("transactionForm", purchaseForm);
 		return modelAndView;
 	}
