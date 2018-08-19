@@ -13,10 +13,10 @@
 	<jsp:include page="nav.jsp"/>
 	
 	<div class="container">
-		<h1>Login</h1>
+		<h1>Almost there...</h1>
 		<div class="alert alert-danger">
-			<p>Registration is not yet complete! You will receive an email within the next hour, explaining how to 
-			activate your account. You won't be able to log in until you do!</p>
+			<p>Registration is not yet complete! An email will be sent within one hour containing an activation link. 
+				You won't be able to log in until then!</p>
 		</div>
 	</div>
     

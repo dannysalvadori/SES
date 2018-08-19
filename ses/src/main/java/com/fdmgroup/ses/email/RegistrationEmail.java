@@ -17,14 +17,16 @@ public class RegistrationEmail extends Email {
     	body = String.join(
     		    System.getProperty("line.separator"),
     		    "<h1>Registration is not complete!</h1>",
-    		    "<p>You must veify your email address to complete registration. ", 
-    		    "You will not be able to log in until you do. ", 
-    		    "Verify your account by clicking the following link, or copy-pasting it into your browser. ", 
-    		    "<a href='" + confirmationUrl + "'>" + confirmationUrl + "</a>",
-    		    "This link will expire in 24 hours. ",
-    		    "This email was sent to " + toAddress + " because it was submitted for registeration on stockSim.com. ",
-    		    "If this wasn't you, just ignore this email.",
-    		    "</p>."
+    		    "<p>",
+    		    "You must veify your email address to complete registration.", 
+    		    " To do so, simply click the following link or copy-and-paste it into your browser.</p>", 
+    		    "<p><a href='" + confirmationUrl + "'>" + confirmationUrl + "</a></p>",
+    		    "<p>This link expires in 24 hours.</p>",
+    		    "<br/>",
+    		    "<p>Not expecting this email?</p>",
+    		    "<p>This is an automated email sent from <a href='http://localhost:3702'>stockSim.com</a> because",
+    		    " somebody tried to register an account using " + toAddress + ".",
+    		    " If it wasn't you, please ignore this email and accept our apologies for the inconvenience.</p>"
     	);
     }
 
