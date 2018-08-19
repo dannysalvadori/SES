@@ -20,12 +20,6 @@ public class SesApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SesApplication.class, args);
-		try {
-			AmazonSESSample.sendEmail(args);
-		} catch (Exception e) {
-			System.out.println("!! Email send failed");
-			e.printStackTrace();
-		}
 	}
 	
 	@Override

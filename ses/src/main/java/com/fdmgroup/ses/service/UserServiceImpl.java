@@ -31,20 +31,19 @@ public class UserServiceImpl implements UserService {
 	@Autowired
     private RoleRepository roleRepo;
 	@Autowired
-	private VerificationTokenRepository verificationTokenRepository;
+	private VerificationTokenRepository vtRepo;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-
 	@Autowired
-	ApplicationEventPublisher eventPublisher;
-	
+	private ApplicationEventPublisher eventPublisher;
 	@Autowired
-	ValidationFactory validationFactory;
+	private ValidationFactory validationFactory;
 	
 	@Override
 	public void saveUser(User user, WebRequest request) throws SesValidationException {
 		
-		// If no role assigned, set ROLE_USER
+		// If no role assigned, assume this is a new registration
+		// Set ROLE_USER and active=0 (inactive)
 		if (user.getRoles() == null || user.getRoles().isEmpty()) {
 			Set<Role> userRoles = new HashSet<Role>();
 			userRoles.add(roleRepo.findByRole("ROLE_USER"));
@@ -53,6 +52,7 @@ public class UserServiceImpl implements UserService {
 				// TODO: exception handling if no roles
 				System.out.println("NO ROLES!");
 			}
+			user.setActive(0);
 		}
 		
 		// Perform validations
@@ -82,10 +82,8 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public void createVerificationToken(User user, String token) {
-		System.out.println("user: " + user);
-		System.out.println("token: " + token);
 		VerificationToken newToken = new VerificationToken(user, token);
-		verificationTokenRepository.save(newToken);		
+		vtRepo.save(newToken);		
 	}
 
 	@Override
@@ -112,7 +110,7 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	/**
-	 * Hashes the user's passord as long as it is not already hashed.
+	 * Hashes the user's password as long as it is not already hashed.
 	 * Depends on the limitation of a password's unhashed length to less than 60 characters 
 	 */
 	private void hashPassword(User user) {
@@ -120,6 +118,17 @@ public class UserServiceImpl implements UserService {
 		if (user.getPassword().length() != 60) {
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
 		}
+	}
+
+	@Override
+	public void activateUser(String token) throws SesValidationException {
+		System.out.println("Token: " + token);
+		System.out.println("vtRepo: " + vtRepo);
+		VerificationToken vt = vtRepo.findByToken(token);
+		System.out.println("vt: " + vt);
+		User user = vt.getUser();
+		user.setActive(1);
+		saveUser(user);
 	}
 
 }

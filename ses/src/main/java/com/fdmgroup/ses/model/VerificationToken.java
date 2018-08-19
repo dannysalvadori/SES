@@ -3,6 +3,7 @@ package com.fdmgroup.ses.model;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -32,6 +33,12 @@ public class VerificationToken {
 
     public VerificationToken() {
     	this.expiryDate = calculateExpiryDate(EXPIRATION);
+    }
+
+    public VerificationToken(User user) {
+    	this.expiryDate = calculateExpiryDate(EXPIRATION);
+    	this.user = user;
+    	this.token = UUID.randomUUID().toString();
     }
     
     public VerificationToken(User user, String token) {

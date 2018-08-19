@@ -15,4 +15,5 @@ public interface UserService {
 	public void deleteUser(User user);
 	public void updateCredit(User user, TransactionForm transactionForm);
 	public void updateCredit(User user, SaleForm saleForm);
+	public void activateUser(String token) throws SesValidationException;
 }

@@ -42,7 +42,7 @@ public class AmazonSESSample {
     	    " for <a href='https://www.java.com'>Java</a>."
     	);
 
-    public static void sendEmail(String[] args) throws Exception {
+    public static void sendEmail() throws Exception {
 
         // Create a Properties object to contain connection configuration information.
     	Properties props = System.getProperties();

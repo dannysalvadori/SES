@@ -1,13 +1,16 @@
 package com.fdmgroup.ses.listener;
 
-import java.util.UUID;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Component;
 
+import com.fdmgroup.ses.email.EmailSender;
+import com.fdmgroup.ses.email.RegistrationEmail;
 import com.fdmgroup.ses.model.User;
+import com.fdmgroup.ses.model.VerificationToken;
+import com.fdmgroup.ses.registration.AmazonSESSample;
 import com.fdmgroup.ses.registration.OnRegistrationCompleteEvent;
+import com.fdmgroup.ses.repository.VerificationTokenRepository;
 
 @Component
 public class RegistrationListener implements ApplicationListener<OnRegistrationCompleteEvent> {
@@ -18,8 +21,8 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 //	@Autowired
 //	private MessageSource messages;
 	
-//	@Autowired
-//	private VerificationTokenRepository vtRepo;
+	@Autowired
+	private VerificationTokenRepository vtRepo;
 	
 	@Override
 	public void onApplicationEvent(OnRegistrationCompleteEvent event) {
@@ -27,25 +30,25 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 		this.confirmRegistration(event);
 	}
 	
-	
+	/**
+	 * Sends a verification email to a newly registered user
+	 */
 	private void confirmRegistration(OnRegistrationCompleteEvent event) {
-		System.out.println("Confirming reg............");
-		User user = event.getUser();
-		String token = UUID.randomUUID().toString();
-//		VerificationToken vt = new VerificationToken(user, token);
-//		vtRepo.save(vt);
+
+		// Create verification token, but persist only if email is a success
+		VerificationToken vt = new VerificationToken(event.getUser());
 		
-		String recipientAddress = user.getEmail();
-		String subject = "StockSim - Registration Confirmation";
-		String confirmationUrl
-			= event.getAppUrl() + "/registationConfirm.jsp?token=" + token;
-		String message = "Registration success!";//messages.getMessage("message.regSucc", null, event.getLocale());
-		SimpleMailMessage email = new SimpleMailMessage();
-		email.setTo(recipientAddress);
-		email.setSubject(subject);
-		email.setText(message + " rn " + "http://localhost:3072" + confirmationUrl);
-		System.out.println("About to send email!!");
-//		mailSender.send(email); // TODO: Get past network issues?
-		System.out.println("Sent, apparently");
+		// Prepare email for sending
+		RegistrationEmail regEmail = new RegistrationEmail(event, vt);
+		
+		// Send email and persist verification token
+		try {
+			EmailSender.sendEmail(regEmail);
+			vtRepo.save(vt);
+		} catch (Exception e) {
+			// TODO: Proper error handling
+			System.out.println("!! AWS Email send failed");
+			e.printStackTrace();
+		}
 	}
 }

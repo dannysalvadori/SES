@@ -52,8 +52,11 @@ public class User {
 	@NotEmpty(message = "*Please provide your last name")
 	private String lastName;
 	
+	/**
+	 * By default, user's are not active 
+	 */
 	@Column(name = "active")
-	private int active;
+	private int active = 0;
 	
 	@ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
