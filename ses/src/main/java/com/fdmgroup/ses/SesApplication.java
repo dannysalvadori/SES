@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.fdmgroup.ses.config.QueryConfig;
+import com.fdmgroup.ses.registration.AmazonSESSample;
 
 @SpringBootApplication(scanBasePackages="com.fdmgroup.ses")
 @EnableConfigurationProperties(QueryConfig.class)
@@ -19,6 +20,12 @@ public class SesApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SesApplication.class, args);
+		try {
+			AmazonSESSample.sendEmail(args);
+		} catch (Exception e) {
+			System.out.println("!! Email send failed");
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
