@@ -36,13 +36,8 @@ public class EmailSender {
                     
         // Send
         try {
-            System.out.println("Sending...");
-            
-            // Connect to Amazon SES using the SMTP username and password you specified above.
             transport.connect(getHost(), getSmtpUsername(), getSmtpPassword());
-        	
             transport.sendMessage(msg, msg.getAllRecipients());
-            System.out.println("Email sent!");
         
         } catch (Exception ex) {
         	// TODO: proper error handling
