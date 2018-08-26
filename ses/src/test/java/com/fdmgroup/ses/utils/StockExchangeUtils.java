@@ -9,7 +9,7 @@ import com.fdmgroup.ses.model.OwnedShare;
 import com.fdmgroup.ses.stockExchange.SaleForm;
 import com.fdmgroup.ses.stockExchange.TransactionForm;
 
-public class DataFactory {
+public class StockExchangeUtils {
 
 	/**
 	 * Creates a Company instance

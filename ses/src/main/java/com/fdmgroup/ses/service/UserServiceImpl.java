@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void createVerificationToken(User user, String token) {
 		VerificationToken newToken = new VerificationToken(user, token);
-		vtRepo.save(newToken);		
+		vtRepo.save(newToken);
 	}
 
 	@Override
@@ -122,10 +122,12 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void activateUser(String token) throws SesValidationException {
-		System.out.println("Token: " + token);
-		System.out.println("vtRepo: " + vtRepo);
 		VerificationToken vt = vtRepo.findByToken(token);
-		System.out.println("vt: " + vt);
+		if (vt == null) {
+			SesValidationException validationException = new SesValidationException();
+			validationException.getFailures().add("That verification code is expired or incorrect!");
+			throw validationException;
+		}
 		User user = vt.getUser();
 		user.setActive(1);
 		saveUser(user);
