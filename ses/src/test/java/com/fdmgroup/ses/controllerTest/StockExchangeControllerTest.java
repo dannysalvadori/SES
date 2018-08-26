@@ -31,10 +31,10 @@ import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.repository.CompanyRepository;
 import com.fdmgroup.ses.service.OwnedSharesService;
 import com.fdmgroup.ses.service.TransactionService;
-import com.fdmgroup.ses.service.UserServiceImpl;
+import com.fdmgroup.ses.service.UserService;
 import com.fdmgroup.ses.stockExchange.SaleForm;
 import com.fdmgroup.ses.stockExchange.TransactionForm;
-import com.fdmgroup.ses.utils.DataFactory;
+import com.fdmgroup.ses.utils.StockExchangeUtils;
 import com.fdmgroup.ses.validation.SaleValidator;
 import com.fdmgroup.ses.validation.SesValidationException;
 import com.fdmgroup.ses.validation.TransactionValidator;
@@ -58,7 +58,7 @@ public class StockExchangeControllerTest {
 	private TransactionService transactionService;
 	
 	@Mock
-	private UserServiceImpl userService;
+	private UserService userService;
 	private static User stubCurrentUser = new User();
 	
 	@Mock
@@ -187,31 +187,31 @@ public class StockExchangeControllerTest {
 			- 1: selected is NULL
 			- 1: selected is TRUE but quantity is NULL
 		*/ 
-		Company c1 = DataFactory.createCompany();
+		Company c1 = StockExchangeUtils.createCompany();
 		c1.setSelected(true);
 		c1.setTransactionQuantity(5l);
 		c1.setCurrentShareValue(new BigDecimal(3.1)); // tx value: 15.50
-		Company c2 = DataFactory.createCompany();
+		Company c2 = StockExchangeUtils.createCompany();
 		c2.setSelected(true);
 		c2.setTransactionQuantity(8l);
 		c2.setCurrentShareValue(new BigDecimal(5.01)); // tx value: 40.08
-		Company c3 = DataFactory.createCompany();
+		Company c3 = StockExchangeUtils.createCompany();
 		c3.setSelected(true);
 		c3.setTransactionQuantity(0l);
 		c3.setCurrentShareValue(new BigDecimal(100)); // Not selected, value is irrelevant
-		Company c4 = DataFactory.createCompany();
+		Company c4 = StockExchangeUtils.createCompany();
 		c4.setSelected(false);
 		c4.setTransactionQuantity(10l);
 		c4.setCurrentShareValue(new BigDecimal(100)); // Not selected, value is irrelevant
-		Company c5 = DataFactory.createCompany();
+		Company c5 = StockExchangeUtils.createCompany();
 		c5.setSelected(false);
 		c5.setTransactionQuantity(0l);
 		c5.setCurrentShareValue(new BigDecimal(100)); // Not selected, value is irrelevant
-		Company c6 = DataFactory.createCompany();
+		Company c6 = StockExchangeUtils.createCompany();
 		c6.setSelected(null);
 		c6.setTransactionQuantity(0l);
 		c6.setCurrentShareValue(new BigDecimal(100)); // Not selected, value is irrelevant
-		Company c7 = DataFactory.createCompany();
+		Company c7 = StockExchangeUtils.createCompany();
 		c7.setSelected(true);
 		c7.setTransactionQuantity(null);
 		c7.setCurrentShareValue(new BigDecimal(100)); // Not selected, value is irrelevant
@@ -285,7 +285,7 @@ public class StockExchangeControllerTest {
 	@Test
 	public void goToAuthenticatePurchaseTest() {
 		
-		TransactionForm txForm = DataFactory.createTransactionForm();
+		TransactionForm txForm = StockExchangeUtils.createTransactionForm();
 		mav = ctrl.goToAuthenticatePurchase(mav, txForm);
 		
 		// Confirm view
@@ -307,7 +307,7 @@ public class StockExchangeControllerTest {
 	@Test
 	public void doPurchaseSuccessTest() {
 
-		TransactionForm txForm = DataFactory.createTransactionForm();
+		TransactionForm txForm = StockExchangeUtils.createTransactionForm();
 		mav = ctrl.doPurchase(mav, txForm);
 		
 		// Confirm view
@@ -356,31 +356,31 @@ public class StockExchangeControllerTest {
 			- 1: selected is NULL
 			- 1: selected is TRUE but quantity is NULL
 		*/ 
-		Company c1 = DataFactory.createCompany();
+		Company c1 = StockExchangeUtils.createCompany();
 		c1.setSelected(true);
 		c1.setTransactionQuantity(5l);
 		c1.setCurrentShareValue(new BigDecimal(3.1)); // tx value: 15.50
-		Company c2 = DataFactory.createCompany();
+		Company c2 = StockExchangeUtils.createCompany();
 		c2.setSelected(true);
 		c2.setTransactionQuantity(8l);
 		c2.setCurrentShareValue(new BigDecimal(5.01)); // tx value: 40.08
-		Company c3 = DataFactory.createCompany();
+		Company c3 = StockExchangeUtils.createCompany();
 		c3.setSelected(true);
 		c3.setTransactionQuantity(0l);
 		c3.setCurrentShareValue(new BigDecimal(100)); // Not selected, value is irrelevant
-		Company c4 = DataFactory.createCompany();
+		Company c4 = StockExchangeUtils.createCompany();
 		c4.setSelected(false);
 		c4.setTransactionQuantity(10l);
 		c4.setCurrentShareValue(new BigDecimal(100)); // Not selected, value is irrelevant
-		Company c5 = DataFactory.createCompany();
+		Company c5 = StockExchangeUtils.createCompany();
 		c5.setSelected(false);
 		c5.setTransactionQuantity(0l);
 		c5.setCurrentShareValue(new BigDecimal(100)); // Not selected, value is irrelevant
-		Company c6 = DataFactory.createCompany();
+		Company c6 = StockExchangeUtils.createCompany();
 		c6.setSelected(null);
 		c6.setTransactionQuantity(0l);
 		c6.setCurrentShareValue(new BigDecimal(100)); // Not selected, value is irrelevant
-		Company c7 = DataFactory.createCompany();
+		Company c7 = StockExchangeUtils.createCompany();
 		c7.setSelected(true);
 		c7.setTransactionQuantity(null);
 		c7.setCurrentShareValue(new BigDecimal(100)); // Not selected, value is irrelevant
@@ -390,7 +390,7 @@ public class StockExchangeControllerTest {
 		
 		List<OwnedShare> ownedShares = new ArrayList<>();
 		for (Company c : testCompanies) {
-			OwnedShare newOwnedShare = DataFactory.createOwnedShare(c);
+			OwnedShare newOwnedShare = StockExchangeUtils.createOwnedShare(c);
 			newOwnedShare.setSelected(c.getSelected());
 			ownedShares.add(newOwnedShare);
 		}
@@ -427,7 +427,7 @@ public class StockExchangeControllerTest {
 	@Test
 	public void doSaleSuccessTest() {
 		
-		SaleForm saleForm = DataFactory.createSaleForm();
+		SaleForm saleForm = StockExchangeUtils.createSaleForm();
 		mav = ctrl.doSale(mav, saleForm);
 		
 		// Confirm view

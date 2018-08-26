@@ -2,7 +2,9 @@
 
 <nav class="navbar navbar-expand-sm navbar-light" style="background-color: #d3e2ff;">
 	
-	<a class="navbar-brand" href="/">stockSim</a>
+	<a class="navbar-brand" href="/" style="padding:0px">
+		<img alt="stockSim Home" width="86px" src="<%=request.getContextPath()%>/resources/img/stockSimLogo-m.png"/>
+	</a>
 
 	<div id="navbarSupportedContent">
 		

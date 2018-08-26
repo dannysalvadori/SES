@@ -11,6 +11,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -59,8 +60,7 @@ public class RegistrationController {
     ) {
 		try {
 			userService.saveUser(newUser, request);
-			modelAndView.addObject("successfulRegistration", true);
-			modelAndView.setViewName("login");
+			modelAndView.setViewName("newRegistrationAdvice");
 		} catch (SesValidationException ex) {
 			modelAndView.addObject("failures", ValidationUtils.stringifyFailures(ex.getFailures()));
 			modelAndView.setViewName("register");
@@ -69,6 +69,26 @@ public class RegistrationController {
 //	        return new ModelAndView("emailError", "newUser", newUser);
 //	    }
 		
+		return modelAndView;
+	}
+	
+	/**
+	 * Confirm email verification and activate user account
+	 */
+	@RequestMapping(value="/registationConfirm")
+    public ModelAndView goToEditUser(
+    		ModelAndView modelAndView,
+    		@RequestParam(name="token") String token
+    ) {
+		try {
+			userService.activateUser(token);
+			modelAndView.addObject("successfulRegistration", true);
+			modelAndView.setViewName("login");
+		} catch (SesValidationException ex) {
+			// TODO: error handling
+			System.out.println("Activation failed somehow");
+			ex.printStackTrace();
+		}
 		return modelAndView;
 	}
 

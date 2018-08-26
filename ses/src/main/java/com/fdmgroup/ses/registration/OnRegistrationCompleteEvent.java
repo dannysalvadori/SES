@@ -16,8 +16,6 @@ public class OnRegistrationCompleteEvent extends ApplicationEvent {
  
     public OnRegistrationCompleteEvent(User user, Locale locale, String appUrl) {
         super(user);
-        
-        System.out.println("registration complete event constructor!");
         this.user = user;
         this.locale = locale;
         this.appUrl = appUrl;

@@ -18,7 +18,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.fdmgroup.ses.model.Company;
 import com.fdmgroup.ses.repository.CompanyRepository;
 import com.fdmgroup.ses.stockUpdate.StockExchangeManager;
-import com.fdmgroup.ses.utils.DataFactory;
+import com.fdmgroup.ses.utils.StockExchangeUtils;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StockExchangeManagerTest {
@@ -31,7 +31,7 @@ public class StockExchangeManagerTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		Company c1 = DataFactory.createCompany();
+		Company c1 = StockExchangeUtils.createCompany();
 		c1.setCurrentShareValue(new BigDecimal(100));
 		testCompanies.addAll(new ArrayList<Company>(Arrays.asList(c1)));
 		when(companyRepo.findAll()).thenReturn(testCompanies);

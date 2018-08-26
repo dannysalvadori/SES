@@ -1,19 +1,19 @@
 package com.fdmgroup.ses.controllerTest;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
-import java.math.BigDecimal;
+import static com.fdmgroup.ses.utils.UserUtils.*;
 
-import javax.transaction.Transactional;
-
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -22,47 +22,31 @@ import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.repository.RoleRepository;
 import com.fdmgroup.ses.repository.UserRepository;
 import com.fdmgroup.ses.service.UserService;
+import com.fdmgroup.ses.validation.SesValidationException;
 
-@RunWith(SpringRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
-@Transactional
 public class RegistrationControllerTest {
 	
-	@Autowired
-	private RegistrationController ctrl;
-	
-	@Autowired
-	RoleRepository roleRepo;
-
-	@Autowired
-	UserRepository userRepo;
-	
-	@Autowired
-	UserService userService;
+	@InjectMocks
+	private RegistrationController ctrl = new RegistrationController();
 	
 	@Mock
-    WebRequest webRequest;
+	private RoleRepository roleRepo;
+	@Mock
+	private UserRepository userRepo;
+	@Mock
+	private UserService userService;
+	@Mock
+	private WebRequest webRequest;
 	
 	private ModelAndView mav = new ModelAndView();
-	private final String VALID_TEST_EMAIL = String.valueOf(Math.random()) + "@sesTest.com";
 	
 	@Before
 	public void setUp() throws Exception {
-		User testUser = userRepo.findByEmail(VALID_TEST_EMAIL);
-		assertEquals("A user already exists with the test email. Consider re-running test", null, testUser);
+
 	}
 	
-	/**
-	 * Delete any DB data persisted during the test 
-	 */
-	@After
-	public void revert() {
-		User testUser = userRepo.findByEmail(VALID_TEST_EMAIL);
-		if (testUser != null) {
-			userService.deleteUser(testUser);
-		}
-	}
-
 	/**
 	 * registerUser() adds a new User instance to the model (as "newUser") and sets the view to register.jsp
 	 */
@@ -75,10 +59,10 @@ public class RegistrationControllerTest {
 	}
 	
 	/**
-	 * If validation succeeds, createUser() inserts the given User object into the DB
+	 * If validation succeeds, createUser() saves the given User object
 	 */
 	@Test
-	public void createUserSuccessTest() {
+	public void createUserSuccessTest() throws SesValidationException {
 		User testUser = createUser();
 		mav = ctrl.createUser(mav, testUser, webRequest);
 		
@@ -86,101 +70,38 @@ public class RegistrationControllerTest {
 		Object failures = mav.getModel().get("failures");
 		assertEquals("Validation failed", null, (String)failures);
 		
-		User resultUser = userRepo.findByEmail(VALID_TEST_EMAIL);
-		assertTrue("Null user", resultUser != null);
-		assertEquals("Wrong email", VALID_TEST_EMAIL, resultUser.getEmail());
-		assertEquals("Wrong amount of credit", new BigDecimal(50000), resultUser.getCredit());
+		verify(userService, times(1)).saveUser(testUser, webRequest);
 	}
 	
 	/**
-	 * If the user's password doesn't match the confirmation password, createUser() must not persist
-	 * the given User object.
+	 * If user validation fails, createUser() must not save the given User object.
 	 */
 	@Test
-	public void createUserPasswordMismatchTest() {
+	public void createUserValidationFailureTest() throws SesValidationException {
+		
 		User testUser = createUser();
+		Mockito.doThrow(new SesValidationException()).when(userService).saveUser(testUser, webRequest);		
+		
 		testUser.setConfirmationPassword("Something different");
 		mav = ctrl.createUser(mav, testUser, webRequest);
 		
 		// Confirm validation failure
 		Object failures = mav.getModel().get("failures");
-		assertTrue("Validation didn't fail", ((String)failures).equals("Passwords do not match."));
+		assertTrue("Validation didn't fail", "" == (String)failures);
 		
-		User resultUser = userRepo.findByEmail(VALID_TEST_EMAIL);
-		assertTrue("Null user", resultUser == null);
+		verify(userService, times(0)).saveUser(testUser);
 	}
 	
 	/**
-	 * If the user's password is too short, createUser() must not persist the given User object.
+	 * goToEditUser(ModelAndView, String) activates the user and sets view to login page with a success message
 	 */
 	@Test
-	public void createUserPasswordTooShortTest() {
-		User testUser = createUser();
-		testUser.setPassword("A");
-		testUser.setConfirmationPassword("A");
-		mav = ctrl.createUser(mav, testUser, webRequest);
-		
-		Object failures = mav.getModel().get("failures");
-		assertTrue("Validation didn't fail", ((String)failures).equals("Password must be 6 to 50 characters long."));
-		
-		User resultUser = userRepo.findByEmail(VALID_TEST_EMAIL);
-		assertTrue("Null user", resultUser == null);
-	}
-	
-	/**
-	 * If the user's password is too long, createUser() must not persist the given User object.
-	 */
-	@Test
-	public void createUserPasswordTooLongTest() {
-		// Generate a password of 60 chars length
-		String tenChars = "XXXXXXXXXX";
-		String longPassword = "";
-		for (int i = 0; i < 6; i++) {
-			longPassword += tenChars;
-		}
-		
-		User testUser = createUser();
-		testUser.setPassword(longPassword);
-		testUser.setConfirmationPassword(longPassword);
-		mav = ctrl.createUser(mav, testUser, webRequest);
-		
-		Object failures = mav.getModel().get("failures");
-		assertTrue("Validation didn't fail", ((String)failures).equals("Password must be 6 to 50 characters long."));
-		
-		User resultUser = userRepo.findByEmail(VALID_TEST_EMAIL);
-		assertTrue("Null user", resultUser == null);
-	}
-	
-	/**
-	 * If the user's email has already been taken, createUser() must not persist the given User object.
-	 */
-	@Test
-	public void createUserAlreadyExistsTest() {
-		// Insert user and confirm persistence
-		User testUser = createUser();
-		mav = ctrl.createUser(mav, testUser, webRequest);
-		User resultUser = userRepo.findByEmail(VALID_TEST_EMAIL);
-		assertTrue("Null user", resultUser != null);
-		assertEquals("Wrong email", VALID_TEST_EMAIL, resultUser.getEmail());
-		
-		// Attempt to insert user with same email
-		testUser = createUser();
-		mav = ctrl.createUser(mav, testUser, webRequest);
-		
-		// Confirm validation failure
-		Object failures = mav.getModel().get("failures");
-		assertTrue("Validation didn't fail", ((String)failures).equals("A user is already registered with this address."));
-	}
-	
-	private User createUser() {
-		User u = new User();
-		u.setActive(1);
-		u.setEmail(VALID_TEST_EMAIL);
-		u.setPassword("123456");
-		u.setConfirmationPassword("123456");
-		u.setName("Testo");
-		u.setLastName("McTest");
-		return u;
+	public void goToEditUserTest() throws SesValidationException {
+		String tokenId = "tokenId";
+		mav = ctrl.goToEditUser(mav, tokenId);
+		assertEquals("Wrong view name", "login", mav.getViewName());
+		assertEquals("Wrong view name", true, mav.getModel().get("successfulRegistration"));
+		verify(userService, times(1)).activateUser(tokenId);
 	}
 
 }

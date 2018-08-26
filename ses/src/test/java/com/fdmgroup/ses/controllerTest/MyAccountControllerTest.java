@@ -23,9 +23,9 @@ import com.fdmgroup.ses.model.TransactionHistory;
 import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.repository.TransactionHistoryRepository;
 import com.fdmgroup.ses.service.OwnedSharesService;
-import com.fdmgroup.ses.service.UserServiceImpl;
+import com.fdmgroup.ses.service.UserService;
 import com.fdmgroup.ses.stockExchange.SaleForm;
-import com.fdmgroup.ses.utils.DataFactory;
+import com.fdmgroup.ses.utils.StockExchangeUtils;
 import com.fdmgroup.ses.validation.UserValidator;
 import com.fdmgroup.ses.validation.ValidationFactory;
 
@@ -41,7 +41,7 @@ public class MyAccountControllerTest {
 	private List<OwnedShare> stubCurrentUsersShares = new ArrayList<>();
 	
 	@Mock
-	private UserServiceImpl userService;
+	private UserService userService;
 	private static User stubCurrentUser = new User();
 	
 	@Mock
@@ -61,7 +61,7 @@ public class MyAccountControllerTest {
 		when(userService.findCurrentUser()).thenReturn(stubCurrentUser);
 		
 		// Stub "user's owned stocks"
-		stubCurrentUsersShares.add(DataFactory.createOwnedShare());
+		stubCurrentUsersShares.add(StockExchangeUtils.createOwnedShare());
 		when(ownedSharesService.findAllForCurrentUser()).thenReturn(stubCurrentUsersShares);
 		
 		// Stub "user's transaction history"

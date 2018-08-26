@@ -16,7 +16,7 @@
 		<h1>Login</h1>
 		<c:if test="${successfulRegistration}">
 			<div class="alert alert-success">
-				Registration success! Please sign in.
+				Registration complete! You may now log in.
 			</div>
 		</c:if>
 		<form name="loginForm" action="/login" method="POST" class="col-md-6 col-md-offset-3">
