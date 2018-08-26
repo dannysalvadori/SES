@@ -1,8 +1,10 @@
 package com.fdmgroup.ses.email;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
 import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
@@ -11,8 +13,8 @@ import javax.mail.internet.MimeMessage;
 import static com.fdmgroup.ses.email.AWSCredentials.*;
 
 public class EmailSender {
-
-	public static void sendEmail(Email email) throws Exception {
+	
+	public static void sendEmail(Email email) throws MessagingException, UnsupportedEncodingException  {
 
         // Create a Properties object to contain connection configuration information.
     	Properties props = System.getProperties();
@@ -41,7 +43,7 @@ public class EmailSender {
         
         } catch (Exception ex) {
         	// TODO: proper error handling
-            System.out.println("The email was not sent.");
+            System.out.println("AWS email not sent.");
             System.out.println("Error message: " + ex.getMessage());
         
         } finally {

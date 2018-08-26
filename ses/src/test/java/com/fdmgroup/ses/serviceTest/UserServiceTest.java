@@ -40,7 +40,6 @@ import com.fdmgroup.ses.repository.RoleRepository;
 import com.fdmgroup.ses.repository.UserRepository;
 import com.fdmgroup.ses.repository.VerificationTokenRepository;
 import com.fdmgroup.ses.service.UserService;
-import com.fdmgroup.ses.service.UserServiceImpl;
 import com.fdmgroup.ses.stockExchange.SaleForm;
 import com.fdmgroup.ses.stockExchange.TransactionForm;
 import com.fdmgroup.ses.validation.SesValidationException;
@@ -86,7 +85,7 @@ public class UserServiceTest {
 	
 	// Class to be tested
 	@InjectMocks
-	private UserService userService = new UserServiceImpl();
+	private UserService userService = new UserService();
 
 	@Before
 	public void setUp() throws Exception {

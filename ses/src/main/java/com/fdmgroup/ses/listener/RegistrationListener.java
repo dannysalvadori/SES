@@ -18,7 +18,6 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 	
 	@Override
 	public void onApplicationEvent(OnRegistrationCompleteEvent event) {
-		System.out.println("onAppEvent -- going to send email");
 		this.confirmRegistration(event);
 	}
 	

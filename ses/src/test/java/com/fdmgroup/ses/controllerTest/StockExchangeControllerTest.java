@@ -31,7 +31,7 @@ import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.repository.CompanyRepository;
 import com.fdmgroup.ses.service.OwnedSharesService;
 import com.fdmgroup.ses.service.TransactionService;
-import com.fdmgroup.ses.service.UserServiceImpl;
+import com.fdmgroup.ses.service.UserService;
 import com.fdmgroup.ses.stockExchange.SaleForm;
 import com.fdmgroup.ses.stockExchange.TransactionForm;
 import com.fdmgroup.ses.utils.StockExchangeUtils;
@@ -58,7 +58,7 @@ public class StockExchangeControllerTest {
 	private TransactionService transactionService;
 	
 	@Mock
-	private UserServiceImpl userService;
+	private UserService userService;
 	private static User stubCurrentUser = new User();
 	
 	@Mock

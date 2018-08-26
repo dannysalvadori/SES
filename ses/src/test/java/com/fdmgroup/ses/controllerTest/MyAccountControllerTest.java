@@ -23,7 +23,7 @@ import com.fdmgroup.ses.model.TransactionHistory;
 import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.repository.TransactionHistoryRepository;
 import com.fdmgroup.ses.service.OwnedSharesService;
-import com.fdmgroup.ses.service.UserServiceImpl;
+import com.fdmgroup.ses.service.UserService;
 import com.fdmgroup.ses.stockExchange.SaleForm;
 import com.fdmgroup.ses.utils.StockExchangeUtils;
 import com.fdmgroup.ses.validation.UserValidator;
@@ -41,7 +41,7 @@ public class MyAccountControllerTest {
 	private List<OwnedShare> stubCurrentUsersShares = new ArrayList<>();
 	
 	@Mock
-	private UserServiceImpl userService;
+	private UserService userService;
 	private static User stubCurrentUser = new User();
 	
 	@Mock
