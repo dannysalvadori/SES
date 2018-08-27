@@ -2,7 +2,6 @@ package com.fdmgroup.ses.controllerTest;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anySet;
 import static org.mockito.Mockito.when;
 
 import static com.fdmgroup.ses.utils.StockExchangeUtils.*;
@@ -42,9 +41,6 @@ public class ReportsControllerTest {
 	@Mock
 	private CompanyService companyService;
 	private List<Company> allCompanies = new ArrayList<>();
-	
-	@Autowired
-	private OwnedSharesService ownedSharesService;
 	
 	@Mock
 	private HttpServletResponse httpResponse;
