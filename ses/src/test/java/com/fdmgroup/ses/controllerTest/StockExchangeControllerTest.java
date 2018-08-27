@@ -1,5 +1,6 @@
 package com.fdmgroup.ses.controllerTest;
 
+import static com.fdmgroup.ses.utils.CreditCardUtils.createCard;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doThrow;
@@ -11,9 +12,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -26,9 +25,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fdmgroup.ses.controller.StockExchangeController;
 import com.fdmgroup.ses.model.Company;
+import com.fdmgroup.ses.model.CreditCardDetail;
 import com.fdmgroup.ses.model.OwnedShare;
 import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.repository.CompanyRepository;
+import com.fdmgroup.ses.service.CreditCardService;
 import com.fdmgroup.ses.service.OwnedSharesService;
 import com.fdmgroup.ses.service.TransactionService;
 import com.fdmgroup.ses.service.UserService;
@@ -59,14 +60,18 @@ public class StockExchangeControllerTest {
 	
 	@Mock
 	private UserService userService;
-	private static User stubCurrentUser = new User();
+	private static User currentUser = new User();
 	
 	@Mock
 	private ValidationFactory validationFactory;
 	@Mock
-	private TransactionValidator stubTransactionValidator;
+	private TransactionValidator transactionValidator;
 	@Mock
-	private SaleValidator stubSaleValidator;
+	private SaleValidator saleValidator;
+	
+	@Mock
+	private CreditCardService creditCardService;
+	private List<CreditCardDetail> currentUsersCreditCards = new ArrayList<>();
 	
 	// Test data
 	private List<Company> stubAllCompanies = new ArrayList<>();
@@ -88,10 +93,21 @@ public class StockExchangeControllerTest {
 		when(ownedSharesService.findAllForCurrentUser()).thenReturn(stubCurrentUsersShares);
 		
 		// Stub validators
-		when(validationFactory.getValidator(any(TransactionForm.class))).thenReturn(stubTransactionValidator);
-		when(validationFactory.getValidator(any(SaleForm.class))).thenReturn(stubSaleValidator);
+		when(validationFactory.getValidator(any(TransactionForm.class))).thenReturn(transactionValidator);
+		when(validationFactory.getValidator(any(SaleForm.class))).thenReturn(saleValidator);
 		
-		when(userService.findCurrentUser()).thenReturn(stubCurrentUser);
+		when(userService.findCurrentUser()).thenReturn(currentUser);
+		
+		setupCreditCards();
+		when(creditCardService.findAllForCurrentUser()).thenReturn(currentUsersCreditCards);
+	}
+	
+	private void setupCreditCards() {
+		for (Integer i = 0; i < 2;i++) {
+			CreditCardDetail card = createCard();
+			card.setCardNumber("000000000000000" + String.valueOf(i)); // i.e. 0000 0000 0000 0001 etc.
+			currentUsersCreditCards.add(card);
+		}
 	}
 	
 
@@ -242,40 +258,30 @@ public class StockExchangeControllerTest {
 	 * "purchaseFailures"
 	 */
 	@Test
-	public void doPlaceOrderValidationFailTest() {
-		
+	public void doPlaceOrderValidationFailTest() throws SesValidationException {
 		TransactionForm txForm = new TransactionForm();
-//		BigDecimal expectedTotal = new BigDecimal(55.58).setScale(2, RoundingMode.HALF_UP);
 		
-		SesValidationException stubValidationException = new SesValidationException();
-		Set<String> stubFailures = new HashSet<>();
-		String testFailureMessage = "Test stub failure";
-		stubFailures.add(testFailureMessage);
-		stubValidationException.setFailures(stubFailures);
+		//Setup validation failure
+		SesValidationException vEx = new SesValidationException();
+		final String VALIDATION_FAILURE = "VALIDATION_FAILURE";
+		vEx.addFailure(VALIDATION_FAILURE);		
+		when(validationFactory.getValidator(any())).thenReturn(transactionValidator);
+		doThrow(vEx).when(transactionValidator).validate();
 		
-		// TODO: how can we make the validator throw a failure?
-		try {
-			doThrow(stubValidationException).when(stubTransactionValidator).validate();
-			// Run test
-			mav = ctrl.doPlaceOrder(mav, txForm);
-			verify(validationFactory).getValidator(any());
-//			verify(stubTransactionValidator).validate();
-		} catch (SesValidationException e) {
-			assertTrue("Controller did not handle validation exception", false);
-		}
+		// Run test
+		mav = ctrl.doPlaceOrder(mav, txForm);
+		verify(validationFactory).getValidator(any());
+		verify(transactionValidator).validate();
 		
-//		// Confirm view
-//		assertEquals("Wrong view name", "user/stockExchange", mav.getViewName());
-//		
-//		// Confirm errors were added to model
-//		Object failuresObject = mav.getModel().get("purchaseFailures");
-//		assertNotEquals("purchaseFailures model object shouldn't be null", null, failuresObject);
-//		assertTrue("purchaseFailures object is wrong type", failuresObject instanceof Set<?>);
-//		Set<String> purchaseFailures = (Set<String>) failuresObject;
-//		assertEquals("Wrong number of failures", 1, purchaseFailures.size());
-//		for (String failure : purchaseFailures) {
-//			assertEquals("Wrong failure", testFailureMessage, failure);
-//		}
+		// Confirm view
+		assertEquals("Wrong view name", "user/stockExchange", mav.getViewName());
+		
+		// Confirm errors were added to model
+		Object failuresObject = mav.getModel().get("purchaseFailures");
+		assertNotEquals("purchaseFailures model object shouldn't be null", null, failuresObject);
+		assertTrue("purchaseFailures object is wrong type", failuresObject instanceof String);
+		String purchaseFailures = (String) failuresObject;
+		assertEquals("Wrong failure", VALIDATION_FAILURE, purchaseFailures);
 	}
 
 	/**
@@ -314,7 +320,7 @@ public class StockExchangeControllerTest {
 		assertEquals("Wrong view name", "user/purchaseComplete", mav.getViewName());
 		
 		try {
-			verify(transactionService).buyStocks(stubCurrentUser, txForm);
+			verify(transactionService).buyStocks(currentUser, txForm);
 		} catch (SesValidationException e) {
 			assertTrue("Controller didn't handle ValidationException", false);
 		}
@@ -324,21 +330,29 @@ public class StockExchangeControllerTest {
 	 * doPurchase() sets the view to user/purchaseFailed.jsp if validation fails
 	 */
 	@Test
-	public void doPurchaseFailureTest() {
-
-		// TODO: how to force validator to throw a failure?
+	public void doPurchaseFailureTest() throws SesValidationException {
+		TransactionForm txForm = new TransactionForm();
 		
-//		TransactionForm txForm = DataFactory.createTransactionForm();
-//		mav = ctrl.doPurchase(mav, txForm);
-//		
-//		// Confirm view
-//		assertEquals("Wrong view name", "user/purchaseComplete", mav.getViewName());
-//		
-//		try {
-//			verify(transactionService).buyStocks(stubCurrentUser, txForm);
-//		} catch (SesValidationException e) {
-//			assertTrue("Controller didn't handle ValidationException", false);
-//		}
+		// Setup validation failure
+		SesValidationException vEx = new SesValidationException();
+		final String VALIDATION_FAILURE = "VALIDATION_FAILURE";
+		vEx.addFailure(VALIDATION_FAILURE);		
+		when(validationFactory.getValidator(any())).thenReturn(transactionValidator);
+		doThrow(vEx).when(transactionService).buyStocks(currentUser, txForm);
+		
+		// Run test
+		mav = ctrl.doPurchase(mav, txForm);
+		
+		// Confirm view
+		assertEquals("Wrong view name", "user/purchaseFailed", mav.getViewName());
+		
+		// Confirm errors were added to model
+		Object failuresObject = mav.getModel().get("failures");
+		assertNotEquals("failures model object shouldn't be null", null, failuresObject);
+		assertTrue("failures object is wrong type", failuresObject instanceof String);
+		String failures = (String) failuresObject;
+		assertEquals("Wrong failure", VALIDATION_FAILURE, failures);
+
 	}
 
 	/**
@@ -417,35 +431,66 @@ public class StockExchangeControllerTest {
 	 * If validation fails, goToSellSelected() returns to the stock exchange and adds failures under "saleFailures" 
 	 */
 	@Test
-	public void goToSellSelectedFailureTest() {
-		// TODO: test validation failure
+	public void goToSellSelectedFailureTest() throws SesValidationException {
+		SaleForm saleForm = new SaleForm();
+		
+		// Setup validation failure
+		SesValidationException vEx = new SesValidationException();
+		final String VALIDATION_FAILURE = "VALIDATION_FAILURE";
+		vEx.addFailure(VALIDATION_FAILURE);		
+		when(validationFactory.getValidator(any())).thenReturn(saleValidator);
+		doThrow(vEx).when(saleValidator).validate();
+		
+		// Run test
+		mav = ctrl.goToSellSelected(mav, saleForm);
+		
+		// Confirm view
+		assertEquals("Wrong view name", "user/stockExchange", mav.getViewName());
+		
+		// Confirm errors were added to model
+		Object failuresObject = mav.getModel().get("saleFailures");
+		assertNotEquals("saleFailures model object shouldn't be null", null, failuresObject);
+		assertTrue("saleFailures object is wrong type", failuresObject instanceof String);
+		String saleFailures = (String) failuresObject;
+		assertEquals("Wrong failure", VALIDATION_FAILURE, saleFailures);
 	}
 
 	/**
 	 * doSale() sets view to user/saleComplete.jsp on validation success, and calls the transaction service to sell 
 	 */
 	@Test
-	public void doSaleSuccessTest() {
-		
+	public void doSaleSuccessTest() throws SesValidationException {
+		// Attempt sale
 		SaleForm saleForm = StockExchangeUtils.createSaleForm();
 		mav = ctrl.doSale(mav, saleForm);
 		
-		// Confirm view
+		// Confirm view and sale
 		assertEquals("Wrong view name", "user/saleComplete", mav.getViewName());
-		
-		try {
-			verify(transactionService).sellStocks(stubCurrentUser, saleForm);
-		} catch (SesValidationException e) {
-			assertTrue("Controller didn't handle ValidationException", false);
-		}
+		verify(transactionService).sellStocks(currentUser, saleForm);
 	}
 
 	/**
 	 * If validation fails, doSale() sets the view to user/saleFailed.jsp with failures added under "failures" 
 	 */
 	@Test
-	public void doSaleFailureTest() {
-		// TODO: test validation failure
+	public void doSaleFailureTest() throws SesValidationException {
+		SaleForm saleForm = StockExchangeUtils.createSaleForm();
+		
+		// Setup validation failure
+		SesValidationException vEx = new SesValidationException();
+		final String VALIDATION_FAILURE = "VALIDATION_FAILURE";
+		vEx.addFailure(VALIDATION_FAILURE);
+		doThrow(vEx).when(transactionService).sellStocks(currentUser, saleForm);
+		
+		mav = ctrl.doSale(mav, saleForm);
+		
+		// Confirm view and errors
+		assertEquals("Wrong view name", "user/saleFailed", mav.getViewName());
+		Object failuresObject = mav.getModel().get("failures");
+		assertNotEquals("failures model object shouldn't be null", null, failuresObject);
+		assertTrue("failures object is wrong type", failuresObject instanceof String);
+		String failures = (String) failuresObject;
+		assertEquals("Wrong failure", VALIDATION_FAILURE, failures);
 	}	
 
 }
