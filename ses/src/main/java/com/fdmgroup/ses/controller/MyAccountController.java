@@ -214,7 +214,7 @@ public class MyAccountController {
 	 * Submit delete request for given credit card detail
 	 */
 	@RequestMapping(value="/user/deleteCard")
-    public ModelAndView goToDeleteCard(
+    public ModelAndView doDeleteCard(
     		ModelAndView modelAndView,
     		@RequestParam(name="id") Integer cardId
     ) {
