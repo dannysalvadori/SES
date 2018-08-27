@@ -80,6 +80,14 @@ public class AdminCRUDUserControllerTest {
 		allRoles.add(ROLE_USER);
 		allRoles.add(ROLE_ADMIN);
 	}
+	
+	/**
+	 * TODO: more meaningful test
+	 */
+	@Test
+	public void initBinderTest() {
+		ctrl.initBinder(new WebDataBinder(null));
+	}
 
 	/**
 	 * manageUsers() adds all users to model (as "users") and sets the view to
