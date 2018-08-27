@@ -51,8 +51,7 @@ public class AdminCRUDCompanyController {
 			// TODO: exception handling
 			System.out.println("doCreateCompany - Exception happened");
 		}
-		modelAndView.setViewName("admin/manageCompanies");
-		modelAndView.addObject("companies", companyRepo.findAll());
+		modelAndView = goToManageCompanies(modelAndView);
 		modelAndView.addObject("company", null);
 		return modelAndView;
 	}
@@ -96,8 +95,7 @@ public class AdminCRUDCompanyController {
 			// TODO: exception handling
 			System.out.println("doEditCompany - Exception happened");
 		}
-		modelAndView.setViewName("admin/manageCompanies");
-		modelAndView.addObject("companies", companyRepo.findAll());
+		modelAndView = goToManageCompanies(modelAndView);
 		modelAndView.addObject("company", null);
 		return modelAndView;
 	}

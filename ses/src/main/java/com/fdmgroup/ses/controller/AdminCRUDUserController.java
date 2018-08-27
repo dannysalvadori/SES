@@ -131,9 +131,7 @@ public class AdminCRUDUserController {
 			// TODO: exception handling
 			System.out.println("Bad! Exception happened!");
 		}
-		modelAndView.setViewName("admin/manageUsers");
-		modelAndView.addObject("users", userRepo.findAll());
-		return modelAndView;
+		return goToManageUsers(modelAndView);
 	}
 	
 	/**
@@ -168,8 +166,7 @@ public class AdminCRUDUserController {
     ) {
 		try {
 			userService.saveUser(user, request);
-			modelAndView.setViewName("admin/manageUsers");
-			modelAndView.addObject("users", userRepo.findAll());
+			modelAndView = goToManageUsers(modelAndView);
 			modelAndView.addObject("user", null);
 		} catch (SesValidationException ex) {
 			modelAndView.addObject("failures", ValidationUtils.stringifyFailures(ex.getFailures()));

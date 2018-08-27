@@ -1,65 +1,60 @@
 package com.fdmgroup.ses.controllerTest;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
-import javax.transaction.Transactional;
+import static com.fdmgroup.ses.utils.StockExchangeUtils.*;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fdmgroup.ses.controller.AdminCRUDCompanyController;
 import com.fdmgroup.ses.model.Company;
 import com.fdmgroup.ses.repository.CompanyRepository;
-import com.fdmgroup.ses.utils.StockExchangeUtils;
 
-@RunWith(SpringRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
-@Transactional // Allows detached entities (caused by multiple entityManager instances) to be persisted
 public class AdminCRUDCompanyControllerTest {
 
-	@Autowired
-	private AdminCRUDCompanyController ctrl;
+	@InjectMocks
+	private AdminCRUDCompanyController ctrl = new AdminCRUDCompanyController();
+	private ModelAndView mav = new ModelAndView();
 	
-	@Autowired
+	@Mock
 	private CompanyRepository companyRepo;
 
 	@Mock
-	WebRequest webRequest;
-
-	private ModelAndView mav = new ModelAndView();
-	private final String VALID_TEST_SYMBOL = "T" + String.valueOf(Math.random());
+	private WebRequest webRequest;
+	
+	private List<Company> allCompanies = new  ArrayList<>();
 
 	@Before
 	public void setUp() throws Exception {
-		Company testCompany = companyRepo.findBySymbol(VALID_TEST_SYMBOL);
-		assertEquals("A company already exists with test symbol. Consider re-running test", null, testCompany);
+		setupAllCompanies();
+		when(companyRepo.findAll()).thenReturn(allCompanies);
 	}
-
-	/**
-	 * Delete any DB data persisted during the test
-	 */
-	@After
-	public void revert() {
-		Company testCompany = companyRepo.findBySymbol(VALID_TEST_SYMBOL);
-		if (testCompany != null) {
-			companyRepo.delete(testCompany);
+	
+	private void setupAllCompanies() {
+		for (Integer i = 0; i < 3; i++) {
+			Company c = createCompany();
+			c.setId(i);
+			c.setSymbol(String.valueOf(i));
+			allCompanies.add(c);
 		}
 	}
-
-	/*******************************************
-	*               Tests Start                *
-	*******************************************/
 
 	/**
 	 * manageCompanies() adds all companies to model (as "companies") and sets the view to admin/manageCompanies.jsp
@@ -70,16 +65,16 @@ public class AdminCRUDCompanyControllerTest {
 		assertEquals("Wrong view name", "admin/manageCompanies", mav.getViewName());
 		Object companiesModelObject = mav.getModel().get("companies");
 		assertNotEquals(null, companiesModelObject);
-		assertTrue("newUser is wrong type", companiesModelObject instanceof Collection<?>);
+		assertTrue("companies model object is the wrong type", companiesModelObject instanceof Collection<?>);
 		Collection<?> companies = (Collection<?>) companiesModelObject;
-		assertEquals("Didn't find all users", companies.size(), companyRepo.findAll().size());
+		assertEquals("Didn't find all companies", allCompanies.size(), companies.size());
 		for (Object obj : companies) {
 			assertTrue("'Company' is wrong type", obj instanceof Company);
 		}
 	}
 
 	/**
-	 * createCompany() adds a new Company instance to the model (as "company") and sets the view to
+	 * goToCreateCompany() adds a new Company instance to the model (as "company") and sets the view to
 	 * admin/createCompany.jsp
 	 */
 	@Test
@@ -87,7 +82,7 @@ public class AdminCRUDCompanyControllerTest {
 		mav = ctrl.goToCreateCompany(mav);
 		assertEquals("Wrong view name", "admin/createCompany", mav.getViewName());
 		assertNotEquals(null, mav.getModel().get("company"));
-		assertTrue("newUser is wrong type", mav.getModel().get("company") instanceof Company);
+		assertTrue("company model object is the wrong type", mav.getModel().get("company") instanceof Company);
 	}
 
 	/**
@@ -95,19 +90,26 @@ public class AdminCRUDCompanyControllerTest {
 	 */
 	@Test
 	public void doCreateCompanySuccessTest() {
-		Company testCompany = createCompany();
-		mav = ctrl.doCreateCompany(mav, testCompany);
+		Company c = createCompany();
+		mav = ctrl.doCreateCompany(mav, c);
 
 		// Confirm validation passes
 		Object failures = mav.getModel().get("failures");
 		assertEquals("Validation failed", null, (String) failures);
 
-		Company resultCompany = companyRepo.findBySymbol(VALID_TEST_SYMBOL);
-		assertTrue("Null user", resultCompany != null);
-		assertEquals("Wrong symbol", VALID_TEST_SYMBOL, resultCompany.getSymbol());
-		assertEquals("Wrong name", VALID_TEST_SYMBOL, resultCompany.getName());
-		assertEquals("Wrong amount of shares", testCompany.getAvailableShares(), resultCompany.getAvailableShares());
-		assertEquals("Wrong share value", testCompany.getCurrentShareValue(), resultCompany.getCurrentShareValue());
+		// Confirm save was attempted and view reset to manage companies
+		verify(companyRepo, times(1)).save(c);
+		assertEquals("Wrong view name", "admin/manageCompanies", mav.getViewName());
+		Collection<?> companies = (Collection<?>) mav.getModel().get("companies");
+		assertEquals("Didn't find all companies", allCompanies.size(), companies.size());
+	}
+	
+	/**
+	 * If validation fails, doCreateCompany() .... TODO: the code does nothing different if it fails! 
+	 */
+	@Test
+	public void doCreateCompanyFailureTest() {
+		// implement
 	}
 
 	/**
@@ -116,67 +118,49 @@ public class AdminCRUDCompanyControllerTest {
 	 */
 	@Test
 	public void goToEditCompanyTest() {
-		Company testCompany = insertTestCompany();
-		mav = ctrl.goToEditCompany(mav, testCompany.getId());
+		Company c = allCompanies.get(0);
+		when(companyRepo.findById(c.getId())).thenReturn(c);
+		
+		mav = ctrl.goToEditCompany(mav, c.getId());
+		
+		// Verify view and company object set correctly
 		assertEquals("Wrong view name", "admin/editCompany", mav.getViewName());
 		Object companyModelObject = mav.getModel().get("company");
 		assertNotEquals("Model company object was null", null, companyModelObject);
 		assertTrue("Model company object is wrong type", companyModelObject instanceof Company);
-		assertEquals("Wrong ID", testCompany.getId(), ((Company)companyModelObject).getId());
+		assertEquals("Wrong ID", c.getId(), ((Company)companyModelObject).getId());
 	}
 
 	/**
 	 * doEditCompany() updates the Company in the DB, and sets the view back to admin/manageCompanies.jsp
 	 */
 	@Test
-	public void doEditUserCompanyTest() {
-		Company testCompany = insertTestCompany();
+	public void doEditCompanySuccessTest() {
+		Company c = allCompanies.get(0);
+		when(companyRepo.findById(c.getId())).thenReturn(c);
 		
-		// Edit test user's details
-		testCompany.setName("ALTERED_NAME");
-		mav = ctrl.doEditCompany(mav, testCompany);
+		Company c2 = createCompany();
+		c2.setId(c.getId());
+		c2.setName("NEW_NAME");
 		
-		// Get company from DB
-		testCompany = companyRepo.findBySymbol(VALID_TEST_SYMBOL);
+		mav = ctrl.doEditCompany(mav, c2);
 		
+		// Verify company object fields set correctly and saved
+		verify(companyRepo, times(1)).save(c);
+		assertEquals("Saved company's name was not updated", c2.getName(), c.getName());
+		
+		// Verify view set back to manage companies
 		assertEquals("Wrong view name", "admin/manageCompanies", mav.getViewName());
-		assertEquals("Model User had wrong ID", "ALTERED_NAME", testCompany.getName());
-	}
-	
-	// TODO add fail cases after TODO add company validation
-
-	/*******************************************
-	 * Helper Methods *
-	 *******************************************/
-
-	private Company createCompany() {
-		Company c = StockExchangeUtils.createCompany();
-		c.setName(VALID_TEST_SYMBOL);
-		c.setSymbol(VALID_TEST_SYMBOL);
-		c.setAvailableShares(100l);
-		c.setCurrentShareValue(new BigDecimal(50));
-		return c;
+		Collection<?> companies = (Collection<?>) mav.getModel().get("companies");
+		assertEquals("Didn't find all companies", allCompanies.size(), companies.size());
 	}
 
-	private Company insertTestCompany() {
-		return insertTestCompany(null);
-	}
-	private Company insertTestCompany(Company c) {
-		Company testCompany = c == null ? createCompany() : c;
-//		try {
-			companyRepo.save(testCompany);
-//		} catch (SesValidationException e) {
-			// TODO: create company validator!
-//			assertTrue("Test user validation failure: " + ValidationUtils.stringifyFailures(e.getFailures()), false);
-//		}
-		// Confirm successful persist
-		Company resultCompany = companyRepo.findBySymbol(testCompany.getSymbol());
-		assertTrue("Null company", resultCompany != null);
-		assertEquals("Wrong symbol", testCompany.getSymbol(), resultCompany.getSymbol());
-		assertEquals("Wrong name", testCompany.getName(), resultCompany.getName());
-		assertEquals("Wrong amount of shares", testCompany.getAvailableShares(), resultCompany.getAvailableShares());
-		assertEquals("Wrong share value", testCompany.getCurrentShareValue(), resultCompany.getCurrentShareValue());
-		return resultCompany;
+	/**
+	 * doEditCompany() failure ... TODO: the code does nothing if it fails
+	 */
+	@Test
+	public void doEditCompanyFailureTest() {
+		// implement
 	}
 
 }
