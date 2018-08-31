@@ -33,7 +33,6 @@ import com.fdmgroup.ses.validation.TransactionValidator;
  * # At least one company must be selected
  * # User must have sufficient credit for the whole transaction
  * # Each company must have sufficient stock
- * Tests purchase validations only. No sale validations are currently in place
  */
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest

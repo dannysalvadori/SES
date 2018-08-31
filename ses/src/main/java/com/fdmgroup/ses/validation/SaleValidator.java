@@ -26,12 +26,9 @@ public class SaleValidator extends ModelValidator {
 	private SaleForm saleForm;
 
 	/**
-	 * Validates transaction requests:
-	 * -- Purchases:
-	 * # User must have sufficient credit for the whole transaction
-	 * # Each company must have sufficient stock
-	 * -- Sales:
-	 * # TODO:
+	 * Validates sake requests:
+	 * # At least one stock must be selected for sale with quantity 1 or greater
+	 * # You cannot sell more of a stock than you own
 	 */
 	@Override
 	public void validate() throws SesValidationException {

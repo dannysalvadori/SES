@@ -50,8 +50,6 @@ public class TransactionValidator extends ModelValidator {
 	 * # At least one company must be selected
 	 * # User must have sufficient credit for the whole transaction
 	 * # Each company must have sufficient stock
-	 * Sales:
-	 * # None
 	 */
 	@Override
 	public void validate() throws SesValidationException {
