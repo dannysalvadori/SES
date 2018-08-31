@@ -20,6 +20,7 @@ public class StockExchangeUtils {
 		c.setSymbol("DFTC");
 		c.setAvailableShares(100l);
 		c.setCurrentShareValue(new BigDecimal(50));
+		c.setTransactionQuantity(10l); // TX value of 500
 		return c;
 	}
 	

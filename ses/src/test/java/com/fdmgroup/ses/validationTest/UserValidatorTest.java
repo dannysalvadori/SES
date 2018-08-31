@@ -1,22 +1,16 @@
 package com.fdmgroup.ses.validationTest;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 import static com.fdmgroup.ses.utils.UserUtils.*;
 import static com.fdmgroup.ses.validation.UserValidator.*;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.repository.UserRepository;
-import com.fdmgroup.ses.validation.SesValidationException;
 import com.fdmgroup.ses.validation.UserValidator;
 
 /**
@@ -28,16 +22,14 @@ import com.fdmgroup.ses.validation.UserValidator;
  */
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
-public class UserValidatorTest {
-
-	@InjectMocks
-	private UserValidator validator = new UserValidator();
-	private SesValidationException vEx = null;
-	private Set<String> failures = null;
-	private Set<String> expectedFailures = new HashSet<>();
+public class UserValidatorTest extends ValidationTest<UserValidator> {
 	
 	@Mock
 	private UserRepository userRepo;
+	
+	public UserValidatorTest() {
+		validator = new UserValidator();
+	}
 	
 	/************************************************
 	*                 Insert Tests                  *
@@ -203,43 +195,6 @@ public class UserValidatorTest {
 		validator.setUser(newUser);
 		expectedFailures.add(FAIL_PASSWORD_MISMATCH);
 		runTest();
-	}
-		
-	/************************************************
-	*                Helper Methods                 *
-	************************************************/
-	
-	/**
-	 * Runs the test with the user and expected failures having been setup
-	 */
-	private void runTest() {
-		try {
-			validator.validate();
-			if (!expectedFailures.isEmpty()) {
-				fail("Validation should have failed, but didn't");
-			}
-		} catch (SesValidationException ex) {
-			vEx = ex;
-			failures = vEx.getFailures();
-		}
-		
-		// Null check failures for successful scenarios
-		if (failures == null) {
-			failures = new HashSet<>();
-		}
-		
-		assertTrue("One or more expected failures did not occur:" + printFailures(),
-				failures.containsAll(expectedFailures));
-		assertTrue("One or more unexpected failures occured:" + printFailures(),
-				expectedFailures.containsAll(failures));
-	}
-	
-	/**
-	 * Prints expected and actual failures as strings
-	 */
-	private String printFailures() {
-		return "\nExpected Failures: " + expectedFailures.toString()
-				+ "\nActual Failures: " + failures.toString();
 	}
 
 }

@@ -15,6 +15,23 @@ import com.fdmgroup.ses.stockExchange.TransactionForm;
 @Component
 public class TransactionValidator extends ModelValidator {
 
+	// Failure messages
+	public static final String FAIL_NO_CREDIT_CARDS = "Purchases require a valid credit card. Visit \"My Account\" to "
+			+ "register a card.";
+	
+	public static final String FAIL_NO_STOCK_SELECTED = "You must select at least one stock.";
+	
+	public static String generateInsufficientCreditMessage(BigDecimal transactionValue, BigDecimal userCredit) {
+		return "Insufficient credit: " // TODO: format currency
+				+ transactionValue + " required; "
+				+ "you have " + userCredit + " available.";
+	}
+	public static String generateInsufficientStockMessage(Company company, Company dbCompany) {
+		return "Insufficient stocks for " + company.getSymbol() + ": "
+				+ company.getTransactionQuantity() + " requested; "
+				+ dbCompany.getAvailableShares() + " available.";
+	}
+	
 	@Autowired
 	private UserService userService;
 
@@ -28,11 +45,13 @@ public class TransactionValidator extends ModelValidator {
 
 	/**
 	 * Validates transaction requests:
-	 * -- Purchases:
+	 * Purchases:
+	 * # User must have registered at least one credit card
+	 * # At least one company must be selected
 	 * # User must have sufficient credit for the whole transaction
 	 * # Each company must have sufficient stock
-	 * -- Sales:
-	 * # TODO:
+	 * Sales:
+	 * # None
 	 */
 	@Override
 	public void validate() throws SesValidationException {
@@ -45,19 +64,17 @@ public class TransactionValidator extends ModelValidator {
 		
 		// Must have at least one registered credit card
 		if (creditCardService.findAllForCurrentUser().isEmpty()) {
-			failures.add("Purchases require a valid credit card. Visit \"My Account\" to register a card.");
+			failures.add(FAIL_NO_CREDIT_CARDS);
 		}
 		
 		// At least one company must be selected
 		if (transactionForm.getCompanies().size() < 1) {
-			failures.add("You must select at least one stock.");
+			failures.add(FAIL_NO_STOCK_SELECTED);
 		}
 		
 		// User must have sufficient credit
 		if (userCredit.compareTo(transactionValue) < 0) {
-			failures.add("Insufficient credit: " // TODO: format currency
-					+ transactionValue + " required; "
-					+ "you have " + userCredit + " available.");
+			failures.add(generateInsufficientCreditMessage(transactionValue, userCredit));
 		}
 		
 		// For each stock...
@@ -66,9 +83,7 @@ public class TransactionValidator extends ModelValidator {
 			// ... companies must have sufficient available stock 
 			Company dbCompany = companyRepo.findBySymbol(company.getSymbol());
 			if (dbCompany.getAvailableShares() < company.getTransactionQuantity()) {
-				failures.add("Insufficient stocks for " + company.getSymbol() + ": "
-						+ company.getTransactionQuantity() + " requested; "
-						+ dbCompany.getAvailableShares() + " available.");
+				failures.add(generateInsufficientStockMessage(company, dbCompany));
 			}
 			
 		}

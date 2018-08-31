@@ -14,7 +14,7 @@ import com.fdmgroup.ses.SesApplication;
 public class SesApplicationTests {
 
 	@Test
-	public void contextLoads() {
+	public void contextLoadsTest() {
 		SesApplication.main(new String[0]);	
 		assert(true);
 	}
