@@ -39,7 +39,7 @@ import com.fdmgroup.ses.utils.StockExchangeUtils;
 import com.fdmgroup.ses.validation.SaleValidator;
 import com.fdmgroup.ses.validation.SesValidationException;
 import com.fdmgroup.ses.validation.TransactionValidator;
-import com.fdmgroup.ses.validation.ValidationFactory;
+import com.fdmgroup.ses.validation.ValidatorFactory;
 
 @RunWith(MockitoJUnitRunner.class) // Unlike SpringRunner.class, allows Mock-Autowired injection
 @SpringBootTest
@@ -63,7 +63,7 @@ public class StockExchangeControllerTest {
 	private static User currentUser = new User();
 	
 	@Mock
-	private ValidationFactory validationFactory;
+	private ValidatorFactory validationFactory;
 	@Mock
 	private TransactionValidator transactionValidator;
 	@Mock

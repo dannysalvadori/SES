@@ -25,7 +25,7 @@ public class SesApplicationTests {
 	@Test
 	public void passwordEncoderBeanTest() {
 		Object output = new SesApplication().passwordEncoder();
-		assertTrue("Passwoord encoder is of the wrong type",
+		assertTrue("Password encoder is of the wrong type",
 				output instanceof org.springframework.security.crypto.password.PasswordEncoder);
 	}
 

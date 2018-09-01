@@ -34,7 +34,7 @@ import com.fdmgroup.ses.stockExchange.SaleForm;
 import com.fdmgroup.ses.utils.StockExchangeUtils;
 import com.fdmgroup.ses.validation.SesValidationException;
 import com.fdmgroup.ses.validation.UserValidator;
-import com.fdmgroup.ses.validation.ValidationFactory;
+import com.fdmgroup.ses.validation.ValidatorFactory;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
@@ -62,7 +62,7 @@ public class MyAccountControllerTest {
 	private ModelAndView mav = new ModelAndView();
 	
 	@Mock
-	private ValidationFactory validationFactory;
+	private ValidatorFactory validationFactory;
 	private UserValidator userValidator;
 	
 

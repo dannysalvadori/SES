@@ -28,7 +28,7 @@ import com.fdmgroup.ses.model.Company;
 import com.fdmgroup.ses.repository.CompanyRepository;
 import com.fdmgroup.ses.validation.CompanyValidator;
 import com.fdmgroup.ses.validation.SesValidationException;
-import com.fdmgroup.ses.validation.ValidationFactory;
+import com.fdmgroup.ses.validation.ValidatorFactory;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
@@ -45,7 +45,7 @@ public class AdminCRUDCompanyControllerTest {
 	private WebRequest webRequest;
 	
 	@Mock
-	private ValidationFactory validationFactory;
+	private ValidatorFactory validationFactory;
 	@Mock
 	private CompanyValidator validator;
 	

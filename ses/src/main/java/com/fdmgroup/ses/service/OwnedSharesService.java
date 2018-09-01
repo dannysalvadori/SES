@@ -11,7 +11,7 @@ import com.fdmgroup.ses.model.OwnedShare;
 import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.repository.CompanyRepository;
 import com.fdmgroup.ses.repository.OwnedSharesRepository;
-import com.fdmgroup.ses.validation.ValidationFactory;
+import com.fdmgroup.ses.validation.ValidatorFactory;
 
 @Service("ownedSharesService")
 public class OwnedSharesService {
@@ -26,7 +26,7 @@ public class OwnedSharesService {
 	private UserService userService;
 
 	@Autowired
-	ValidationFactory validationFactory;
+	ValidatorFactory validationFactory;
 	
 	public OwnedShare upsertOwnedShares(Company company, User user) {
 		Company dbCompany = companyRepo.findBySymbol(company.getSymbol());

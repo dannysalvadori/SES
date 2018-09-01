@@ -10,7 +10,7 @@ import com.fdmgroup.ses.model.CreditCardDetail;
 import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.repository.CreditCardDetailRepository;
 import com.fdmgroup.ses.validation.SesValidationException;
-import com.fdmgroup.ses.validation.ValidationFactory;
+import com.fdmgroup.ses.validation.ValidatorFactory;
 
 @Service("creditCardService")
 public class CreditCardService {
@@ -22,7 +22,7 @@ public class CreditCardService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	@Autowired
-	private ValidationFactory validationFactory;
+	private ValidatorFactory validationFactory;
 	
 	/**
 	 * Insert/Update a CreditCardDetail instance

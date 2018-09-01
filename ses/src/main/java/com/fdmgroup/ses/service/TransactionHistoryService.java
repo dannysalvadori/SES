@@ -11,7 +11,7 @@ import com.fdmgroup.ses.model.TransactionHistory;
 import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.repository.CompanyRepository;
 import com.fdmgroup.ses.repository.TransactionHistoryRepository;
-import com.fdmgroup.ses.validation.ValidationFactory;
+import com.fdmgroup.ses.validation.ValidatorFactory;
 
 @Service("transactionHistoryService")
 public class TransactionHistoryService {
@@ -23,7 +23,7 @@ public class TransactionHistoryService {
 	private CompanyRepository companyRepo;
 
 	@Autowired
-	ValidationFactory validationFactory;
+	ValidatorFactory validationFactory;
 	
 	public void createTransactionHistory(Company company, User user, OwnedShare ownedShare) {
 		TransactionHistory txHistory = new TransactionHistory();

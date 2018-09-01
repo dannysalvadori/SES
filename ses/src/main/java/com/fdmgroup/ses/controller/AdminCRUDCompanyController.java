@@ -10,7 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fdmgroup.ses.model.Company;
 import com.fdmgroup.ses.repository.CompanyRepository;
 import com.fdmgroup.ses.validation.SesValidationException;
-import com.fdmgroup.ses.validation.ValidationFactory;
+import com.fdmgroup.ses.validation.ValidatorFactory;
 import com.fdmgroup.ses.validation.ValidationUtils;
 
 @Controller
@@ -20,7 +20,7 @@ public class AdminCRUDCompanyController {
 	CompanyRepository companyRepo;
 	
 	@Autowired
-	private ValidationFactory validationFactory;
+	private ValidatorFactory validationFactory;
 
 	/**
 	 * Go to the company management page

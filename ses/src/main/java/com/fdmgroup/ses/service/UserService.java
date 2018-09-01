@@ -21,7 +21,7 @@ import com.fdmgroup.ses.repository.VerificationTokenRepository;
 import com.fdmgroup.ses.stockExchange.SaleForm;
 import com.fdmgroup.ses.stockExchange.TransactionForm;
 import com.fdmgroup.ses.validation.SesValidationException;
-import com.fdmgroup.ses.validation.ValidationFactory;
+import com.fdmgroup.ses.validation.ValidatorFactory;
 
 @Service("userService")
 public class UserService {
@@ -37,7 +37,7 @@ public class UserService {
 	@Autowired
 	private ApplicationEventPublisher eventPublisher;
 	@Autowired
-	private ValidationFactory validationFactory;
+	private ValidatorFactory validationFactory;
 	
 	public void saveUser(User user, WebRequest request) throws SesValidationException {
 		

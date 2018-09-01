@@ -44,7 +44,7 @@ import com.fdmgroup.ses.stockExchange.SaleForm;
 import com.fdmgroup.ses.stockExchange.TransactionForm;
 import com.fdmgroup.ses.validation.SesValidationException;
 import com.fdmgroup.ses.validation.UserValidator;
-import com.fdmgroup.ses.validation.ValidationFactory;
+import com.fdmgroup.ses.validation.ValidatorFactory;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
@@ -64,7 +64,7 @@ public class UserServiceTest {
 	private UserRepository userRepo;
 	
 	@Mock
-	private ValidationFactory validationFactory;
+	private ValidatorFactory validationFactory;
 	@Mock
 	private UserValidator userValidator;
 	
