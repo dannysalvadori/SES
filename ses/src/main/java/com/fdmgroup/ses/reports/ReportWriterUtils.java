@@ -11,27 +11,21 @@ public class ReportWriterUtils {
 		String output = "";
 		Object intermediateObject = sourceObject;
 		
-		// Split field path such that Company_Name --> Company, Name
+		// Split field path such that Company.Name --> Company, Name
 		String[] fields = fieldPath.split("\\.");
 		
 		try {
-			
 			for (Integer i = 0; i < fields.length; i++) {
 				String field = fields[i];
 				intermediateObject = intermediateObject.getClass().getMethod("get" + field).invoke(intermediateObject);
 				output = String.valueOf(intermediateObject);
 			}
 		
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException e) {
-			// TODO: handle properly
-			e.printStackTrace();
+		} catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| SecurityException e) {
 			System.out.println("Something went wrong attempting to get field with name " + fieldPath + " from an "
 					+ "object of type " + intermediateObject.getClass().toString());
-		
-		} catch (NoSuchMethodException e) {
-			// TODO: handle properly
-			e.printStackTrace();
-			System.out.println("No such method: " + intermediateObject.getClass().toString() + ".get" + fieldPath);
+			output = "";
 		}
 		
 		return output;
