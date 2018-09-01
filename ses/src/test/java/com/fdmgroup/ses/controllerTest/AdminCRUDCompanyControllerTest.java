@@ -26,8 +26,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fdmgroup.ses.controller.AdminCRUDCompanyController;
 import com.fdmgroup.ses.model.Company;
 import com.fdmgroup.ses.repository.CompanyRepository;
-import com.fdmgroup.ses.service.CompanyService;
-import com.fdmgroup.ses.stockExchange.TransactionForm;
 import com.fdmgroup.ses.validation.CompanyValidator;
 import com.fdmgroup.ses.validation.SesValidationException;
 import com.fdmgroup.ses.validation.ValidationFactory;

@@ -108,12 +108,12 @@ public class TransactionValidatorTest extends ValidationTest<TransactionValidato
 	@Test
 	public void insufficientCreditTest() {
 		// Set empty transaction form
-		TransactionForm f = createTransactionForm(); // transaction value is 500
-		u.setCredit(new BigDecimal(100)); // Set insufficient credit
+		TransactionForm f = createTransactionForm(); // transaction value is 50
+		u.setCredit(new BigDecimal(10)); // Set insufficient credit
 		when(cardService.findAllForCurrentUser()).thenReturn(cards);
 		when(companyRepo.findBySymbol(f.getCompanies().get(0).getSymbol())).thenReturn(f.getCompanies().get(0));
 		validator.setTransactionForm(f);
-		expectedFailures.add(generateInsufficientCreditMessage(new BigDecimal(500), new BigDecimal(100)));
+		expectedFailures.add(generateInsufficientCreditMessage(new BigDecimal(50), new BigDecimal(10)));
 		runTest();
 	}
 
@@ -123,9 +123,10 @@ public class TransactionValidatorTest extends ValidationTest<TransactionValidato
 	@Test
 	public void insufficientStockTest() {
 		// Set empty transaction form
-		TransactionForm f = createTransactionForm(); // Available shares is 100
+		TransactionForm f = createTransactionForm(); // Available shares is 2,000,000
+		u.setCredit(new BigDecimal(20000000)); // 15 million credit required
 		Company c = f.getCompanies().get(0);
-		c.setTransactionQuantity(110l); // Set transaction request to exceed 100
+		c.setTransactionQuantity(3000000l); // Set transaction request to exceed availibility
 		when(cardService.findAllForCurrentUser()).thenReturn(cards);
 		when(companyRepo.findBySymbol(c.getSymbol())).thenReturn(c);
 		validator.setTransactionForm(f);

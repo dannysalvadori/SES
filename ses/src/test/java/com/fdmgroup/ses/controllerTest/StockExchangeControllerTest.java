@@ -303,8 +303,6 @@ public class StockExchangeControllerTest {
 		assertTrue("transactionForm object is wrong type", transactionFormObject instanceof TransactionForm);
 		txForm = (TransactionForm) transactionFormObject;
 		assertEquals("Wrong number of companies", 1, txForm.getCompanies().size());
-		assertEquals("Wrong number of available shares",
-				Long.valueOf(100), Long.valueOf(txForm.getCompanies().get(0).getAvailableShares()));
 	}
 
 	/**

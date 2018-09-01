@@ -18,7 +18,7 @@ public class CompanyValidator extends ModelValidator {
 	public static final String FAIL_CREATION_VALUE_RANGE = "New companies must have a starting stock value between "
 			+ CREATIONS_LOWER_VALUE_LIMIT + " and " + CREATIONS_UPPER_VALUE_LIMIT + ", inclusive.";
 	public static final String FAIL_NEGATIVE_VALUE = "Stock value cannot be negative.";
-	public static final String FAIL_NEGATIVE_QUANTITY = "Stock quantty cannot be negative.";
+	public static final String FAIL_NEGATIVE_QUANTITY = "Stock quantity cannot be negative.";
 	
 	private Company company;
 
