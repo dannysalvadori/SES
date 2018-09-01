@@ -66,7 +66,7 @@ public class TransactionValidatorTest extends ValidationTest<TransactionValidato
 	 * If validation passes all criteria, no failures are thrown
 	 */
 	@Test
-	public void insertSuccessTest() {
+	public void transactionSuccessTest() {
 		TransactionForm f = createTransactionForm();
 		when(cardService.findAllForCurrentUser()).thenReturn(cards);
 		when(companyRepo.findBySymbol(f.getCompanies().get(0).getSymbol())).thenReturn(f.getCompanies().get(0));

@@ -13,7 +13,15 @@ import com.fdmgroup.ses.stockExchange.SaleForm;
 
 @Component
 public class SaleValidator extends ModelValidator {
+	
+	public static final String FAIL_NO_STOCK_SELECTED = "You must select at least one stock to sell.";
 
+	public static String generateInsufficientOwnedStockMessage(Company company, Long quantityOwned) {
+		return "Insufficient stocks for " + company.getSymbol() + ": "
+				+ company.getTransactionQuantity() + " to be sold; "
+				+ quantityOwned + " owned.";
+	}
+	
 	@Autowired
 	private UserService userService;
 
@@ -39,7 +47,17 @@ public class SaleValidator extends ModelValidator {
 		
 		// At least one share must be selected
 		if (saleForm.getOwnedShares().size() < 1) {
-			failures.add("You must select at least one stock to sell.");
+			failures.add(FAIL_NO_STOCK_SELECTED);
+		} else {
+			Boolean containsNonZeroSale = false;
+			for (OwnedShare sale : saleForm.getOwnedShares()) {
+				if (sale.getCompany().getTransactionQuantity() != 0) {
+					containsNonZeroSale = true;
+				}
+			}
+			if (!containsNonZeroSale) {
+				failures.add(FAIL_NO_STOCK_SELECTED);
+			}
 		}
 		
 		// For each stock...
@@ -52,9 +70,7 @@ public class SaleValidator extends ModelValidator {
 			
 			// ... you must own sufficient stock to be able to sell it 
 			if (dbOwnedQuantity < saleQuantity) {
-				failures.add("Insufficient stocks for " + company.getSymbol() + ": "
-						+ saleQuantity + " to be sold; "
-						+ dbOwnedQuantity + " owned.");
+				failures.add(generateInsufficientOwnedStockMessage(company, dbOwnedQuantity));
 			}
 			
 		}

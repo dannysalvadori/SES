@@ -87,7 +87,6 @@ public class RegistrationController {
 		} catch (SesValidationException ex) {
 			// TODO: error handling
 			modelAndView.addObject("successfulRegistration", false);
-			ex.printStackTrace();
 		}
 		return modelAndView;
 	}
