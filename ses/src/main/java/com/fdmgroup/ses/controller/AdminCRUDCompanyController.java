@@ -53,12 +53,11 @@ public class AdminCRUDCompanyController {
     ) {
 		try {
 			companyService.save(company);
-//			modelAndView.addObject("company", null);
 			modelAndView = goToManageCompanies(modelAndView);
 		} catch (SesValidationException ex) {
 			modelAndView.addObject("failures", ValidationUtils.stringifyFailures(ex.getFailures()));
 			modelAndView.setViewName("admin/createCompany");
-		}		
+		}
 		return modelAndView;
 	}
 	
@@ -70,15 +69,10 @@ public class AdminCRUDCompanyController {
     		ModelAndView modelAndView,
     		@RequestParam(name="cid") int companyId
     ) {
-		try {
-			Company company = companyRepo.findById(companyId);
-			modelAndView.setViewName("admin/editCompany");
-			company.setId(companyId);
-			modelAndView.addObject("company", company);
-		} catch (Exception e) {
-			// TODO: exception handling
-			System.out.println("editCompany - Exception happened");
-		}
+		Company company = companyRepo.findById(companyId);
+		modelAndView.setViewName("admin/editCompany");
+		company.setId(companyId);
+		modelAndView.addObject("company", company);
 		return modelAndView;
 	}
 	
@@ -96,13 +90,13 @@ public class AdminCRUDCompanyController {
 			update.setName(company.getName());
 			update.setAvailableShares(company.getAvailableShares());
 			update.setCurrentShareValue(company.getCurrentShareValue());
-			companyRepo.save(update);
-		} catch (Exception e) {
-			// TODO: exception handling
-			System.out.println("doEditCompany - Exception happened");
+			companyService.save(update);
+			modelAndView = goToManageCompanies(modelAndView);
+		} catch (SesValidationException ex) {
+			modelAndView.addObject("failures", ValidationUtils.stringifyFailures(ex.getFailures()));
+			modelAndView = goToEditCompany(modelAndView, company.getId());
 		}
-		modelAndView = goToManageCompanies(modelAndView);
-		modelAndView.addObject("company", null);
+		
 		return modelAndView;
 	}
 	
