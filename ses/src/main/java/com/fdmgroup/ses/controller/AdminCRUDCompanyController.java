@@ -9,8 +9,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fdmgroup.ses.model.Company;
 import com.fdmgroup.ses.repository.CompanyRepository;
-import com.fdmgroup.ses.service.CompanyService;
 import com.fdmgroup.ses.validation.SesValidationException;
+import com.fdmgroup.ses.validation.ValidationFactory;
 import com.fdmgroup.ses.validation.ValidationUtils;
 
 @Controller
@@ -20,7 +20,7 @@ public class AdminCRUDCompanyController {
 	CompanyRepository companyRepo;
 	
 	@Autowired
-	CompanyService companyService;
+	private ValidationFactory validationFactory;
 
 	/**
 	 * Go to the company management page
@@ -52,11 +52,12 @@ public class AdminCRUDCompanyController {
     		@ModelAttribute("company") Company company
     ) {
 		try {
-			companyService.save(company);
+			validationFactory.getValidator(company).validate();
+			companyRepo.save(company);
 			modelAndView = goToManageCompanies(modelAndView);
 		} catch (SesValidationException ex) {
 			modelAndView.addObject("failures", ValidationUtils.stringifyFailures(ex.getFailures()));
-			modelAndView.setViewName("admin/createCompany");
+			modelAndView = goToCreateCompany(modelAndView);
 		}
 		return modelAndView;
 	}
@@ -90,7 +91,8 @@ public class AdminCRUDCompanyController {
 			update.setName(company.getName());
 			update.setAvailableShares(company.getAvailableShares());
 			update.setCurrentShareValue(company.getCurrentShareValue());
-			companyService.save(update);
+			validationFactory.getValidator(company).validate();
+			companyRepo.save(update);
 			modelAndView = goToManageCompanies(modelAndView);
 		} catch (SesValidationException ex) {
 			modelAndView.addObject("failures", ValidationUtils.stringifyFailures(ex.getFailures()));
