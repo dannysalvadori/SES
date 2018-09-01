@@ -19,7 +19,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.ModelAndView;
@@ -28,7 +27,6 @@ import com.fdmgroup.ses.controller.ReportsController;
 import com.fdmgroup.ses.model.Company;
 import com.fdmgroup.ses.reports.ReportForm;
 import com.fdmgroup.ses.service.CompanyService;
-import com.fdmgroup.ses.service.OwnedSharesService;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
