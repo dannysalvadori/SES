@@ -9,12 +9,18 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fdmgroup.ses.model.Company;
 import com.fdmgroup.ses.repository.CompanyRepository;
+import com.fdmgroup.ses.service.CompanyService;
+import com.fdmgroup.ses.validation.SesValidationException;
+import com.fdmgroup.ses.validation.ValidationUtils;
 
 @Controller
 public class AdminCRUDCompanyController {
 
 	@Autowired
 	CompanyRepository companyRepo;
+	
+	@Autowired
+	CompanyService companyService;
 
 	/**
 	 * Go to the company management page
@@ -46,13 +52,13 @@ public class AdminCRUDCompanyController {
     		@ModelAttribute("company") Company company
     ) {
 		try {
-			companyRepo.save(company);
-		} catch (Exception e) {
-			// TODO: exception handling
-			System.out.println("doCreateCompany - Exception happened");
-		}
-		modelAndView = goToManageCompanies(modelAndView);
-		modelAndView.addObject("company", null);
+			companyService.save(company);
+//			modelAndView.addObject("company", null);
+			modelAndView = goToManageCompanies(modelAndView);
+		} catch (SesValidationException ex) {
+			modelAndView.addObject("failures", ValidationUtils.stringifyFailures(ex.getFailures()));
+			modelAndView.setViewName("admin/createCompany");
+		}		
 		return modelAndView;
 	}
 	
