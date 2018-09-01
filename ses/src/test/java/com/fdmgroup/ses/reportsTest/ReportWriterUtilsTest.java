@@ -2,7 +2,6 @@ package com.fdmgroup.ses.reportsTest;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -17,11 +16,6 @@ import com.fdmgroup.ses.reports.ReportWriterUtils;
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
 public class ReportWriterUtilsTest {
-	
-	@Before
-	public void setUp() throws Exception {
-		
-	}
 
 	/**
 	 * getFieldValue get the value of a valid property of a given object, one object deep
