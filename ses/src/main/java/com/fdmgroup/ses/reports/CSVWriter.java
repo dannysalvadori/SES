@@ -11,7 +11,8 @@ public class CSVWriter<T> extends ReportWriter<T> {
 		for (String column : report.getRowDefinition().getColumnValueMap().keySet()) {
 			opening += column + ",";
 		}
-		opening += "\n";
+		// Remove trailing comma after last column
+		opening = opening.substring(0, opening.lastIndexOf(",")) + "\n";
 		return opening;
 	};
 	
