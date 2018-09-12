@@ -25,8 +25,8 @@ public class CreditCardUtils {
 		CreditCardDetail card = new CreditCardDetail();
 		card.setCardHolderName(VALID_CARDHOLDER_NAME);
 		card.setCardNumber(VALID_CARD_NUMBER);
-		card.setCardSignature(VALID_CARD_SIGNATURE);
 		card.setExpired(0);
+		card.setId(1);
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.MONTH, 1);
 		card.setExpiryDate(c.getTime());
