@@ -124,7 +124,7 @@ public class UserServiceTest {
 		// Confirm critical business logic methods were called
 		verify(userValidator, times(1)).validate();
 		verify(userRepo, times(1)).save(u);
-		verify(eventPublisher, times(1)).publishEvent(any());;
+		verify(eventPublisher, times(1)).publishEvent(any());
 	}
 
 	/**
