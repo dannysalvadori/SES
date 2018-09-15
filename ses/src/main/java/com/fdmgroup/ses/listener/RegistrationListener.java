@@ -16,6 +16,9 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 	@Autowired
 	private VerificationTokenRepository vtRepo;
 	
+	@Autowired
+	private EmailSender emailSender;
+	
 	@Override
 	public void onApplicationEvent(OnRegistrationCompleteEvent event) {
 		this.confirmRegistration(event);
@@ -31,7 +34,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 		
 		// Send email and persist verification token
 		try {
-			EmailSender.sendEmail(new RegistrationEmail(event, vt));
+			emailSender.sendEmail(new RegistrationEmail(event, vt));
 			vtRepo.save(vt);
 		} catch (Exception e) {
 			// TODO: Proper error handling
