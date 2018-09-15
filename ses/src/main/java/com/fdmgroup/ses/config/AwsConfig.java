@@ -9,12 +9,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("ses.awsconfig")
 public class AwsConfig {
 	
-    private String from = "danny.salvadori@gmail.com";
-    private String fromName = "stockSim Admin";
-    private String smtpUsername = "AKIAIQ2MI7FOK3W6HWSQ";
-    private String smtpPassword = "AlhZh5dvsVjdFvvWmeP6v8JtgTu+p49ogYZr7Rc+JCf4";
-    private String host = "email-smtp.eu-west-1.amazonaws.com";
-    private int port = 587;
+    private String from;
+    private String fromName;
+    private String smtpUsername;
+    private String smtpPassword;
+    private String host;
+    private int port;
 
     public String getFrom() {
 		return from;

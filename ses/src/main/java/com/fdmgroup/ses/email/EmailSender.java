@@ -10,6 +10,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fdmgroup.ses.config.AwsConfig;
@@ -17,9 +18,10 @@ import com.fdmgroup.ses.config.AwsConfig;
 @Component
 public class EmailSender {
 	
-	private static AwsConfig awsConfig = new AwsConfig();
+	@Autowired
+	private AwsConfig awsConfig;
 	
-	public static void sendEmail(Email email) throws MessagingException, UnsupportedEncodingException  {
+	public void sendEmail(Email email) throws MessagingException, UnsupportedEncodingException  {
 
         // Create a Properties object to contain connection configuration information.
     	Properties props = System.getProperties();

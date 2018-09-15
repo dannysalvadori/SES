@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.fdmgroup.ses.config.AwsConfig;
 import com.fdmgroup.ses.email.Email;
 import com.fdmgroup.ses.email.EmailSender;
 import com.fdmgroup.ses.email.RegistrationEmail;
@@ -34,6 +35,9 @@ public class EmailSenderTest {
 	
 	@Mock
 	private OnRegistrationCompleteEvent event;
+	
+	@Mock
+	private AwsConfig awsConfig;
 	
 	private User u = createUser();
 	private String tokenId = "tokenId";
@@ -57,7 +61,7 @@ public class EmailSenderTest {
 		// User email address is not AWS verified
 		VerificationToken vt = new VerificationToken(u, tokenId);
 		Email registrationEmail = new RegistrationEmail(event, vt);
-		EmailSender.sendEmail(registrationEmail);
+		emailSender.sendEmail(registrationEmail);
 	}
 
 }

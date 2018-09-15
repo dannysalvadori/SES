@@ -10,10 +10,11 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.fdmgroup.ses.config.AwsConfig;
 import com.fdmgroup.ses.config.QueryConfig;
 
 @SpringBootApplication(scanBasePackages="com.fdmgroup.ses")
-@EnableConfigurationProperties(QueryConfig.class)
+@EnableConfigurationProperties({QueryConfig.class, AwsConfig.class})
 @EnableScheduling
 public class SesApplication extends SpringBootServletInitializer {
 
