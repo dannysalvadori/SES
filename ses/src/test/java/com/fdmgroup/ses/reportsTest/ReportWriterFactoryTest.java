@@ -4,28 +4,22 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.math.BigDecimal;
-
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.reports.CSVWriter;
 import com.fdmgroup.ses.reports.CompanyReport;
 import com.fdmgroup.ses.reports.Report;
 import com.fdmgroup.ses.reports.ReportWriter;
 import com.fdmgroup.ses.reports.ReportWriterFactory;
 import com.fdmgroup.ses.reports.XMLWriter;
-import com.fdmgroup.ses.validation.UserValidator;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
 public class ReportWriterFactoryTest {
 	
-	private ReportWriterFactory factory = new ReportWriterFactory();
 	private ReportWriter<?> reportWriter = null;  
 	private Report<?> report = new CompanyReport();
 	

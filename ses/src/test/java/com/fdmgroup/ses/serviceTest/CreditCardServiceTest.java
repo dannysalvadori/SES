@@ -6,17 +6,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.lang.reflect.Array;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import static com.fdmgroup.ses.utils.UserUtils.*;
-import static com.fdmgroup.ses.utils.RoleUtils.*;
-import static com.fdmgroup.ses.utils.StockExchangeUtils.*;
 import static com.fdmgroup.ses.utils.CreditCardUtils.*;
 
 import org.junit.Before;
@@ -26,31 +18,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.context.request.WebRequest;
 
-import com.fdmgroup.ses.model.Company;
 import com.fdmgroup.ses.model.CreditCardDetail;
-import com.fdmgroup.ses.model.OwnedShare;
-import com.fdmgroup.ses.model.Role;
 import com.fdmgroup.ses.model.User;
-import com.fdmgroup.ses.model.VerificationToken;
 import com.fdmgroup.ses.repository.CreditCardDetailRepository;
-import com.fdmgroup.ses.repository.RoleRepository;
-import com.fdmgroup.ses.repository.UserRepository;
-import com.fdmgroup.ses.repository.VerificationTokenRepository;
 import com.fdmgroup.ses.service.CreditCardService;
 import com.fdmgroup.ses.service.UserService;
-import com.fdmgroup.ses.stockExchange.SaleForm;
-import com.fdmgroup.ses.stockExchange.TransactionForm;
 import com.fdmgroup.ses.validation.CreditCardValidator;
 import com.fdmgroup.ses.validation.SesValidationException;
-import com.fdmgroup.ses.validation.UserValidator;
 import com.fdmgroup.ses.validation.ValidatorFactory;
 
 @RunWith(MockitoJUnitRunner.class)
