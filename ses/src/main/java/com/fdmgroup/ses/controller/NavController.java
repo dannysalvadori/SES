@@ -7,6 +7,11 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class NavController {	
 	
+	@RequestMapping(value="/")
+    public ModelAndView index() {
+		return new ModelAndView("index");
+    }
+	
 	/**
 	 * Go to Admin home page
 	 */

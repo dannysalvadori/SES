@@ -13,7 +13,7 @@ public class OwnedSharesReport extends Report<OwnedShare> {
 		rowDefinition.putColumnValueMapping("Company Name", "Company.Name");
 		rowDefinition.putColumnValueMapping("Average Purchase Price", "AveragePurchasePrice");
 		rowDefinition.putColumnValueMapping("Quantity Owned", "Quantity");
-		rowDefinition.putColumnValueMapping("Gains", "Gains");
+		rowDefinition.putColumnValueMapping("Gains", "Company.Gains");
 	}
 
 	@Override

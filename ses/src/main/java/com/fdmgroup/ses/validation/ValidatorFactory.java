@@ -10,7 +10,7 @@ import com.fdmgroup.ses.stockExchange.SaleForm;
 import com.fdmgroup.ses.stockExchange.TransactionForm;
 
 @Component
-public class ValidationFactory {
+public class ValidatorFactory {
 
 	@Autowired
 	private UserValidator userValidator;

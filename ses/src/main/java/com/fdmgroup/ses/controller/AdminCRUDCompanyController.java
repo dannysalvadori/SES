@@ -9,12 +9,18 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fdmgroup.ses.model.Company;
 import com.fdmgroup.ses.repository.CompanyRepository;
+import com.fdmgroup.ses.validation.SesValidationException;
+import com.fdmgroup.ses.validation.ValidatorFactory;
+import com.fdmgroup.ses.validation.ValidationUtils;
 
 @Controller
 public class AdminCRUDCompanyController {
 
 	@Autowired
 	CompanyRepository companyRepo;
+	
+	@Autowired
+	private ValidatorFactory validationFactory;
 
 	/**
 	 * Go to the company management page
@@ -46,13 +52,13 @@ public class AdminCRUDCompanyController {
     		@ModelAttribute("company") Company company
     ) {
 		try {
+			validationFactory.getValidator(company).validate();
 			companyRepo.save(company);
-		} catch (Exception e) {
-			// TODO: exception handling
-			System.out.println("doCreateCompany - Exception happened");
+			modelAndView = goToManageCompanies(modelAndView);
+		} catch (SesValidationException ex) {
+			modelAndView.addObject("failures", ValidationUtils.stringifyFailures(ex.getFailures()));
+			modelAndView = goToCreateCompany(modelAndView);
 		}
-		modelAndView = goToManageCompanies(modelAndView);
-		modelAndView.addObject("company", null);
 		return modelAndView;
 	}
 	
@@ -64,15 +70,10 @@ public class AdminCRUDCompanyController {
     		ModelAndView modelAndView,
     		@RequestParam(name="cid") int companyId
     ) {
-		try {
-			Company company = companyRepo.findById(companyId);
-			modelAndView.setViewName("admin/editCompany");
-			company.setId(companyId);
-			modelAndView.addObject("company", company);
-		} catch (Exception e) {
-			// TODO: exception handling
-			System.out.println("editCompany - Exception happened");
-		}
+		Company company = companyRepo.findById(companyId);
+		modelAndView.setViewName("admin/editCompany");
+		company.setId(companyId);
+		modelAndView.addObject("company", company);
 		return modelAndView;
 	}
 	
@@ -90,13 +91,14 @@ public class AdminCRUDCompanyController {
 			update.setName(company.getName());
 			update.setAvailableShares(company.getAvailableShares());
 			update.setCurrentShareValue(company.getCurrentShareValue());
+			validationFactory.getValidator(company).validate();
 			companyRepo.save(update);
-		} catch (Exception e) {
-			// TODO: exception handling
-			System.out.println("doEditCompany - Exception happened");
+			modelAndView = goToManageCompanies(modelAndView);
+		} catch (SesValidationException ex) {
+			modelAndView.addObject("failures", ValidationUtils.stringifyFailures(ex.getFailures()));
+			modelAndView = goToEditCompany(modelAndView, company.getId());
 		}
-		modelAndView = goToManageCompanies(modelAndView);
-		modelAndView.addObject("company", null);
+		
 		return modelAndView;
 	}
 	

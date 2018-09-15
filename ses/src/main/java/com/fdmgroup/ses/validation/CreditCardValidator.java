@@ -9,13 +9,18 @@ import com.fdmgroup.ses.model.CreditCardDetail;
 @Component
 public class CreditCardValidator extends ModelValidator {
 	
+	public static final String FAIL_CARD_NUMBER_LENGTH = "Card number must be exactly 16 numbers.";
+	public static final String FAIL_CARDHOLDER_BLANK = "Card holder name must not be blank.";
+	public static final String FAIL_CARD_EXPIRED = "This card appears to have already expired. Please check the expiry"
+			+ " date you entered.";
+	
 	private CreditCardDetail creditCardDetail;
 
 	/**
 	 * Validates new Credit Card properties:
 	 * # Card number must be 16 numbers long
 	 * # Card holder name must not be blank
-	 * # The expiry date must not have already passed
+	 * # The expiration date must not have already passed
 	 */
 	@Override
 	public void validate() throws SesValidationException {
@@ -23,15 +28,16 @@ public class CreditCardValidator extends ModelValidator {
 		failures.clear();
 		
 		if (!creditCardDetail.getCardNumber().matches("^[0-9]{16}$")) {
-			failures.add("Card number must be exactly 16 numbers.");
+			failures.add(FAIL_CARD_NUMBER_LENGTH);
 		}
 		
-		if (creditCardDetail.getCardHolderName().length() == 0) {
-			failures.add("Card holder name must not be blank.");
+		if (creditCardDetail.getCardHolderName() == null
+				|| creditCardDetail.getCardHolderName().length() == 0) {
+			failures.add(FAIL_CARDHOLDER_BLANK);
 		}
 		
 		if (creditCardDetail.getExpiryDate().before(Calendar.getInstance().getTime())) {
-			failures.add("This card appears to have already expired. Please check the expiry date you entered.");
+			failures.add(FAIL_CARD_EXPIRED);
 		}
 		
 		throwFailures();

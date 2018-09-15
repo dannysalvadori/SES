@@ -1,6 +1,8 @@
 package com.fdmgroup.ses.controllerTest;
 
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -24,6 +26,9 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fdmgroup.ses.controller.AdminCRUDCompanyController;
 import com.fdmgroup.ses.model.Company;
 import com.fdmgroup.ses.repository.CompanyRepository;
+import com.fdmgroup.ses.validation.CompanyValidator;
+import com.fdmgroup.ses.validation.SesValidationException;
+import com.fdmgroup.ses.validation.ValidatorFactory;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
@@ -35,9 +40,14 @@ public class AdminCRUDCompanyControllerTest {
 	
 	@Mock
 	private CompanyRepository companyRepo;
-
+	
 	@Mock
 	private WebRequest webRequest;
+	
+	@Mock
+	private ValidatorFactory validationFactory;
+	@Mock
+	private CompanyValidator validator;
 	
 	private List<Company> allCompanies = new  ArrayList<>();
 
@@ -45,6 +55,7 @@ public class AdminCRUDCompanyControllerTest {
 	public void setUp() throws Exception {
 		setupAllCompanies();
 		when(companyRepo.findAll()).thenReturn(allCompanies);
+		when(validationFactory.getValidator(any())).thenReturn(validator);
 	}
 	
 	private void setupAllCompanies() {
@@ -89,7 +100,7 @@ public class AdminCRUDCompanyControllerTest {
 	 * If validation succeeds, doCreateCompany() inserts the given Company object into the DB
 	 */
 	@Test
-	public void doCreateCompanySuccessTest() {
+	public void doCreateCompanySuccessTest() throws SesValidationException {
 		Company c = createCompany();
 		mav = ctrl.doCreateCompany(mav, c);
 
@@ -105,11 +116,32 @@ public class AdminCRUDCompanyControllerTest {
 	}
 	
 	/**
-	 * If validation fails, doCreateCompany() .... TODO: the code does nothing different if it fails! 
+	 * If validation fails, doCreateCompany() returns to editCompany with failure messages 
 	 */
 	@Test
-	public void doCreateCompanyFailureTest() {
-		// implement
+	public void doCreateCompanyFailureTest() throws SesValidationException {
+		Company c = createCompany();
+		
+		//Setup validation failure
+		SesValidationException vEx = new SesValidationException();
+		final String VALIDATION_FAILURE = "VALIDATION_FAILURE";
+		vEx.addFailure(VALIDATION_FAILURE);	
+		doThrow(vEx).when(validator).validate();
+		
+		mav = ctrl.doCreateCompany(mav, c);
+		
+		// Confirm failures were added to model
+		Object failuresObject = mav.getModel().get("failures");
+		assertNotEquals("Failures model object shouldn't be null", null, failuresObject);
+		assertTrue("purchaseFailures object is wrong type", failuresObject instanceof String);
+		String failures = (String) failuresObject;
+		assertEquals("Wrong failure", VALIDATION_FAILURE, failures);
+
+		// Confirm save was attempted and view reset to edit company
+		verify(companyRepo, times(0)).save(c);
+		assertEquals("Wrong view name", "admin/createCompany", mav.getViewName());
+		assertNotEquals(null, mav.getModel().get("company"));
+		assertTrue("company model object is the wrong type", mav.getModel().get("company") instanceof Company);
 	}
 
 	/**
@@ -135,7 +167,7 @@ public class AdminCRUDCompanyControllerTest {
 	 * doEditCompany() updates the Company in the DB, and sets the view back to admin/manageCompanies.jsp
 	 */
 	@Test
-	public void doEditCompanySuccessTest() {
+	public void doEditCompanySuccessTest() throws SesValidationException {
 		Company c = allCompanies.get(0);
 		when(companyRepo.findById(c.getId())).thenReturn(c);
 		
@@ -159,8 +191,34 @@ public class AdminCRUDCompanyControllerTest {
 	 * doEditCompany() failure ... TODO: the code does nothing if it fails
 	 */
 	@Test
-	public void doEditCompanyFailureTest() {
-		// implement
+	public void doEditCompanyFailureTest() throws SesValidationException {
+		Company c = allCompanies.get(0);
+		when(companyRepo.findById(c.getId())).thenReturn(c);
+		
+		Company c2 = createCompany();
+		c2.setId(c.getId());
+		c2.setName("NEW_NAME");
+		
+		//Setup validation failure
+		SesValidationException vEx = new SesValidationException();
+		final String VALIDATION_FAILURE = "VALIDATION_FAILURE";
+		vEx.addFailure(VALIDATION_FAILURE);	
+		doThrow(vEx).when(validator).validate();
+		
+		mav = ctrl.doEditCompany(mav, c2);
+		
+		// Confirm failures were added to model
+		Object failuresObject = mav.getModel().get("failures");
+		assertNotEquals("Failures model object shouldn't be null", null, failuresObject);
+		assertTrue("purchaseFailures object is wrong type", failuresObject instanceof String);
+		String failures = (String) failuresObject;
+		assertEquals("Wrong failure", VALIDATION_FAILURE, failures);
+
+		// Confirm save was attempted and view reset to edit company
+		verify(companyRepo, times(0)).save(c);
+		assertEquals("Wrong view name", "admin/editCompany", mav.getViewName());
+		assertNotEquals(null, mav.getModel().get("company"));
+		assertTrue("company model object is the wrong type", mav.getModel().get("company") instanceof Company);
 	}
 
 }

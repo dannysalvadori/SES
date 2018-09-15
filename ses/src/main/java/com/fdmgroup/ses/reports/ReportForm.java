@@ -16,10 +16,10 @@ public class ReportForm {
 	private Set<String> availableFormats;
 	private Map<String, Class<?>> availableTypes;
 	private Set<String> availableStockSymbols;
-	private static final String FORMAT_CSV = "CSV"; 
-	private static final String FORMAT_XML = "XML"; 
-	private static final String TYPE_COMPANY = "Public Stocks"; 
-	private static final String TYPE_OWNED_SHARE = "My Owned Stocks"; 
+	public static final String FORMAT_CSV = "CSV"; 
+	public static final String FORMAT_XML = "XML"; 
+	public static final String TYPE_COMPANY = "Public Stocks"; 
+	public static final String TYPE_OWNED_SHARE = "My Owned Stocks"; 
 	
 	// Form properties
 	private String format;

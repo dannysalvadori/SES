@@ -1,6 +1,7 @@
 package com.fdmgroup.ses.controllerTest;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -14,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -96,12 +98,40 @@ public class RegistrationControllerTest {
 	 * goToEditUser(ModelAndView, String) activates the user and sets view to login page with a success message
 	 */
 	@Test
-	public void goToEditUserTest() throws SesValidationException {
+	public void goToEditUserSuccessTest() throws SesValidationException {
 		String tokenId = "tokenId";
 		mav = ctrl.goToEditUser(mav, tokenId);
 		assertEquals("Wrong view name", "login", mav.getViewName());
-		assertEquals("Wrong view name", true, mav.getModel().get("successfulRegistration"));
+		assertEquals("Wrong success message", true, mav.getModel().get("successfulRegistration"));
 		verify(userService, times(1)).activateUser(tokenId);
+	}
+	
+	/**
+	 * goToEditUser(ModelAndView, String) activates the user and sets view to login page with a success message
+	 */
+	@Test
+	public void goToEditUserFailureTest() throws SesValidationException {
+		String tokenId = "tokenId";
+		
+		// Setup failure
+		final String VALIDATION_FAILURE = "VALIDATION_FAILURE";
+		SesValidationException vEx = new SesValidationException();
+		vEx.addFailure(VALIDATION_FAILURE);
+		doThrow(vEx).when(userService).activateUser(tokenId);
+		
+		mav = ctrl.goToEditUser(mav, tokenId);
+		
+		// NOTE: Controller has a todo to improve fail behaviour 
+		assertNotEquals("Wrong view name", "login", mav.getViewName());
+		assertEquals("Wrong success message", false, mav.getModel().get("successfulRegistration"));
+	}
+	
+	/**
+	 * TODO: write meaningful test
+	 */
+	@Test
+	public void initBinderTest() {
+		ctrl.initBinder(new WebDataBinder(null));
 	}
 
 }

@@ -21,6 +21,12 @@
 		<br/>
 		<br/>
 		
+		<c:forTokens items="${failures}" delims="|" var="failure">
+			<div class="alert alert-danger" id="asp-error">
+				<c:out value="${failure}"/>
+			</div>
+		</c:forTokens>
+		
 		<form:form action="../admin/doEditCompany" method="POST" modelAttribute="company" class="col-md-6 col-md-offset-3">
 			<label for="symbol">Symbol</label>
 			<form:input id="symbol" path="symbol" placeholder="${company.symbol}" class="form-control"/>

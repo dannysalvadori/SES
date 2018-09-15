@@ -8,6 +8,7 @@ import com.fdmgroup.ses.model.Company;
 import com.fdmgroup.ses.model.OwnedShare;
 import com.fdmgroup.ses.stockExchange.SaleForm;
 import com.fdmgroup.ses.stockExchange.TransactionForm;
+import com.fdmgroup.ses.validation.CompanyValidator;
 
 public class StockExchangeUtils {
 
@@ -17,9 +18,10 @@ public class StockExchangeUtils {
 	public static Company createCompany() {
 		Company c = new Company();
 		c.setName("Test Company");
-		c.setSymbol("DFTC");
-		c.setAvailableShares(100l);
-		c.setCurrentShareValue(new BigDecimal(50));
+		c.setSymbol("SEUTC");
+		c.setAvailableShares(CompanyValidator.CREATIONS_LOWER_QUANTITY_LIMIT); // 2,000,000
+		c.setCurrentShareValue(CompanyValidator.CREATIONS_LOWER_VALUE_LIMIT); // 5
+		c.setTransactionQuantity(10l); // TX value of 50
 		return c;
 	}
 	

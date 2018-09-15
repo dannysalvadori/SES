@@ -9,13 +9,13 @@ import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.stockExchange.SaleForm;
 import com.fdmgroup.ses.stockExchange.TransactionForm;
 import com.fdmgroup.ses.validation.SesValidationException;
-import com.fdmgroup.ses.validation.ValidationFactory;
+import com.fdmgroup.ses.validation.ValidatorFactory;
 
 @Service("transactionService")
 public class TransactionService {
 	
 	@Autowired
-	private ValidationFactory validationFactory;
+	private ValidatorFactory validationFactory;
 
 	@Autowired
     private CompanyService companyService;

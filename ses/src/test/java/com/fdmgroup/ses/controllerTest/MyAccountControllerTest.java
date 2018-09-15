@@ -2,7 +2,11 @@ package com.fdmgroup.ses.controllerTest;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import static com.fdmgroup.ses.utils.CreditCardUtils.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,16 +22,19 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fdmgroup.ses.controller.MyAccountController;
+import com.fdmgroup.ses.model.CreditCardDetail;
 import com.fdmgroup.ses.model.OwnedShare;
 import com.fdmgroup.ses.model.TransactionHistory;
 import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.repository.TransactionHistoryRepository;
+import com.fdmgroup.ses.service.CreditCardService;
 import com.fdmgroup.ses.service.OwnedSharesService;
 import com.fdmgroup.ses.service.UserService;
 import com.fdmgroup.ses.stockExchange.SaleForm;
 import com.fdmgroup.ses.utils.StockExchangeUtils;
+import com.fdmgroup.ses.validation.SesValidationException;
 import com.fdmgroup.ses.validation.UserValidator;
-import com.fdmgroup.ses.validation.ValidationFactory;
+import com.fdmgroup.ses.validation.ValidatorFactory;
 
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
@@ -42,7 +49,11 @@ public class MyAccountControllerTest {
 	
 	@Mock
 	private UserService userService;
-	private static User stubCurrentUser = new User();
+	private static User currentUser = new User();
+	
+	@Mock
+	private CreditCardService creditCardService;
+	private List<CreditCardDetail> currentUsersCreditCards = new ArrayList<>();
 	
 	@Mock
 	private TransactionHistoryRepository txHistoryRepo;
@@ -51,14 +62,14 @@ public class MyAccountControllerTest {
 	private ModelAndView mav = new ModelAndView();
 	
 	@Mock
-	private ValidationFactory validationFactory;
+	private ValidatorFactory validationFactory;
 	private UserValidator userValidator;
 	
 
 	@Before
 	public void setUp() throws Exception {
 		// Stub "current user"
-		when(userService.findCurrentUser()).thenReturn(stubCurrentUser);
+		when(userService.findCurrentUser()).thenReturn(currentUser);
 		
 		// Stub "user's owned stocks"
 		stubCurrentUsersShares.add(StockExchangeUtils.createOwnedShare());
@@ -66,10 +77,21 @@ public class MyAccountControllerTest {
 		
 		// Stub "user's transaction history"
 		stubCurrentUsersTxHistory.add(new TransactionHistory());
-		when(txHistoryRepo.findByOwner(stubCurrentUser)).thenReturn(stubCurrentUsersTxHistory);
+		when(txHistoryRepo.findByOwner(currentUser)).thenReturn(stubCurrentUsersTxHistory);
 		
 		// Stub validators
 		when(validationFactory.getValidator(any(User.class))).thenReturn(userValidator);
+		
+		setupCreditCards();
+		when(creditCardService.findAllForCurrentUser()).thenReturn(currentUsersCreditCards);
+	}
+	
+	private void setupCreditCards() {
+		for (Integer i = 0; i < 2;i++) {
+			CreditCardDetail card = createCard(currentUser);
+			card.setCardNumber("000000000000000" + String.valueOf(i)); // i.e. 0000 0000 0000 0001 etc.
+			currentUsersCreditCards.add(card);
+		}
 	}
 	
 	/**
@@ -112,6 +134,16 @@ public class MyAccountControllerTest {
 		List<?> txHistory = (List<?>) txHistoryObject;
 		assertEquals("Wrong number of transaction history lines", 1, txHistory.size());
 		assertTrue("TxHistory was not of class TransactionHistory", txHistory.get(0) instanceof TransactionHistory);
+		
+		// Confirm user's credit cards were added to the model
+		Object creditCardsObject = mav.getModel().get("creditCardDetails");
+		assertNotEquals("creditCardDetails model object shouldn't be null", null, creditCardsObject);
+		assertTrue("creditCardDetails object is wrong type", creditCardsObject instanceof List<?>);
+		List<?> creditCards = (List<?>) creditCardsObject;
+		assertEquals("Wrong number of credit cards", 2, creditCards.size());
+		for (Object cardObject : creditCards) {
+			assertTrue("credit card was not of class CreditCardDetail", cardObject instanceof CreditCardDetail);
+		}
 	}
 	
 	/**
@@ -152,7 +184,7 @@ public class MyAccountControllerTest {
 	 */
 	@Test
 	public void doChangePasswordSuccessTest() {
-		mav = ctrl.doChangePassword(mav, stubCurrentUser);
+		mav = ctrl.doChangePassword(mav, currentUser);
 		
 		// Confirm view
 		assertEquals("Wrong view name", "user/myAccount", mav.getViewName());
@@ -160,17 +192,31 @@ public class MyAccountControllerTest {
 		// Confirm current user was added to the model
 		Object userObject = mav.getModel().get("user");
 		assertNotEquals("user model object shouldn't be null", null, userObject);
-		assertTrue("saleForm object is wrong type", userObject instanceof User);
+		assertTrue("user model object object is wrong type", userObject instanceof User);
 	}
 	
 	/**
-	 * TODO: implement test
 	 * If doChangePassword() fails validation it adds failure messages as "failures" and calls goToChangePassword(),
-	 *  resetting as per goToChangePasswordTest().
+	 * resetting as per goToChangePasswordTest().
 	 */
 	@Test
-	public void doChangePasswordFailureTest() {
-		// TODO: implement
+	public void doChangePasswordFailureTest() throws SesValidationException {
+		// Setup validation failure
+		final String VALIDATION_FAILURE = "VALIDATION_FAILURE";
+		SesValidationException vEx = new SesValidationException();
+		vEx.addFailure(VALIDATION_FAILURE);
+		doThrow(vEx).when(userService).saveUser(currentUser);
+		
+		mav = ctrl.doChangePassword(mav, currentUser);
+		
+		// Confirm view
+		assertEquals("Wrong view name", "user/changePassword", mav.getViewName());
+		
+		// Confirm failure was added to the model
+		Object failuresObject = mav.getModel().get("failures");
+		assertNotEquals("failures model object shouldn't be null", null, failuresObject);
+		assertTrue("failure object is wrong type", failuresObject instanceof String);
+		assertEquals("Wrong failures", VALIDATION_FAILURE, (String) failuresObject);
 	}
 	
 	/**
@@ -179,7 +225,7 @@ public class MyAccountControllerTest {
 	 */
 	@Test
 	public void doEditDetailsSuccessTest() {
-		mav = ctrl.doEditDetails(mav, stubCurrentUser);
+		mav = ctrl.doEditDetails(mav, currentUser);
 		
 		// Confirm view
 		assertEquals("Wrong view name", "user/myAccount", mav.getViewName());
@@ -191,13 +237,127 @@ public class MyAccountControllerTest {
 	}
 	
 	/**
-	 * TODO: implement test
 	 * If doEditDetails() fails validation it adds failure messages as "failures" and calls goToEditDetails(),
 	 *  resetting as per goToEditDetailsTest().
 	 */
 	@Test
-	public void doEditDetailsFailureTest() {
-		// TODO: implement
+	public void doEditDetailsFailureTest() throws SesValidationException {
+		// Setup validation failure
+		final String VALIDATION_FAILURE = "VALIDATION_FAILURE";
+		SesValidationException vEx = new SesValidationException();
+		vEx.addFailure(VALIDATION_FAILURE);
+		doThrow(vEx).when(userService).saveUser(currentUser);
+		
+		mav = ctrl.doEditDetails(mav, currentUser);
+		
+		// Confirm view
+		assertEquals("Wrong view name", "user/editDetails", mav.getViewName());
+		
+		// Confirm failure was added to the model
+		Object failuresObject = mav.getModel().get("failures");
+		assertNotEquals("failures model object shouldn't be null", null, failuresObject);
+		assertTrue("failure object is wrong type", failuresObject instanceof String);
+		assertEquals("Wrong failures", VALIDATION_FAILURE, (String) failuresObject);
 	}
+	
+	/**
+	 * goToNewCreditCard() sets the view to user/createCreditCardDetail.jsp and adds a new CreditCardDetail to the
+	 * model as "newCreditCardDetail"
+	 */
+	@Test
+	public void goToNewCreditCardTest() {
+		mav = ctrl.goToNewCreditCard(mav);
+		
+		// Confirm view
+		assertEquals("Wrong view name", "user/createCreditCardDetail", mav.getViewName());
+		
+		// Confirm new credit card was added to the model
+		Object cardObject = mav.getModel().get("newCreditCardDetail");
+		assertNotEquals("user model object shouldn't be null", null, cardObject);
+		assertTrue("saleForm object is wrong type", cardObject instanceof CreditCardDetail);
+	}
+	
+	/**
+	 * doCreateCreditCardDetail() sets the view back to myAccount and saves the new CreditCardDetail for the current
+	 * user
+	 */
+	@Test
+	public void doCreateNewCreditCardDetailSuccessTest() throws SesValidationException {
+		// Create new card details
+		final String CARD_NUMBER = "1234123456781234";
+		CreditCardDetail card = createCard();
+		card.setCardNumber(CARD_NUMBER);
+		
+		// Submit to controller for creation
+		mav = ctrl.doCreateCreditCardDetail(mav, card);
+		
+		// Confirm card owner was set to current user and the card got saved
+		assertEquals("Wrong user", currentUser, card.getUser());
+		assertEquals("Wrong card number", CARD_NUMBER, card.getCardNumber());
+		verify(creditCardService).saveCreditCard(card);
+		assertEquals("Wrong view name", "user/myAccount", mav.getViewName());
+	}
+	
+	/**
+	 * If validation fails, doCreateCreditCardDetail() sets the view back to createCreditCardDetail and does not save
+	 * the new CreditCardDetail
+	 */
+	@Test
+	public void doCreateNewCreditCardDetailFailureTest() throws SesValidationException {
+		// Create new card and setup validation failure
+		CreditCardDetail card = createCard();
+		final String VALIDATION_FAILURE = "VALIDATION_FAILURE";
+		SesValidationException vEx = new SesValidationException();
+		vEx.addFailure(VALIDATION_FAILURE);
+		doThrow(vEx).when(creditCardService).saveCreditCard(card);
+		
+		// Submit to controller for creation
+		mav = ctrl.doCreateCreditCardDetail(mav, card);
+		
+		// Confirm card owner was set to current user and the card got saved
+		assertEquals("Wrong view name", "user/createCreditCardDetail", mav.getViewName());
+		verify(creditCardService).saveCreditCard(card);
+		
+		// Confirm failure was added to the model
+		Object failuresObject = mav.getModel().get("failures");
+		assertNotEquals("failures model object shouldn't be null", null, failuresObject);
+		assertTrue("failure object is wrong type", failuresObject instanceof String);
+		assertEquals("Wrong failures", VALIDATION_FAILURE, (String) failuresObject);
+	}
+	
+	/**
+	 * doDeleteCard() sets the view back to myAccount and deletes the given CreditCardDetail
+	 */
+	@Test
+	public void doDeleteCardSuccessTest() throws SesValidationException {
+		CreditCardDetail card = currentUsersCreditCards.get(0);
+		mav = ctrl.doDeleteCard(mav, card.getId());
+		verify(creditCardService).deleteCreditCard(card.getId());
+		assertEquals("Wrong view name", "user/myAccount", mav.getViewName());
+	}
+	
+	/**
+	 * If deleting the card fails, reports errors under "cardFailures"
+	 */
+	@Test
+	public void doDeleteCardFailureTest() throws SesValidationException {
+		// Setup failure
+		CreditCardDetail card = currentUsersCreditCards.get(0);
+		final String VALIDATION_FAILURE = "VALIDATION_FAILURE";
+		SesValidationException vEx = new SesValidationException();
+		vEx.addFailure(VALIDATION_FAILURE);
+		doThrow(vEx).when(creditCardService).deleteCreditCard(card.getId());
+		
+		// Attempt to delete card
+		mav = ctrl.doDeleteCard(mav, card.getId());
+		
+		// Confirm view and that cardFailures was added to the model
+		assertEquals("Wrong view name", "user/myAccount", mav.getViewName());
+		Object failuresObject = mav.getModel().get("cardFailures");
+		assertNotEquals("failures model object shouldn't be null", null, failuresObject);
+		assertTrue("failure object is wrong type", failuresObject instanceof String);
+		assertEquals("Wrong failures", VALIDATION_FAILURE, (String) failuresObject);
+	}
+
 
 }

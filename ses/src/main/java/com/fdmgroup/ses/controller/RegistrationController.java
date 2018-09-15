@@ -86,8 +86,7 @@ public class RegistrationController {
 			modelAndView.setViewName("login");
 		} catch (SesValidationException ex) {
 			// TODO: error handling
-			System.out.println("Activation failed somehow");
-			ex.printStackTrace();
+			modelAndView.addObject("successfulRegistration", false);
 		}
 		return modelAndView;
 	}

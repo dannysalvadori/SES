@@ -19,14 +19,14 @@ import com.fdmgroup.ses.service.UserService;
 import com.fdmgroup.ses.stockExchange.SaleForm;
 import com.fdmgroup.ses.stockExchange.TransactionForm;
 import com.fdmgroup.ses.validation.SesValidationException;
-import com.fdmgroup.ses.validation.ValidationFactory;
+import com.fdmgroup.ses.validation.ValidatorFactory;
 import com.fdmgroup.ses.validation.ValidationUtils;
 
 @Controller
 public class StockExchangeController {
 	
 	@Autowired
-	private ValidationFactory validationFactory;
+	private ValidatorFactory validationFactory;
 	
 	@Autowired
 	private CompanyRepository companyRepo;

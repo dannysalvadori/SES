@@ -21,7 +21,6 @@ public class LoginController {
 	 */
 	@RequestMapping(value="/login-error")
     public ModelAndView doLoginError(ModelAndView modelAndView) {
-		modelAndView.setViewName("login");
 		modelAndView.addObject("error", "Invalid username or password");
 		return goToLogin(modelAndView);
 	}
