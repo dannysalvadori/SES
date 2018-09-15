@@ -57,12 +57,6 @@ public class Company {
 	@Transient
 	private Long transactionQuantity;
 	
-	/**
-	 * Used to control multi-select transactions
-	 */
-	@Transient
-	private Boolean selected;
-	
 	public BigDecimal getTransactionValue() {
 		return currentShareValue.multiply(new BigDecimal(transactionQuantity));
 	}
@@ -113,14 +107,6 @@ public class Company {
 
 	public void setTransactionQuantity(Long transactionQuantity) {
 		this.transactionQuantity = transactionQuantity;
-	}
-
-	public Boolean getSelected() {
-		return selected;
-	}
-
-	public void setSelected(Boolean selected) {
-		this.selected = selected;
 	}
 
 	public Date getLastTrade() {

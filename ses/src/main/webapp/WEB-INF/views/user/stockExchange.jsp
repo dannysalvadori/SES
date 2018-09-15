@@ -59,7 +59,6 @@
 						<th>Stocks Available</th>
 						<th>Current Value</th>
 						<th>Qty.</th>
-						<th></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -87,11 +86,6 @@
 							<td>
 								<form:input path="companies[${cStatus.index}].transactionQuantity" type="number" min="1"/>
 								<form:hidden path="companies[${cStatus.index}].transactionQuantity"/>
-							</td>
-	
-							<td>
-								<form:checkbox path="companies[${cStatus.index}].selected"/>
-								<form:hidden path="companies[${cStatus.index}].Id"/>
 							</td>
 						</tr>
 					</c:forEach>
@@ -124,7 +118,6 @@
 						<th>Avg. Purchase Price</th>
 						<th>Current Market Value</th>
 						<th>Qty.</th>
-						<th></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -159,11 +152,7 @@
 								<form:input path="ownedShares[${cStatus.index}].company.transactionQuantity" type="number" min="1"/>
 								<form:hidden path="ownedShares[${cStatus.index}].company.transactionQuantity"/>
 							</td>
-							
-							<td>
-								<form:checkbox path="ownedShares[${cStatus.index}].selected"/>
-								<form:hidden path="ownedShares[${cStatus.index}].Id"/>
-							</td>
+
 						</tr>
 					</c:forEach>
 				</tbody>

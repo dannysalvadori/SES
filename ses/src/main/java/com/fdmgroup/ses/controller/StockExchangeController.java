@@ -101,8 +101,7 @@ public class StockExchangeController {
 		// Refine transaction form
 		TransactionForm purchaseForm = new TransactionForm();
 		for (Company comp : transactionForm.getCompanies()) {
-			if (comp.getSelected() != null && comp.getSelected() == true
-					&& comp.getTransactionQuantity() != null && comp.getTransactionQuantity() > 0) {
+			if (comp.getTransactionQuantity() != null && comp.getTransactionQuantity() > 0) {
 				purchaseForm.getCompanies().add(comp);
 			}
 		}
@@ -170,8 +169,7 @@ public class StockExchangeController {
 		SaleForm refinedForm = new SaleForm();
 		for (OwnedShare share : saleForm.getOwnedShares()) {
 			Company comp = share.getCompany();
-			if (share.getSelected() != null && share.getSelected() == true
-					&& comp.getTransactionQuantity() != null && comp.getTransactionQuantity() > 0) {
+			if (comp.getTransactionQuantity() != null && comp.getTransactionQuantity() > 0) {
 				refinedForm.getOwnedShares().add(share);
 			}
 		}

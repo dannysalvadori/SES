@@ -204,36 +204,20 @@ public class StockExchangeControllerTest {
 			- 1: selected is TRUE but quantity is NULL
 		*/ 
 		Company c1 = StockExchangeUtils.createCompany();
-		c1.setSelected(true);
 		c1.setTransactionQuantity(5l);
 		c1.setCurrentShareValue(new BigDecimal(3.1)); // tx value: 15.50
 		Company c2 = StockExchangeUtils.createCompany();
-		c2.setSelected(true);
 		c2.setTransactionQuantity(8l);
 		c2.setCurrentShareValue(new BigDecimal(5.01)); // tx value: 40.08
 		Company c3 = StockExchangeUtils.createCompany();
-		c3.setSelected(true);
 		c3.setTransactionQuantity(0l);
 		c3.setCurrentShareValue(new BigDecimal(100)); // Not selected, value is irrelevant
 		Company c4 = StockExchangeUtils.createCompany();
-		c4.setSelected(false);
-		c4.setTransactionQuantity(10l);
+		c4.setTransactionQuantity(null);
 		c4.setCurrentShareValue(new BigDecimal(100)); // Not selected, value is irrelevant
-		Company c5 = StockExchangeUtils.createCompany();
-		c5.setSelected(false);
-		c5.setTransactionQuantity(0l);
-		c5.setCurrentShareValue(new BigDecimal(100)); // Not selected, value is irrelevant
-		Company c6 = StockExchangeUtils.createCompany();
-		c6.setSelected(null);
-		c6.setTransactionQuantity(0l);
-		c6.setCurrentShareValue(new BigDecimal(100)); // Not selected, value is irrelevant
-		Company c7 = StockExchangeUtils.createCompany();
-		c7.setSelected(true);
-		c7.setTransactionQuantity(null);
-		c7.setCurrentShareValue(new BigDecimal(100)); // Not selected, value is irrelevant
 		
 		List<Company> testCompanies = new ArrayList<>();
-		testCompanies.addAll(new ArrayList<Company>(Arrays.asList(c1, c2, c3, c4, c5, c6, c7)));
+		testCompanies.addAll(new ArrayList<Company>(Arrays.asList(c1, c2, c3, c4)));
 		
 		TransactionForm txForm = new TransactionForm();
 		txForm.setCompanies(testCompanies); // Total tx value: 55.58
@@ -369,41 +353,24 @@ public class StockExchangeControllerTest {
 			- 1: selected is TRUE but quantity is NULL
 		*/ 
 		Company c1 = StockExchangeUtils.createCompany();
-		c1.setSelected(true);
 		c1.setTransactionQuantity(5l);
 		c1.setCurrentShareValue(new BigDecimal(3.1)); // tx value: 15.50
 		Company c2 = StockExchangeUtils.createCompany();
-		c2.setSelected(true);
 		c2.setTransactionQuantity(8l);
 		c2.setCurrentShareValue(new BigDecimal(5.01)); // tx value: 40.08
 		Company c3 = StockExchangeUtils.createCompany();
-		c3.setSelected(true);
 		c3.setTransactionQuantity(0l);
 		c3.setCurrentShareValue(new BigDecimal(100)); // Not selected, value is irrelevant
 		Company c4 = StockExchangeUtils.createCompany();
-		c4.setSelected(false);
-		c4.setTransactionQuantity(10l);
+		c4.setTransactionQuantity(null);
 		c4.setCurrentShareValue(new BigDecimal(100)); // Not selected, value is irrelevant
-		Company c5 = StockExchangeUtils.createCompany();
-		c5.setSelected(false);
-		c5.setTransactionQuantity(0l);
-		c5.setCurrentShareValue(new BigDecimal(100)); // Not selected, value is irrelevant
-		Company c6 = StockExchangeUtils.createCompany();
-		c6.setSelected(null);
-		c6.setTransactionQuantity(0l);
-		c6.setCurrentShareValue(new BigDecimal(100)); // Not selected, value is irrelevant
-		Company c7 = StockExchangeUtils.createCompany();
-		c7.setSelected(true);
-		c7.setTransactionQuantity(null);
-		c7.setCurrentShareValue(new BigDecimal(100)); // Not selected, value is irrelevant
 		
 		List<Company> testCompanies = new ArrayList<>();
-		testCompanies.addAll(new ArrayList<Company>(Arrays.asList(c1, c2, c3, c4, c5, c6, c7)));
+		testCompanies.addAll(new ArrayList<Company>(Arrays.asList(c1, c2, c3, c4)));
 		
 		List<OwnedShare> ownedShares = new ArrayList<>();
 		for (Company c : testCompanies) {
 			OwnedShare newOwnedShare = StockExchangeUtils.createOwnedShare(c);
-			newOwnedShare.setSelected(c.getSelected());
 			ownedShares.add(newOwnedShare);
 		}
 		
