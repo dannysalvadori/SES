@@ -37,7 +37,6 @@ public class StockExchangeUtils {
 		os.setCompany(c);
 		os.setAveragePurchasePrice(new BigDecimal(66));
 		os.setQuantity(100l);
-		os.setSelected(true);
 		return os;
 	}
 	

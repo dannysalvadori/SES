@@ -41,12 +41,6 @@ public class OwnedShare {
 	private List<TransactionHistory> transactionHistory;
 	
 	/**
-	 * Used to control multi-select transactions
-	 */
-	@Transient
-	private Boolean selected;
-	
-	/**
 	 * Used to track the user's average price of purchase for shares of this stock
 	 */
 	@Transient
@@ -112,14 +106,6 @@ public class OwnedShare {
 
 	public void setTransactionHistory(List<TransactionHistory> transactionHistory) {
 		this.transactionHistory = transactionHistory;
-	}
-
-	public Boolean getSelected() {
-		return selected;
-	}
-
-	public void setSelected(Boolean selected) {
-		this.selected = selected;
 	}
 
 }
