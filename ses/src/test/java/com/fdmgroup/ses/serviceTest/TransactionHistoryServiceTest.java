@@ -58,7 +58,7 @@ public class TransactionHistoryServiceTest {
 	}
 
 	/**
-	 * ...
+	 * Test tansaction history is created correctly
 	 */
 	@Test
 	public void createTransactionHistoryTest() {
@@ -70,8 +70,8 @@ public class TransactionHistoryServiceTest {
 		assertEquals("Wrong company", c, txHistory.getCompany());
 		assertEquals("Wrong company", u, txHistory.getOwner());
 		assertEquals("Wrong owned share", os, txHistory.getOwnedShare());
-		assertTrue("Wrong company",
-				GregorianCalendar.getInstance().getTime().getTime() > txHistory.getExchangeDate().getTime());
+		assertTrue("Wrong exchange date",
+				GregorianCalendar.getInstance().getTime().getTime() >= txHistory.getExchangeDate().getTime());
 		assertEquals("Wrong unit price", c.getCurrentShareValue(), txHistory.getUnitPrice());
 		assertEquals("Wrong quantity", c.getTransactionQuantity(), txHistory.getQuantity());
 		assertEquals("Wrong transaction value", c.getTransactionValue(), txHistory.getValue());
