@@ -60,7 +60,7 @@ public class AdminCRUDUserController {
 						e.printStackTrace();
 					}
 				} else if (element instanceof Integer) {
-					//From the database 'element' will be a Long
+					// From the database, 'element' will be a Long
 					id = (Integer) element;
 				}
 				return roleRepo.findById(id);
