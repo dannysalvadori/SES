@@ -25,7 +25,7 @@ public class TransactionHistoryService {
 	@Autowired
 	ValidatorFactory validationFactory;
 	
-	public void createTransactionHistory(Company company, User user, OwnedShare ownedShare) {
+	public TransactionHistory createTransactionHistory(Company company, User user, OwnedShare ownedShare) {
 		TransactionHistory txHistory = new TransactionHistory();
 		Company dbCompany = companyRepo.findBySymbol(company.getSymbol());
 		txHistory.setCompany(dbCompany);
@@ -36,6 +36,7 @@ public class TransactionHistoryService {
 		txHistory.setValue(company.getTransactionValue());
 		txHistory.setOwnedShare(ownedShare);
 		txHistoryRepo.save(txHistory);
+		return txHistory;
 	}
 	
 }
