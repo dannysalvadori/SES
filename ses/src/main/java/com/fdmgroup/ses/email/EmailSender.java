@@ -10,16 +10,21 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import static com.fdmgroup.ses.email.AWSCredentials.*;
+import org.springframework.stereotype.Component;
 
+import com.fdmgroup.ses.config.AwsConfig;
+
+@Component
 public class EmailSender {
+	
+	private static AwsConfig awsConfig = new AwsConfig();
 	
 	public static void sendEmail(Email email) throws MessagingException, UnsupportedEncodingException  {
 
         // Create a Properties object to contain connection configuration information.
     	Properties props = System.getProperties();
     	props.put("mail.transport.protocol", "smtp");
-    	props.put("mail.smtp.port", getPort()); 
+    	props.put("mail.smtp.port", awsConfig.getPort());
     	props.put("mail.smtp.starttls.enable", "true");
     	props.put("mail.smtp.auth", "true");
 
@@ -28,7 +33,7 @@ public class EmailSender {
 
         // Create a message with the specified information. 
         MimeMessage msg = new MimeMessage(session);
-        msg.setFrom(new InternetAddress(getFrom(), getFromName()));
+        msg.setFrom(new InternetAddress(awsConfig.getFrom(), awsConfig.getFromName()));
         msg.setRecipient(Message.RecipientType.TO, new InternetAddress(email.getToAddress()));
         msg.setSubject(email.getSubject());
         msg.setContent(email.getBody(),"text/html");
@@ -38,7 +43,7 @@ public class EmailSender {
                     
         // Send
         try {
-            transport.connect(getHost(), getSmtpUsername(), getSmtpPassword());
+            transport.connect(awsConfig.getHost(), awsConfig.getSmtpUsername(), awsConfig.getSmtpPassword());
             transport.sendMessage(msg, msg.getAllRecipients());
         
         } catch (Exception ex) {
