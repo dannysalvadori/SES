@@ -1,18 +1,16 @@
 /**
 *	Author: Danny Salvadori
-*	Description: Core CSS for all pages
+*	Description: Core CSS for SES
 *	Date: 29/07/2017
 */
 @charset "ISO-8859-1";
-.text-center {
-	text-align: center;
+
+.gain {
+	color: #00AE00;
+	font-weight: bold;
 }
 
-html {
-   	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background-image:url("../img/crap.jpg");
-    background-color: #76a6d6;
-    background-repeat: no-repeat;
-    background-position: top center;
-    background-size: cover;
+.loss {
+	color: #fb0000;
+	font-weight: bold;
 }
