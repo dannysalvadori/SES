@@ -8,6 +8,7 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
+	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/resources/css/ses_core.css">
 	<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-1.12.4.js"></script>
 	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
 	<script>
@@ -43,7 +44,7 @@
 				<h3 class="panel-title">Account Information</h3>
 			</div>
 			<div class="panel-body">
-				<table width="100%">
+				<table width="100%" class="table">
 					<tr>
 						<td class="text-right">Email Address:&nbsp;</td>	<td>${user.email}</td>
 						<td class="text-right">Credit:&nbsp;</td>			<td><fmt:formatNumber value="${user.credit}" type="currency"/></td>
@@ -139,7 +140,22 @@
 								</td>
 		
 								<td class="text-right">
-									<fmt:formatNumber value="${ownedStock.company.currentShareValue}" type="currency"/>
+								
+									<c:choose>
+										<c:when test="${ownedStock.company.currentShareValue > ownedStock.averagePurchasePrice}">
+											<span class="gain">
+										</c:when>
+										<c:when test="${ownedStock.company.currentShareValue < ownedStock.averagePurchasePrice}">
+											<span class="loss">
+										</c:when>
+										<c:otherwise>
+											<span>
+										</c:otherwise>
+									</c:choose>
+								
+										<fmt:formatNumber value="${ownedStock.company.currentShareValue}" type="currency"/>
+									</span>
+									
 								</td>
 		
 								<td class="text-right">
