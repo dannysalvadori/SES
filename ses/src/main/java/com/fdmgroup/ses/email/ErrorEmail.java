@@ -25,7 +25,6 @@ public class ErrorEmail extends Email {
     		    "<tr><td>Stack Trace</td><td>" + Arrays.toString(e.getStackTrace()) + "</td></tr>",
     		    "</table>"
     	);
-    	System.out.println("error log addressee: " + toAddress);
     }
 
 }

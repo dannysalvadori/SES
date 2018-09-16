@@ -6,12 +6,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import javax.mail.MessagingException;
 
 import static com.fdmgroup.ses.utils.UserUtils.*;
 import static com.fdmgroup.ses.utils.RoleUtils.*;
@@ -126,7 +123,7 @@ public class AdminCRUDUserControllerTest {
 	 * If validation succeeds, createUser() inserts the given User object
 	 */
 	@Test
-	public void doCreateUserSuccessTest() throws SesValidationException, UnsupportedEncodingException, MessagingException {
+	public void doCreateUserSuccessTest() throws SesValidationException {
 		User u = createUser();
 		mav = ctrl.doCreateUser(mav, u, webRequest);
 
@@ -142,7 +139,7 @@ public class AdminCRUDUserControllerTest {
 	 * @throws SesValidationException 
 	 */
 	@Test
-	public void doCreateUserFailureTest() throws SesValidationException, UnsupportedEncodingException, MessagingException {
+	public void doCreateUserFailureTest() throws SesValidationException {
 		User u = createUser();
 		final String VALIDATION_FAILURE = "VALIDATION_FAILURE";
 		SesValidationException vEx = new SesValidationException();

@@ -1,11 +1,8 @@
 package com.fdmgroup.ses.controller;
 
-import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
-
-import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
@@ -125,8 +122,6 @@ public class AdminCRUDUserController {
 	
 	/**
 	 * Toggle a user's active/inactive status
-	 * @throws MessagingException 
-	 * @throws UnsupportedEncodingException 
 	 */
 	@RequestMapping(value="/admin/toggleActive")
     public ModelAndView toggleActive(
