@@ -3,6 +3,9 @@ package com.fdmroup.ses.emailTest;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
+import java.util.GregorianCalendar;
+
 import static com.fdmgroup.ses.utils.UserUtils.*;
 
 import org.junit.Before;
@@ -12,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.fdmgroup.ses.email.ErrorEmail;
 import com.fdmgroup.ses.email.RegistrationEmail;
 import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.model.VerificationToken;
@@ -67,6 +71,44 @@ public class EmailTest {
 		assertEquals("Wrong subject", expectedSubject, email.getSubject());
 		assertEquals("Wrong body", expectedBody, email.getBody());
 		assertEquals("Wrong toAddress", u.getEmail(), email.getToAddress());		
+	}
+
+	/**
+	 * Positive test ErrorEmail
+	 */
+	@Test
+	public void errorEmailConstructorTest() {
+		
+		Exception ex = null;
+		try {
+			@SuppressWarnings("unused")
+			Integer fail = 7 / 0; // Throws exception 
+		} catch (Exception e) {
+			ex = e;
+		} finally {
+			if (ex == null) {
+				fail("Test exception was not initialised");
+			}
+		}
+		
+		ErrorEmail email = new ErrorEmail(ex);
+		
+		String expectedAddress = "danny.salvadori.fdm@gmail.com";
+		String expectedSubject = "stockSim Error Log";
+		String expectedBody = String.join(
+    		    System.getProperty("line.separator"),
+    		    "<h1>Error Log</h1>",
+    		    "<table>",
+    		    "<tr><td>Time</td><td>" + GregorianCalendar.getInstance().getTime() + "</td></tr>",
+    		    "<tr><td>Class</td><td>" + ex.getClass() + "</td></tr>",
+    		    "<tr><td>Message</td><td>" + ex.getMessage() + "</td></tr>",
+    		    "<tr><td>Stack Trace</td><td>" + Arrays.toString(ex.getStackTrace()) + "</td></tr>",
+    		    "</table>"
+    	);
+		
+		assertEquals("Wrong subject", expectedSubject, email.getSubject());
+		assertEquals("Wrong body", expectedBody, email.getBody());
+		assertEquals("Wrong toAddress", expectedAddress, email.getToAddress());		
 	}
 
 }

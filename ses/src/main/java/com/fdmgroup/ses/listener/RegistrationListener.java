@@ -5,6 +5,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
 import com.fdmgroup.ses.email.EmailSender;
+import com.fdmgroup.ses.email.ErrorEmail;
 import com.fdmgroup.ses.email.RegistrationEmail;
 import com.fdmgroup.ses.model.VerificationToken;
 import com.fdmgroup.ses.registration.OnRegistrationCompleteEvent;
@@ -37,9 +38,8 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 			emailSender.sendEmail(new RegistrationEmail(event, vt));
 			vtRepo.save(vt);
 		} catch (Exception e) {
-			// TODO: Proper error handling
 			System.out.println("Part of the registration process failed.");
-			e.printStackTrace();
+			emailSender.sendEmail(new ErrorEmail(e));
 		}
 	}
 }

@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fdmgroup.ses.email.EmailSender;
+import com.fdmgroup.ses.email.ErrorEmail;
 import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.service.UserService;
 import com.fdmgroup.ses.validation.SesValidationException;
@@ -28,6 +30,9 @@ public class RegistrationController {
 	
 	@Autowired
 	ApplicationEventPublisher eventPublisher;
+	
+	@Autowired
+	private EmailSender emailSender;
 	
 	/**
 	 * Instruct Spring Form how to bind date input
@@ -64,10 +69,11 @@ public class RegistrationController {
 		} catch (SesValidationException ex) {
 			modelAndView.addObject("failures", ValidationUtils.stringifyFailures(ex.getFailures()));
 			modelAndView.setViewName("register");
-		}
-//	    } catch (Exception me) { // TODO: Catch email failure exceptions
-//	        return new ModelAndView("emailError", "newUser", newUser);
-//	    }
+		} catch (Exception e) {
+			modelAndView.addObject("failures", e.getMessage());
+			modelAndView.setViewName("register");
+			emailSender.sendEmail(new ErrorEmail(e));
+	    }
 		
 		return modelAndView;
 	}
@@ -83,11 +89,11 @@ public class RegistrationController {
 		try {
 			userService.activateUser(token);
 			modelAndView.addObject("successfulRegistration", true);
-			modelAndView.setViewName("login");
 		} catch (SesValidationException ex) {
-			// TODO: error handling
+			modelAndView.addObject("failures", ValidationUtils.stringifyFailures(ex.getFailures()));
 			modelAndView.addObject("successfulRegistration", false);
 		}
+		modelAndView.setViewName("login");
 		return modelAndView;
 	}
 
