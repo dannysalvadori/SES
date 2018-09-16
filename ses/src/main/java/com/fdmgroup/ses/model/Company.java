@@ -52,7 +52,7 @@ public class Company {
 	private BigDecimal closeValue;
 	
 	@Column(name = "gains")
-	private BigDecimal gains;	
+	private BigDecimal gains = new BigDecimal(0);	
 	
 	@Transient
 	private Long transactionQuantity;
