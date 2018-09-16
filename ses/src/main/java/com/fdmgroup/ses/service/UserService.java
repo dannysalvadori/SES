@@ -11,6 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.WebRequest;
 
+import com.fdmgroup.ses.email.EmailSender;
+import com.fdmgroup.ses.email.ErrorEmail;
 import com.fdmgroup.ses.model.Role;
 import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.model.VerificationToken;
@@ -38,6 +40,8 @@ public class UserService {
 	private ApplicationEventPublisher eventPublisher;
 	@Autowired
 	private ValidatorFactory validationFactory;
+	@Autowired
+	private EmailSender emailSender;
 	
 	public void saveUser(User user, WebRequest request) throws SesValidationException {
 		
@@ -48,8 +52,10 @@ public class UserService {
 			userRoles.add(roleRepo.findByRole("ROLE_USER"));
 			user.setRoles(userRoles);
 			if (userRoles == null || userRoles.isEmpty()) {
-				// TODO: exception handling if no roles
-				System.out.println("NO ROLES!");
+				SesValidationException vEx = new SesValidationException();
+				vEx.addFailure("ROLE_USER could not be found in the db.");
+				emailSender.sendEmail(new ErrorEmail(vEx));
+				System.out.println("ROLE_USER could not be found in the db.");
 			}
 			user.setActive(0);
 		}

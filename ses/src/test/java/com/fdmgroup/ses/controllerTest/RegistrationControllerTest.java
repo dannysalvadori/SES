@@ -121,8 +121,7 @@ public class RegistrationControllerTest {
 		
 		mav = ctrl.goToEditUser(mav, tokenId);
 		
-		// NOTE: Controller has a todo to improve fail behaviour 
-		assertNotEquals("Wrong view name", "login", mav.getViewName());
+		assertNotNull("No failures", mav.getModel().get("failures"));
 		assertEquals("Wrong success message", false, mav.getModel().get("successfulRegistration"));
 	}
 	

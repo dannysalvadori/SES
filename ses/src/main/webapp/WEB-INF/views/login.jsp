@@ -19,6 +19,11 @@
 				Registration complete! You may now log in.
 			</div>
 		</c:if>
+		<c:forTokens items="${failures}" delims="|" var="failure">
+			<div class="alert alert-danger" id="asp-error">
+				<c:out value="${failure}"/>
+			</div>
+		</c:forTokens>
 		<form name="loginForm" action="/login" method="POST" class="col-md-6 col-md-offset-3">
 	        <label for="username">User Name:</label>
 	        <input id="username" name="username" type="text" class="form-control" autofocus="true"/>

@@ -1,5 +1,4 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
 <ul class="navbar-nav mr-auto">
 	<li class="nav-item">
 		<a class="nav-link disabled">Welcome ${pageContext.request.userPrincipal.name}</a>

@@ -1,8 +1,11 @@
 package com.fdmgroup.ses.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
+
+import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
@@ -16,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fdmgroup.ses.email.EmailSender;
+import com.fdmgroup.ses.email.ErrorEmail;
 import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.repository.RoleRepository;
 import com.fdmgroup.ses.repository.UserRepository;
@@ -27,13 +32,16 @@ import com.fdmgroup.ses.validation.ValidationUtils;
 public class AdminCRUDUserController {
 
 	@Autowired
-	UserRepository userRepo;
+	private UserRepository userRepo;
 
 	@Autowired
-	UserService userService;
+	private UserService userService;
 	
 	@Autowired
-	RoleRepository roleRepo;
+	private RoleRepository roleRepo;
+	
+	@Autowired
+	private EmailSender emailSender;
 	
 	/**
 	 * Instruct Spring Form how to bind date and role inputs
@@ -107,15 +115,18 @@ public class AdminCRUDUserController {
 		} catch (SesValidationException ex) {
 			modelAndView.addObject("failures", ValidationUtils.stringifyFailures(ex.getFailures()));
 			modelAndView.setViewName("admin/createUser");
-		}
-//	    } catch (Exception me) { // TODO: Catch email failure exceptions
-//	        return new ModelAndView("emailError", "newUser", newUser);
-//	    }
+		} catch (Exception ex) {
+			modelAndView.addObject("failures", ex.getMessage());
+			modelAndView.setViewName("admin/createUser");
+			emailSender.sendEmail(new ErrorEmail(ex));
+	    }
 		return modelAndView;
 	}
 	
 	/**
 	 * Toggle a user's active/inactive status
+	 * @throws MessagingException 
+	 * @throws UnsupportedEncodingException 
 	 */
 	@RequestMapping(value="/admin/toggleActive")
     public ModelAndView toggleActive(
@@ -128,8 +139,7 @@ public class AdminCRUDUserController {
 			user.setActive(activeReverseState);
 			userRepo.save(user);
 		} catch (Exception e) {
-			// TODO: exception handling
-			System.out.println("Bad! Exception happened!");
+			emailSender.sendEmail(new ErrorEmail(e));
 		}
 		return goToManageUsers(modelAndView);
 	}
@@ -149,8 +159,7 @@ public class AdminCRUDUserController {
 			modelAndView.addObject("user", user);
 			modelAndView.addObject("allRoles", roleRepo.findAll());
 		} catch (Exception e) {
-			// TODO: exception handling
-			System.out.println("Bad! Exception happened!");
+			emailSender.sendEmail(new ErrorEmail(e));
 		}
 		return modelAndView;
 	}
