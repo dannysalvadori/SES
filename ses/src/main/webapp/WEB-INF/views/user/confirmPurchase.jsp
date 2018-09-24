@@ -21,6 +21,9 @@
 			Your purchase is not complete. Please review and confirm your order.  
 		</div>
 		
+		txForm.subDate:(${transactionForm.submissionDate})
+		subDate:(${submissionDate})
+		
 		<h2>Your Order</h2>
 		<br/>
 			<form:form action="../user/authenticatePurchase" method="POST" modelAttribute="transactionForm">

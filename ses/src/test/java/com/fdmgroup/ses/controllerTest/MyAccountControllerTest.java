@@ -1,12 +1,11 @@
 package com.fdmgroup.ses.controllerTest;
 
+import static com.fdmgroup.ses.testUtils.CreditCardUtils.*;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import static com.fdmgroup.ses.utils.CreditCardUtils.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +30,7 @@ import com.fdmgroup.ses.service.CreditCardService;
 import com.fdmgroup.ses.service.OwnedSharesService;
 import com.fdmgroup.ses.service.UserService;
 import com.fdmgroup.ses.stockExchange.SaleForm;
-import com.fdmgroup.ses.utils.StockExchangeUtils;
+import com.fdmgroup.ses.testUtils.StockExchangeUtils;
 import com.fdmgroup.ses.validation.SesValidationException;
 import com.fdmgroup.ses.validation.UserValidator;
 import com.fdmgroup.ses.validation.ValidatorFactory;

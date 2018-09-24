@@ -1,10 +1,10 @@
 package com.fdmgroup.ses.validationTest;
 
 import static org.mockito.Mockito.when;
-import static com.fdmgroup.ses.utils.CreditCardUtils.*;
-import static com.fdmgroup.ses.utils.StockExchangeUtils.*;
-import static com.fdmgroup.ses.utils.UserUtils.*;
-import static com.fdmgroup.ses.validation.TransactionValidator.*;
+import static com.fdmgroup.ses.testUtils.CreditCardUtils.*;
+import static com.fdmgroup.ses.testUtils.StockExchangeUtils.*;
+import static com.fdmgroup.ses.testUtils.UserUtils.*;
+import static com.fdmgroup.ses.validation.PurchaseFormValidator.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -24,8 +24,8 @@ import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.repository.CompanyRepository;
 import com.fdmgroup.ses.service.CreditCardService;
 import com.fdmgroup.ses.service.UserService;
-import com.fdmgroup.ses.stockExchange.TransactionForm;
-import com.fdmgroup.ses.validation.TransactionValidator;
+import com.fdmgroup.ses.stockExchange.PurchaseForm;
+import com.fdmgroup.ses.validation.PurchaseFormValidator;
 
 /**
  * Test for TransactionValidator:
@@ -36,7 +36,7 @@ import com.fdmgroup.ses.validation.TransactionValidator;
  */
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
-public class TransactionValidatorTest extends ValidationTest<TransactionValidator> {
+public class TransactionValidatorTest extends ValidationTest<PurchaseFormValidator> {
 	
 	@Mock
 	private UserService userService;
@@ -50,7 +50,7 @@ public class TransactionValidatorTest extends ValidationTest<TransactionValidato
 	private CompanyRepository companyRepo;
 	
 	public TransactionValidatorTest() {
-		validator = new TransactionValidator();
+		validator = new PurchaseFormValidator();
 	}
 	
 	@Before
@@ -67,7 +67,7 @@ public class TransactionValidatorTest extends ValidationTest<TransactionValidato
 	 */
 	@Test
 	public void transactionSuccessTest() {
-		TransactionForm f = createTransactionForm();
+		PurchaseForm f = createTransactionForm();
 		when(cardService.findAllForCurrentUser()).thenReturn(cards);
 		when(companyRepo.findBySymbol(f.getCompanies().get(0).getSymbol())).thenReturn(f.getCompanies().get(0));
 		validator.setTransactionForm(f);
@@ -80,7 +80,7 @@ public class TransactionValidatorTest extends ValidationTest<TransactionValidato
 	 */
 	@Test
 	public void noCreditCardTest() {
-		TransactionForm f = createTransactionForm();
+		PurchaseForm f = createTransactionForm();
 		// When requested, return empty list of credit cards
 		when(cardService.findAllForCurrentUser()).thenReturn(new ArrayList<CreditCardDetail>());
 		when(companyRepo.findBySymbol(f.getCompanies().get(0).getSymbol())).thenReturn(f.getCompanies().get(0));
@@ -95,7 +95,7 @@ public class TransactionValidatorTest extends ValidationTest<TransactionValidato
 	@Test
 	public void noCompaniesSelectedTest() {
 		// Set empty transaction form
-		TransactionForm f = new TransactionForm();
+		PurchaseForm f = new PurchaseForm();
 		when(cardService.findAllForCurrentUser()).thenReturn(cards);
 		validator.setTransactionForm(f);
 		expectedFailures.add(FAIL_NO_STOCK_SELECTED);
@@ -108,7 +108,7 @@ public class TransactionValidatorTest extends ValidationTest<TransactionValidato
 	@Test
 	public void insufficientCreditTest() {
 		// Set empty transaction form
-		TransactionForm f = createTransactionForm(); // transaction value is 50
+		PurchaseForm f = createTransactionForm(); // transaction value is 50
 		u.setCredit(new BigDecimal(10)); // Set insufficient credit
 		when(cardService.findAllForCurrentUser()).thenReturn(cards);
 		when(companyRepo.findBySymbol(f.getCompanies().get(0).getSymbol())).thenReturn(f.getCompanies().get(0));
@@ -123,7 +123,7 @@ public class TransactionValidatorTest extends ValidationTest<TransactionValidato
 	@Test
 	public void insufficientStockTest() {
 		// Set empty transaction form
-		TransactionForm f = createTransactionForm(); // Available shares is 2,000,000
+		PurchaseForm f = createTransactionForm(); // Available shares is 2,000,000
 		u.setCredit(new BigDecimal(20000000)); // 15 million credit required
 		Company c = f.getCompanies().get(0);
 		c.setTransactionQuantity(3000000l); // Set transaction request to exceed availibility

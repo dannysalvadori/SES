@@ -10,9 +10,11 @@ import com.fdmgroup.ses.repository.CompanyRepository;
 import com.fdmgroup.ses.repository.OwnedSharesRepository;
 import com.fdmgroup.ses.service.UserService;
 import com.fdmgroup.ses.stockExchange.SaleForm;
+import com.fdmgroup.ses.stockExchange.TransactionForm;
+import com.fdmgroup.ses.utils.DateUtils;
 
 @Component
-public class SaleValidator extends ModelValidator {
+public class SaleFormValidator extends ModelValidator {
 	
 	public static final String FAIL_NO_STOCK_SELECTED = "You must select at least one stock to sell.";
 
@@ -21,6 +23,9 @@ public class SaleValidator extends ModelValidator {
 				+ company.getTransactionQuantity() + " to be sold; "
 				+ quantityOwned + " owned.";
 	}
+	
+	public static final String FAIL_TRANSACTION_EXPIRED = "Transaction expired! You must complete sales/purchases "
+			+ "within " + TransactionForm.EXPIRY_MINUTES_STRING + " minutes.";
 	
 	@Autowired
 	private UserService userService;
@@ -44,6 +49,13 @@ public class SaleValidator extends ModelValidator {
 		failures.clear();
 		
 		User user = userService.findCurrentUser();
+		
+		// Must be completed within 5 minutes
+		if (saleForm.getSubmissionDate() != null) {
+			if (DateUtils.isXMinutesOld(saleForm.getSubmissionDate(), TransactionForm.EXPIRY_MINUTES)) {
+				failures.add(FAIL_TRANSACTION_EXPIRED);
+			}
+		}
 		
 		// At least one share must be selected
 		if (saleForm.getOwnedShares().size() < 1) {

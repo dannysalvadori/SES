@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.fdmgroup.ses.utils.StockExchangeUtils.*;
+import static com.fdmgroup.ses.testUtils.StockExchangeUtils.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;

@@ -7,7 +7,7 @@ import com.fdmgroup.ses.model.Company;
 import com.fdmgroup.ses.model.CreditCardDetail;
 import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.stockExchange.SaleForm;
-import com.fdmgroup.ses.stockExchange.TransactionForm;
+import com.fdmgroup.ses.stockExchange.PurchaseForm;
 
 @Component
 public class ValidatorFactory {
@@ -17,9 +17,9 @@ public class ValidatorFactory {
 	@Autowired
 	private CompanyValidator companyValidator;
 	@Autowired
-	private TransactionValidator transactionValidator;
+	private PurchaseFormValidator transactionValidator;
 	@Autowired
-	private SaleValidator saleValidator;
+	private SaleFormValidator saleValidator;
 	@Autowired
 	private CreditCardValidator creditCardValidator;
 	
@@ -40,8 +40,8 @@ public class ValidatorFactory {
 			companyValidator.setCompany((Company) object);
 			validator = companyValidator;
 			
-		} else if (object.getClass() == TransactionForm.class) {
-			transactionValidator.setTransactionForm((TransactionForm) object);
+		} else if (object.getClass() == PurchaseForm.class) {
+			transactionValidator.setTransactionForm((PurchaseForm) object);
 			validator = transactionValidator;
 		
 		} else if (object.getClass() == SaleForm.class) {

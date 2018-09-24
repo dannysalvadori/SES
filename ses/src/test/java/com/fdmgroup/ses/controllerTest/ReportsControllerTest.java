@@ -1,10 +1,9 @@
 package com.fdmgroup.ses.controllerTest;
 
+import static com.fdmgroup.ses.testUtils.StockExchangeUtils.*;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
-
-import static com.fdmgroup.ses.utils.StockExchangeUtils.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;

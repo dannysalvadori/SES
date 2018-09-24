@@ -1,6 +1,6 @@
 package com.fdmgroup.ses.validationTest;
 
-import static com.fdmgroup.ses.utils.CreditCardUtils.*;
+import static com.fdmgroup.ses.testUtils.CreditCardUtils.*;
 import static com.fdmgroup.ses.validation.CreditCardValidator.*;
 
 import java.util.Calendar;

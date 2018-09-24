@@ -6,10 +6,10 @@ import java.util.List;
 
 import com.fdmgroup.ses.model.OwnedShare;
 
-public class SaleForm {
+public class SaleForm extends TransactionForm {
 
-	List<OwnedShare> ownedShares;
-
+	private List<OwnedShare> ownedShares;
+	
 	public List<OwnedShare> getOwnedShares() {
 		if (ownedShares == null) {
 			ownedShares = new ArrayList<>();

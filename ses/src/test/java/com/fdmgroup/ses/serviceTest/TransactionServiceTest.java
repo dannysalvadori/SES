@@ -1,5 +1,6 @@
 package com.fdmgroup.ses.serviceTest;
 
+import static com.fdmgroup.ses.testUtils.StockExchangeUtils.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.doThrow;
@@ -9,8 +10,6 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
-
-import static com.fdmgroup.ses.utils.StockExchangeUtils.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,10 +28,10 @@ import com.fdmgroup.ses.service.TransactionHistoryService;
 import com.fdmgroup.ses.service.TransactionService;
 import com.fdmgroup.ses.service.UserService;
 import com.fdmgroup.ses.stockExchange.SaleForm;
-import com.fdmgroup.ses.stockExchange.TransactionForm;
-import com.fdmgroup.ses.validation.SaleValidator;
+import com.fdmgroup.ses.stockExchange.PurchaseForm;
+import com.fdmgroup.ses.validation.SaleFormValidator;
 import com.fdmgroup.ses.validation.SesValidationException;
-import com.fdmgroup.ses.validation.TransactionValidator;
+import com.fdmgroup.ses.validation.PurchaseFormValidator;
 import com.fdmgroup.ses.validation.ValidatorFactory;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -41,7 +40,7 @@ public class TransactionServiceTest {
 	
 	// Test data
 	private Company c = createCompany();
-	private TransactionForm txForm = createTransactionForm(Arrays.asList(c)); // TX: £50 x 5
+	private PurchaseForm txForm = createTransactionForm(Arrays.asList(c)); // TX: £50 x 5
 	private OwnedShare os = createOwnedShare(c);
 	private SaleForm saleForm = createSaleForm(Arrays.asList(os));
 	private User u;
@@ -50,9 +49,9 @@ public class TransactionServiceTest {
 	@Mock
 	private ValidatorFactory validationFactory;
 	@Mock
-	private TransactionValidator txValidator;
+	private PurchaseFormValidator txValidator;
 	@Mock
-	private SaleValidator saleValidator;
+	private SaleFormValidator saleValidator;
 	@Mock
 	private CompanyService companyService;
 	@Mock

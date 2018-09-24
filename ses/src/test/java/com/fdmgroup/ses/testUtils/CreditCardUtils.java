@@ -1,4 +1,4 @@
-package com.fdmgroup.ses.utils;
+package com.fdmgroup.ses.testUtils;
 
 import java.util.Calendar;
 

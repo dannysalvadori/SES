@@ -18,7 +18,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.fdmgroup.ses.model.Company;
 import com.fdmgroup.ses.repository.CompanyRepository;
 import com.fdmgroup.ses.stockUpdate.StockExchangeManager;
-import com.fdmgroup.ses.utils.StockExchangeUtils;
+import com.fdmgroup.ses.testUtils.StockExchangeUtils;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StockExchangeManagerTest {

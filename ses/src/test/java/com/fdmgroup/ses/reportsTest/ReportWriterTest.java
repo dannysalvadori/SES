@@ -1,9 +1,8 @@
 package com.fdmgroup.ses.reportsTest;
 
+import static com.fdmgroup.ses.testUtils.StockExchangeUtils.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
-import static com.fdmgroup.ses.utils.StockExchangeUtils.*;
 
 import java.io.StringReader;
 import java.math.BigDecimal;

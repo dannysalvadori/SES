@@ -1,6 +1,6 @@
 package com.fdmgroup.ses.validationTest;
 
-import static com.fdmgroup.ses.utils.StockExchangeUtils.*;
+import static com.fdmgroup.ses.testUtils.StockExchangeUtils.*;
 import static com.fdmgroup.ses.validation.CompanyValidator.*;
 
 import java.math.BigDecimal;

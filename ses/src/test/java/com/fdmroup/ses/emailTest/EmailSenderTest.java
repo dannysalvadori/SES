@@ -1,13 +1,12 @@
 package com.fdmroup.ses.emailTest;
 
+import static com.fdmgroup.ses.testUtils.UserUtils.*;
 import static org.mockito.Mockito.when;
 
 import java.io.UnsupportedEncodingException;
 
 import javax.mail.MessagingException;
 import javax.mail.Transport;
-
-import static com.fdmgroup.ses.utils.UserUtils.*;
 
 import org.junit.Before;
 import org.junit.Test;

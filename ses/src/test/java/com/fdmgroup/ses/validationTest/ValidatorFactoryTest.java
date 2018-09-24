@@ -17,12 +17,12 @@ import com.fdmgroup.ses.model.Company;
 import com.fdmgroup.ses.model.CreditCardDetail;
 import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.stockExchange.SaleForm;
-import com.fdmgroup.ses.stockExchange.TransactionForm;
+import com.fdmgroup.ses.stockExchange.PurchaseForm;
 import com.fdmgroup.ses.validation.CompanyValidator;
 import com.fdmgroup.ses.validation.CreditCardValidator;
-import com.fdmgroup.ses.validation.SaleValidator;
+import com.fdmgroup.ses.validation.SaleFormValidator;
 import com.fdmgroup.ses.validation.SesValidator;
-import com.fdmgroup.ses.validation.TransactionValidator;
+import com.fdmgroup.ses.validation.PurchaseFormValidator;
 import com.fdmgroup.ses.validation.UserValidator;
 import com.fdmgroup.ses.validation.ValidatorFactory;
 
@@ -43,9 +43,9 @@ public class ValidatorFactoryTest {
 	@Mock
 	private CompanyValidator companyValidator;
 	@Mock
-	private TransactionValidator transactionValidator;
+	private PurchaseFormValidator transactionValidator;
 	@Mock
-	private SaleValidator saleValidator;
+	private SaleFormValidator saleValidator;
 	@Mock
 	private CreditCardValidator creditCardValidator;
 		
@@ -83,9 +83,9 @@ public class ValidatorFactoryTest {
 	 */
 	@Test
 	public void transactionFormTest() {
-		validator = factory.getValidator(new TransactionForm());
+		validator = factory.getValidator(new PurchaseForm());
 		assertNotEquals("Null validator returned for type TransactionForm", null, validator);
-		assertTrue("Validatory for TransactionForm was the wrong type", validator instanceof TransactionValidator);
+		assertTrue("Validatory for TransactionForm was the wrong type", validator instanceof PurchaseFormValidator);
 	}
 	
 	/**
@@ -95,7 +95,7 @@ public class ValidatorFactoryTest {
 	public void saleFormTest() {
 		validator = factory.getValidator(new SaleForm());
 		assertNotEquals("Null validator returned for type SaleForm", null, validator);
-		assertTrue("Validatory for SaleForm was the wrong type", validator instanceof SaleValidator);
+		assertTrue("Validatory for SaleForm was the wrong type", validator instanceof SaleFormValidator);
 	}
 	
 	/**

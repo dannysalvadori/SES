@@ -1,4 +1,4 @@
-package com.fdmgroup.ses.utils;
+package com.fdmgroup.ses.testUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -7,7 +7,7 @@ import java.util.List;
 import com.fdmgroup.ses.model.Company;
 import com.fdmgroup.ses.model.OwnedShare;
 import com.fdmgroup.ses.stockExchange.SaleForm;
-import com.fdmgroup.ses.stockExchange.TransactionForm;
+import com.fdmgroup.ses.stockExchange.PurchaseForm;
 import com.fdmgroup.ses.validation.CompanyValidator;
 
 public class StockExchangeUtils {
@@ -44,13 +44,13 @@ public class StockExchangeUtils {
 	 * Create a TransactionForm instance.
 	 * @param (Optional) List of Company objects. Default createCompany() is used.
 	 */
-	public static TransactionForm createTransactionForm() {
+	public static PurchaseForm createTransactionForm() {
 		List<Company> companies = new ArrayList<>();
 		companies.add(createCompany());
 		return createTransactionForm(companies);
 	}
-	public static TransactionForm createTransactionForm(List<Company> companies) {
-		TransactionForm txForm = new TransactionForm();
+	public static PurchaseForm createTransactionForm(List<Company> companies) {
+		PurchaseForm txForm = new PurchaseForm();
 		txForm.setCompanies(companies);
 		return txForm;
 	}

@@ -1,13 +1,15 @@
-package com.fdmgroup.ses.utils;
+package com.fdmgroup.ses.testUtils;
 
 import java.math.BigDecimal;
 
 import com.fdmgroup.ses.model.User;
 
-public class EmailUtils {
+public class UserUtils {
 
 	public static final String VALID_PASSWORD = "123456";
+	public static final String ALT_VALID_PASSWORD = "1234567890";
 	public static final String VALID_EMAIL = "valid.example@ses.test";
+	public static final String ALT_VALID_EMAIL = "alt.valid.example@ses.test";
 	public static final String VALID_HASHED_PASSWORD = "$2a$12$PnKx3mPvRXTgpkSEsOSHxupUniY5qha2kklmLWMDTjUNS6xnalcgW";
 	public static final String VALID_LASTNAME = "Smith";
 	public static final String VALID_NAME = "Jo";
