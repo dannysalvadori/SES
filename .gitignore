@@ -5,7 +5,7 @@
 **/src/main/java/com/fdmgroup/dev/*
 
 # Properties files
-*.properties
+**/application.properties
 
 # Compiled class file
 *.class
