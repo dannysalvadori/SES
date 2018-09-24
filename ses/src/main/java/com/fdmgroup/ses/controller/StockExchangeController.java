@@ -54,7 +54,7 @@ public class StockExchangeController {
 	 */
 	@InitBinder    
 	public void initBinder(WebDataBinder binder){
-		// Date format
+		// Date format for expiry date, must include time
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"), true));
 	}
 	
@@ -194,7 +194,6 @@ public class StockExchangeController {
 			// If validation succeeds, override the model's transaction form with the refined form
 			validationFactory.getValidator(refinedForm).validate();
 			refinedForm.initSubmissionDate();
-			System.out.println("submissin date: " + refinedForm.getSubmissionDate());
 			modelAndView.addObject("saleForm", refinedForm);
 			modelAndView.addObject("total", refinedForm.getTransactionValue());
 			modelAndView.setViewName("user/confirmSale");
@@ -214,7 +213,6 @@ public class StockExchangeController {
     		ModelAndView modelAndView,
     		@ModelAttribute("saleForm") SaleForm saleForm
     ) {
-		System.out.println("submissin date: " + saleForm.getSubmissionDate());
 		try {
 			transactionService.sellStocks(userService.findCurrentUser(), saleForm);
 			modelAndView.setViewName("user/saleComplete");
