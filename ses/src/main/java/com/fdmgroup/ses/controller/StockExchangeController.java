@@ -1,10 +1,15 @@
 package com.fdmgroup.ses.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,7 +22,7 @@ import com.fdmgroup.ses.service.OwnedSharesService;
 import com.fdmgroup.ses.service.TransactionService;
 import com.fdmgroup.ses.service.UserService;
 import com.fdmgroup.ses.stockExchange.SaleForm;
-import com.fdmgroup.ses.stockExchange.TransactionForm;
+import com.fdmgroup.ses.stockExchange.PurchaseForm;
 import com.fdmgroup.ses.validation.SesValidationException;
 import com.fdmgroup.ses.validation.ValidatorFactory;
 import com.fdmgroup.ses.validation.ValidationUtils;
@@ -43,12 +48,22 @@ public class StockExchangeController {
 	@Autowired
 	private UserService userService;
 	
+	/**
+	 * Instruct Spring Form how to bind dates
+	 * @param binder
+	 */
+	@InitBinder    
+	public void initBinder(WebDataBinder binder){
+		// Date format for expiry date, must include time
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"), true));
+	}
+	
 	/* ****************************************************
 	 *                     Nav Methods                    *
 	 ******************************************************/
 	
 	/**
-	 * Go to Stock Exchange page TODO: move to nav controller. TODO: move "addCompanies" somewhere
+	 * Go to Stock Exchange page
 	 */
 	@RequestMapping(value="/user/stockExchange")
     public ModelAndView goToStockExchange(ModelAndView modelAndView) {
@@ -64,7 +79,7 @@ public class StockExchangeController {
 	 */
 	private void addStocksToModel(ModelAndView mav) {
 		// Add available stocks for purchase
-		TransactionForm transactionForm = new TransactionForm();
+		PurchaseForm transactionForm = new PurchaseForm();
 		List<Company> companies = new ArrayList<>();
 		for (Company company : companyRepo.findAll()) {
 			if (company.getAvailableShares() > 0) {
@@ -96,10 +111,10 @@ public class StockExchangeController {
 	@RequestMapping(value="/user/doPlaceOrder")
     public ModelAndView doPlaceOrder(
     		ModelAndView modelAndView,
-    		@ModelAttribute("transactionForm") TransactionForm transactionForm
+    		@ModelAttribute("transactionForm") PurchaseForm transactionForm
     ) {
 		// Refine transaction form
-		TransactionForm purchaseForm = new TransactionForm();
+		PurchaseForm purchaseForm = new PurchaseForm();
 		for (Company comp : transactionForm.getCompanies()) {
 			if (comp.getTransactionQuantity() != null && comp.getTransactionQuantity() > 0) {
 				purchaseForm.getCompanies().add(comp);
@@ -109,6 +124,7 @@ public class StockExchangeController {
 		try {
 			// If validation succeeds, override the model's transaction form with the refined form
 			validationFactory.getValidator(purchaseForm).validate();
+			purchaseForm.initSubmissionDate();
 			modelAndView.addObject("transactionForm", purchaseForm);
 			modelAndView.addObject("total", purchaseForm.getTransactionValue());
 			modelAndView.setViewName("user/confirmPurchase");
@@ -127,7 +143,7 @@ public class StockExchangeController {
 	@RequestMapping(value="/user/authenticatePurchase")
     public ModelAndView goToAuthenticatePurchase(
     		ModelAndView modelAndView,
-    		@ModelAttribute("transactionForm") TransactionForm purchaseForm
+    		@ModelAttribute("transactionForm") PurchaseForm purchaseForm
     ) {
 		modelAndView.setViewName("user/authenticatePurchase");
 		purchaseForm.setCreditCards(creditCardService.findAllForCurrentUser());
@@ -141,7 +157,7 @@ public class StockExchangeController {
 	@RequestMapping(value="/user/doPurchase")
     public ModelAndView doPurchase(
     		ModelAndView modelAndView,
-    		@ModelAttribute("transactionForm") TransactionForm purchaseForm
+    		@ModelAttribute("transactionForm") PurchaseForm purchaseForm
     ) {
 		try {
 			transactionService.buyStocks(userService.findCurrentUser(), purchaseForm);
@@ -177,6 +193,7 @@ public class StockExchangeController {
 		try {
 			// If validation succeeds, override the model's transaction form with the refined form
 			validationFactory.getValidator(refinedForm).validate();
+			refinedForm.initSubmissionDate();
 			modelAndView.addObject("saleForm", refinedForm);
 			modelAndView.addObject("total", refinedForm.getTransactionValue());
 			modelAndView.setViewName("user/confirmSale");

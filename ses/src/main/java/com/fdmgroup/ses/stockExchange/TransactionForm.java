@@ -1,57 +1,26 @@
 package com.fdmgroup.ses.stockExchange;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
-import javax.persistence.Transient;
+import com.fdmgroup.ses.utils.DateUtils;
 
-import com.fdmgroup.ses.model.Company;
-import com.fdmgroup.ses.model.CreditCardDetail;
-
-public class TransactionForm {
-
-	private List<Company> companies = new ArrayList<>();
+public abstract class TransactionForm {
 	
-	@Transient
-	private List<CreditCardDetail> creditCards = new ArrayList<>();
+	public static final Integer EXPIRY_MINUTES = 5;
+	public static final String EXPIRY_MINUTES_STRING = "five";
 
-	@Transient
-	private Integer creditCardId;
+	protected Date submissionDate;
 	
-	public List<Company> getCompanies() {
-		return companies;
-	}
-
-	public void setCompanies(List<Company> companies) {
-		this.companies = companies;
+	public Date getSubmissionDate() {
+		return submissionDate;
 	}
 	
-	/**
-	 * Sums (shareValue * transactionQuantity) for each company in the transaction
-	 */
-	public BigDecimal getTransactionValue() {
-		BigDecimal txValue = new BigDecimal(0);
-		for (Company company : companies) {
-			txValue = txValue.add(company.getTransactionValue());
-		}
-		return txValue;
+	public void setSubmissionDate(Date submissionDate) {
+		this.submissionDate = submissionDate;
 	}
-
-	public List<CreditCardDetail> getCreditCards() {
-		return creditCards;
-	}
-
-	public void setCreditCards(List<CreditCardDetail> creditCards) {
-		this.creditCards = creditCards;
-	}
-
-	public Integer getCreditCardId() {
-		return creditCardId;
-	}
-
-	public void setCreditCardId(Integer cardId) {
-		this.creditCardId = cardId;
+	
+	public void initSubmissionDate() {
+		submissionDate = DateUtils.now();
 	}
 	
 }

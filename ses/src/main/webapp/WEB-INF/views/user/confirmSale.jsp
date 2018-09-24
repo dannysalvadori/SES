@@ -85,6 +85,7 @@
 		
 			<a href="../user/stockExchange"><button type="button" class="btn-sm btn-danger">Cancel</button></a>
 			&nbsp;
+			<form:hidden path="submissionDate"/>
 			<input type="submit" value="Confirm Sale" class="btn-sm btn-success float-right"/>
 		</form:form>
 			

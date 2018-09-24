@@ -7,7 +7,7 @@ import com.fdmgroup.ses.model.Company;
 import com.fdmgroup.ses.model.OwnedShare;
 import com.fdmgroup.ses.model.User;
 import com.fdmgroup.ses.stockExchange.SaleForm;
-import com.fdmgroup.ses.stockExchange.TransactionForm;
+import com.fdmgroup.ses.stockExchange.PurchaseForm;
 import com.fdmgroup.ses.validation.SesValidationException;
 import com.fdmgroup.ses.validation.ValidatorFactory;
 
@@ -35,7 +35,7 @@ public class TransactionService {
 	 * created.
 	 * @throws SesValidationException
 	 */
-	public void buyStocks(User user, TransactionForm transactionForm) throws SesValidationException {
+	public void buyStocks(User user, PurchaseForm transactionForm) throws SesValidationException {
 		
 		// First validate if the purchase remains valid
 		validationFactory.getValidator(transactionForm).validate();

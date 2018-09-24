@@ -35,7 +35,6 @@
 					</tr>
 				</thead>
 
-
 				<tbody>
 					<c:forEach items="${transactionForm.companies}" var="company" varStatus="cStatus">
 						<tr>

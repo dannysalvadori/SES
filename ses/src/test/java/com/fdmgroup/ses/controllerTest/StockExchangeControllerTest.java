@@ -1,6 +1,6 @@
 package com.fdmgroup.ses.controllerTest;
 
-import static com.fdmgroup.ses.utils.CreditCardUtils.createCard;
+import static com.fdmgroup.ses.testUtils.CreditCardUtils.createCard;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doThrow;
@@ -34,11 +34,11 @@ import com.fdmgroup.ses.service.OwnedSharesService;
 import com.fdmgroup.ses.service.TransactionService;
 import com.fdmgroup.ses.service.UserService;
 import com.fdmgroup.ses.stockExchange.SaleForm;
-import com.fdmgroup.ses.stockExchange.TransactionForm;
-import com.fdmgroup.ses.utils.StockExchangeUtils;
-import com.fdmgroup.ses.validation.SaleValidator;
+import com.fdmgroup.ses.stockExchange.PurchaseForm;
+import com.fdmgroup.ses.testUtils.StockExchangeUtils;
+import com.fdmgroup.ses.validation.SaleFormValidator;
 import com.fdmgroup.ses.validation.SesValidationException;
-import com.fdmgroup.ses.validation.TransactionValidator;
+import com.fdmgroup.ses.validation.PurchaseFormValidator;
 import com.fdmgroup.ses.validation.ValidatorFactory;
 
 @RunWith(MockitoJUnitRunner.class) // Unlike SpringRunner.class, allows Mock-Autowired injection
@@ -65,9 +65,9 @@ public class StockExchangeControllerTest {
 	@Mock
 	private ValidatorFactory validationFactory;
 	@Mock
-	private TransactionValidator transactionValidator;
+	private PurchaseFormValidator transactionValidator;
 	@Mock
-	private SaleValidator saleValidator;
+	private SaleFormValidator saleValidator;
 	
 	@Mock
 	private CreditCardService creditCardService;
@@ -93,7 +93,7 @@ public class StockExchangeControllerTest {
 		when(ownedSharesService.findAllForCurrentUser()).thenReturn(stubCurrentUsersShares);
 		
 		// Stub validators
-		when(validationFactory.getValidator(any(TransactionForm.class))).thenReturn(transactionValidator);
+		when(validationFactory.getValidator(any(PurchaseForm.class))).thenReturn(transactionValidator);
 		when(validationFactory.getValidator(any(SaleForm.class))).thenReturn(saleValidator);
 		
 		when(userService.findCurrentUser()).thenReturn(currentUser);
@@ -130,8 +130,8 @@ public class StockExchangeControllerTest {
 		verify(companyRepo, times(1)).findAll();
 		Object transactionFormObject = mav.getModel().get("transactionForm");
 		assertNotEquals("transactionForm model object shouldn't be null", null, transactionFormObject);
-		assertTrue("transactionForm object is wrong type", transactionFormObject instanceof TransactionForm);
-		TransactionForm txForm = (TransactionForm) transactionFormObject;
+		assertTrue("transactionForm object is wrong type", transactionFormObject instanceof PurchaseForm);
+		PurchaseForm txForm = (PurchaseForm) transactionFormObject;
 		assertEquals("Wrong number of companies", stubAllCompanies.size(), txForm.getCompanies().size());
 		assertEquals("Wrong number of available shares",
 				Long.valueOf(100), Long.valueOf(txForm.getCompanies().get(0).getAvailableShares()));
@@ -175,8 +175,8 @@ public class StockExchangeControllerTest {
 		verify(companyRepo, times(1)).findAll();
 		Object transactionFormObject = mav.getModel().get("transactionForm");
 		assertNotEquals("transactionForm model object shouldn't be null", null, transactionFormObject);
-		assertTrue("transactionForm object is wrong type", transactionFormObject instanceof TransactionForm);
-		TransactionForm txForm = (TransactionForm) transactionFormObject;
+		assertTrue("transactionForm object is wrong type", transactionFormObject instanceof PurchaseForm);
+		PurchaseForm txForm = (PurchaseForm) transactionFormObject;
 		assertEquals("Wrong number of companies", 0, txForm.getCompanies().size());
 		
 		// Confirm saleForm was added with all ownedShares for the logged in user
@@ -219,7 +219,7 @@ public class StockExchangeControllerTest {
 		List<Company> testCompanies = new ArrayList<>();
 		testCompanies.addAll(new ArrayList<Company>(Arrays.asList(c1, c2, c3, c4)));
 		
-		TransactionForm txForm = new TransactionForm();
+		PurchaseForm txForm = new PurchaseForm();
 		txForm.setCompanies(testCompanies); // Total tx value: 55.58
 		BigDecimal expectedTotal = new BigDecimal(55.58).setScale(2, RoundingMode.HALF_UP);
 		
@@ -243,7 +243,7 @@ public class StockExchangeControllerTest {
 	 */
 	@Test
 	public void doPlaceOrderValidationFailTest() throws SesValidationException {
-		TransactionForm txForm = new TransactionForm();
+		PurchaseForm txForm = new PurchaseForm();
 		
 		//Setup validation failure
 		SesValidationException vEx = new SesValidationException();
@@ -275,7 +275,7 @@ public class StockExchangeControllerTest {
 	@Test
 	public void goToAuthenticatePurchaseTest() {
 		
-		TransactionForm txForm = StockExchangeUtils.createTransactionForm();
+		PurchaseForm txForm = StockExchangeUtils.createTransactionForm();
 		mav = ctrl.goToAuthenticatePurchase(mav, txForm);
 		
 		// Confirm view
@@ -284,8 +284,8 @@ public class StockExchangeControllerTest {
 		// Confirm transactionForm was added with all available companies
 		Object transactionFormObject = mav.getModel().get("transactionForm");
 		assertNotEquals("transactionForm model object shouldn't be null", null, transactionFormObject);
-		assertTrue("transactionForm object is wrong type", transactionFormObject instanceof TransactionForm);
-		txForm = (TransactionForm) transactionFormObject;
+		assertTrue("transactionForm object is wrong type", transactionFormObject instanceof PurchaseForm);
+		txForm = (PurchaseForm) transactionFormObject;
 		assertEquals("Wrong number of companies", 1, txForm.getCompanies().size());
 	}
 
@@ -295,7 +295,7 @@ public class StockExchangeControllerTest {
 	@Test
 	public void doPurchaseSuccessTest() {
 
-		TransactionForm txForm = StockExchangeUtils.createTransactionForm();
+		PurchaseForm txForm = StockExchangeUtils.createTransactionForm();
 		mav = ctrl.doPurchase(mav, txForm);
 		
 		// Confirm view
@@ -313,7 +313,7 @@ public class StockExchangeControllerTest {
 	 */
 	@Test
 	public void doPurchaseFailureTest() throws SesValidationException {
-		TransactionForm txForm = new TransactionForm();
+		PurchaseForm txForm = new PurchaseForm();
 		
 		// Setup validation failure
 		SesValidationException vEx = new SesValidationException();

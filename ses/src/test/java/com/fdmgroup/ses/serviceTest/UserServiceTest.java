@@ -1,5 +1,8 @@
 package com.fdmgroup.ses.serviceTest;
 
+import static com.fdmgroup.ses.testUtils.RoleUtils.*;
+import static com.fdmgroup.ses.testUtils.StockExchangeUtils.*;
+import static com.fdmgroup.ses.testUtils.UserUtils.*;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
@@ -11,10 +14,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import static com.fdmgroup.ses.utils.UserUtils.*;
-import static com.fdmgroup.ses.utils.RoleUtils.*;
-import static com.fdmgroup.ses.utils.StockExchangeUtils.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -41,7 +40,7 @@ import com.fdmgroup.ses.repository.UserRepository;
 import com.fdmgroup.ses.repository.VerificationTokenRepository;
 import com.fdmgroup.ses.service.UserService;
 import com.fdmgroup.ses.stockExchange.SaleForm;
-import com.fdmgroup.ses.stockExchange.TransactionForm;
+import com.fdmgroup.ses.stockExchange.PurchaseForm;
 import com.fdmgroup.ses.validation.SesValidationException;
 import com.fdmgroup.ses.validation.UserValidator;
 import com.fdmgroup.ses.validation.ValidatorFactory;
@@ -249,7 +248,7 @@ public class UserServiceTest {
 		assertEquals("Test user has the wrong starting credit", new BigDecimal(50000), u.getCredit());
 
 		// Create a purchase worth 5000
-		TransactionForm purchaseForm = new TransactionForm();
+		PurchaseForm purchaseForm = new PurchaseForm();
 		List<Company> purchaseShares = new ArrayList<>();
 		Company purchaseCompany = createCompany();
 		purchaseCompany.setTransactionQuantity(50l);

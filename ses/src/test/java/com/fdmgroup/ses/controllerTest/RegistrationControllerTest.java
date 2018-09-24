@@ -1,11 +1,10 @@
 package com.fdmgroup.ses.controllerTest;
 
+import static com.fdmgroup.ses.testUtils.UserUtils.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-
-import static com.fdmgroup.ses.utils.UserUtils.*;
 
 import org.junit.Before;
 import org.junit.Test;

@@ -1,7 +1,7 @@
 package com.fdmgroup.ses.validationTest;
 
 import static org.mockito.Mockito.when;
-import static com.fdmgroup.ses.utils.UserUtils.*;
+import static com.fdmgroup.ses.testUtils.UserUtils.*;
 import static com.fdmgroup.ses.validation.UserValidator.*;
 
 import org.junit.Test;

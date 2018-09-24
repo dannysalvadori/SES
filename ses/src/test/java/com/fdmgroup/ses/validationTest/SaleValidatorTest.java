@@ -1,9 +1,9 @@
 package com.fdmgroup.ses.validationTest;
 
 import static org.mockito.Mockito.when;
-import static com.fdmgroup.ses.utils.StockExchangeUtils.*;
-import static com.fdmgroup.ses.utils.UserUtils.*;
-import static com.fdmgroup.ses.validation.SaleValidator.*;
+import static com.fdmgroup.ses.testUtils.StockExchangeUtils.*;
+import static com.fdmgroup.ses.testUtils.UserUtils.*;
+import static com.fdmgroup.ses.validation.SaleFormValidator.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +19,7 @@ import com.fdmgroup.ses.repository.CompanyRepository;
 import com.fdmgroup.ses.repository.OwnedSharesRepository;
 import com.fdmgroup.ses.service.UserService;
 import com.fdmgroup.ses.stockExchange.SaleForm;
-import com.fdmgroup.ses.validation.SaleValidator;
+import com.fdmgroup.ses.validation.SaleFormValidator;
 
 /**
  * Test for SaleValidator:
@@ -28,7 +28,7 @@ import com.fdmgroup.ses.validation.SaleValidator;
  */
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
-public class SaleValidatorTest extends ValidationTest<SaleValidator> {
+public class SaleValidatorTest extends ValidationTest<SaleFormValidator> {
 	
 	@Mock
 	private UserService userService;
@@ -41,7 +41,7 @@ public class SaleValidatorTest extends ValidationTest<SaleValidator> {
 	private CompanyRepository companyRepo;
 	
 	public SaleValidatorTest() {
-		validator = new SaleValidator();
+		validator = new SaleFormValidator();
 	}
 	
 	@Before

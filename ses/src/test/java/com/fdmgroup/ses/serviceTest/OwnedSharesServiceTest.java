@@ -1,5 +1,6 @@
 package com.fdmgroup.ses.serviceTest;
 
+import static com.fdmgroup.ses.testUtils.StockExchangeUtils.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -7,8 +8,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import static com.fdmgroup.ses.utils.StockExchangeUtils.*;
 
 import org.junit.Before;
 import org.junit.Test;

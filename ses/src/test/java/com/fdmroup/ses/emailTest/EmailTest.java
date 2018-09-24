@@ -1,12 +1,11 @@
 package com.fdmroup.ses.emailTest;
 
+import static com.fdmgroup.ses.testUtils.UserUtils.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.GregorianCalendar;
-
-import static com.fdmgroup.ses.utils.UserUtils.*;
 
 import org.junit.Before;
 import org.junit.Test;

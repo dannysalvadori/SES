@@ -21,7 +21,7 @@ import com.fdmgroup.ses.repository.RoleRepository;
 import com.fdmgroup.ses.repository.UserRepository;
 import com.fdmgroup.ses.repository.VerificationTokenRepository;
 import com.fdmgroup.ses.stockExchange.SaleForm;
-import com.fdmgroup.ses.stockExchange.TransactionForm;
+import com.fdmgroup.ses.stockExchange.PurchaseForm;
 import com.fdmgroup.ses.validation.SesValidationException;
 import com.fdmgroup.ses.validation.ValidatorFactory;
 
@@ -98,7 +98,7 @@ public class UserService {
 		return userRepo.findByEmail(userDetails.getUsername());
 	}
 
-	public void updateCredit(User user, TransactionForm transactionForm) {
+	public void updateCredit(User user, PurchaseForm transactionForm) {
 		user.setCredit(user.getCredit().subtract(transactionForm.getTransactionValue()));
 		userRepo.save(user);
 	}

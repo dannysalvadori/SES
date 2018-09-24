@@ -38,6 +38,7 @@
 				<form:hidden path="companies[${cStatus.index}].currentShareValue"/>
 				<form:hidden path="companies[${cStatus.index}].transactionQuantity"/>
 			</c:forEach>
+			<form:hidden path="submissionDate"/>${submissionDate}
 			
 			<br/>
 			<br/>

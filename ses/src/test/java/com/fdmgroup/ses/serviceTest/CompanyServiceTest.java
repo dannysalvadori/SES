@@ -1,5 +1,6 @@
 package com.fdmgroup.ses.serviceTest;
 
+import static com.fdmgroup.ses.testUtils.StockExchangeUtils.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -10,8 +11,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
-
-import static com.fdmgroup.ses.utils.StockExchangeUtils.*;
 
 import org.junit.Before;
 import org.junit.Test;

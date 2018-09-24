@@ -1,5 +1,7 @@
 package com.fdmgroup.ses.controllerTest;
 
+import static com.fdmgroup.ses.testUtils.RoleUtils.*;
+import static com.fdmgroup.ses.testUtils.UserUtils.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
@@ -9,9 +11,6 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import static com.fdmgroup.ses.utils.UserUtils.*;
-import static com.fdmgroup.ses.utils.RoleUtils.*;
 
 import org.junit.Before;
 import org.junit.Test;
