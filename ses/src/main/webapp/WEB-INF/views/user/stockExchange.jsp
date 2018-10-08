@@ -58,6 +58,10 @@
 						<th>Symbol</th>
 						<th>Name</th>
 						<th>Stocks Available</th>
+						<th>Last Trade</th>
+						<th>Open</th>
+						<th>Close</th>
+						<th>Gains</th>
 						<th>Current Value</th>
 						<th>Qty.</th>
 					</tr>
@@ -77,6 +81,34 @@
 	
 							<td class="text-right">
 								<fmt:formatNumber value="${company.availableShares}" type="number" />
+							</td>
+	
+							<td>
+								<fmt:formatDate value="${company.lastTrade}" pattern="dd/MMM/yyyy HH:ss"/>
+							</td>
+	
+							<td>
+								${company.openValue}
+							</td>
+	
+							<td>
+								${company.closeValue}
+							</td>
+	
+							<td>
+								<c:choose>
+									<c:when test="${company.gains > 0}">
+										<span class="gain">
+									</c:when>
+									<c:when test="${company.gains < 0}">
+										<span class="loss">
+									</c:when>
+									<c:otherwise>
+										<span>
+									</c:otherwise>
+								</c:choose>
+											<fmt:formatNumber value="${company.gains}" type="currency"/>
+										</span>
 							</td>
 	
 							<td class="text-right">

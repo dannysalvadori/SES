@@ -53,6 +53,7 @@ public class AdminCRUDCompanyController {
     ) {
 		try {
 			validationFactory.getValidator(company).validate();
+			company.setOpenValue(company.getCurrentShareValue());
 			companyRepo.save(company);
 			modelAndView = goToManageCompanies(modelAndView);
 		} catch (SesValidationException ex) {
