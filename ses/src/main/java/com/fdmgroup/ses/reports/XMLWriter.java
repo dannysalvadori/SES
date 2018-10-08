@@ -25,8 +25,7 @@ public class XMLWriter<T> extends ReportWriter<T> {
 	}
 	
 	protected String writeClose(Report<T> report) {
-		return "</body>"
-				+ "</report>";
+		return "</body></report>";
 	}
 
 	@Override
