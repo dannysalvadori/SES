@@ -29,7 +29,7 @@ public class ReportBuilder {
 		if (type == Company.class) {
 			report = new CompanyReport();
 			((Report<Company>)report)
-					.setRows(companyService.findBySymbol(stockSymbols)); // TODO: apply filters
+					.setRows(companyService.findBySymbol(stockSymbols));
 		} else {
 			report = new OwnedSharesReport();
 			((Report<OwnedShare>)report)
