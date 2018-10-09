@@ -84,7 +84,7 @@
 							</td>
 	
 							<td>
-								<fmt:formatDate value="${company.lastTrade}" pattern="dd/MMM/yyyy HH:ss"/>
+								<fmt:formatDate value="${company.lastTrade}" pattern="dd/MMM/yyyy HH:mm"/>
 							</td>
 	
 							<td>
