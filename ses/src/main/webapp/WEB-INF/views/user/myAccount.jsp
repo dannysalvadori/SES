@@ -190,7 +190,7 @@
 						<c:forEach items="${userTXHistory}" var="txHistory">
 							<tr>
 								<td>
-									<fmt:formatDate value="${txHistory.exchangeDate}" pattern="dd/MM/YYYY HH:MM"/>
+									<fmt:formatDate value="${txHistory.exchangeDate}" pattern="dd/MM/YYYY HH:mm"/>
 								</td>
 		
 								<td>
